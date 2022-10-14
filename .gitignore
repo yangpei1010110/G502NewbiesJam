@@ -58,3 +58,22 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Packed Addressables (AA包)
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android Assets
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# JetBrain Config (Rider配置文件)
+/.idea
+
+# Ignore the auto-generated AOT compatibility dll. (这个是Odin生成的文件)
+/Assets/Plugins/Sirenix/Assemblies/AOT/*
+
+# Ignore all unpacked demos. (这个是Odin生成的文件)
+/Assets/Plugins/Sirenix/Demos/*
+
+# But keep the demo packages themselves. (这个是Odin生成的文件)
+!/Assets/Plugins/Sirenix/Demos/*.unitypackage 
+
