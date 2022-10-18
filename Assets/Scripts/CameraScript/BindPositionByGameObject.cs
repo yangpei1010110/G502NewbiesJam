@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Camera
+namespace CameraScript
 {
     public class BindPositionByGameObject : MonoBehaviour
     {
