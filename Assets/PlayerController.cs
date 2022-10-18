@@ -23,23 +23,34 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
     }
 
     private void FixedUpdate() {
         if (movementInput != Vector2.zero)
         {
-            // Check for potential collisions
-            int count = rb.Cast(
-                movementInput, // X and Y values between -1 and 1 that represent the direction from the body to look for collisions
-                movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
-                castCollisions, // List of collisions to store the found collisions into after the Cast is finished
-                moveSpeed * Time.fixedDeltaTime +
-                collisionOffset); // The amount to cast equal to the movement plus an offset
-            if(count == 0){
-                rb.MovePosition(rb.position + movementInput * moveSpeed * Time.fixedDeltaTime);
-                
+            bool success = TryMove(movementInput);
+
+            if(!success) {
+                success = TryMove(new Vector2(movementInput.x, 0));
             }
+
+            if(!success) {
+                success = TryMove(new Vector2(0, movementInput.y));
+            }
+            animator.SetBool("isMoving", success);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+        // Set direction of sprite to movement direction
+        if(movementInput.x < 0) {
+            spriteRenderer.flipX = true;
+        } else if (movementInput.x > 0) {
+            spriteRenderer.flipX = false;
         }
     }
 
@@ -69,9 +80,9 @@ public class PlayerController : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
-    void OnFire() {
-        animator.SetTrigger("swordAttack");
-    }
+    // void OnFire() {
+    //     animator.SetTrigger("swordAttack");
+    // }
 
     // public void SwordAttack() {
     //     LockMovement();
