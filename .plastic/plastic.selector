@@ -1,0 +1,4 @@
+repository "G502NewbiesJam@harrisonchan@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
