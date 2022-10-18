@@ -5,9 +5,10 @@ namespace Camera
 {
     public class BindPositionByGameObject : MonoBehaviour
     {
-        public  GameObject target;
-        private GameObject current;
-        private Vector3    offset;
+        public                   GameObject target;
+        [SerializeField] private GameObject current;
+        [SerializeField] private Vector3    offset;
+
         private void Awake()
         {
             if (!target)
@@ -21,7 +22,7 @@ namespace Camera
             {
                 throw new Exception("当前对象不是摄像机");
             }
-            
+
             offset = current.transform.position - target.transform.position;
         }
 
