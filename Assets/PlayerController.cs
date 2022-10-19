@@ -22,8 +22,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        rb             = GetComponent<Rigidbody2D>();
+        rb.sharedMaterial = new PhysicsMaterial2D()
+        {
+            friction   = .5f,
+            bounciness = .5f,
+        };
+
+        animator       = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         
     }
@@ -49,6 +55,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // Set direction of sprite to movement direction
+            // 设置动画方向
             if(movementInput.x < 0) {
                 spriteRenderer.flipX = true;
             } else if (movementInput.x > 0) {
@@ -58,6 +65,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool TryMove(Vector2 direction) {
+        Debug.Log(direction);
         if(direction != Vector2.zero) {
             // Check for potential collisions
             int count = rb.Cast(
@@ -67,7 +75,8 @@ public class PlayerController : MonoBehaviour
                 moveSpeed * Time.fixedDeltaTime + collisionOffset); // The amount to cast equal to the movement plus an offset
 
             if(count == 0){
-                rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+                rb.AddForce(direction * (moveSpeed * Time.fixedDeltaTime * rb.drag * 2f), ForceMode2D.Impulse);
+                // rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
                 return true;
             } else {
                 return false;

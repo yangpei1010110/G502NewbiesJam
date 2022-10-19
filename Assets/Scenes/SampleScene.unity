@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6744889058840769565, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
+      propertyPath: health
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
 --- !u!1001 &322679737
@@ -234,6 +238,34 @@ PrefabInstance:
     - target: {fileID: 4356126901875218735, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_LinearDrag
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488843790729219025, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929764812451550447, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8865383713216198933, guid: 57ac499e78730db4598e84079d0f41dc, type: 3}
       propertyPath: m_Actions
@@ -300,6 +332,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6744889058840769565, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
+      propertyPath: health
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
 --- !u!1 &399269399
@@ -349,7 +385,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7790178, y: 1}
+    m_SensorSize: {x: 1.6660376, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -609,7 +645,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -14819,6 +14855,10 @@ PrefabInstance:
     - target: {fileID: 6213387318078900538, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6744889058840769565, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
+      propertyPath: health
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7027285949823295121, guid: 1ae1f0096406820438a29e78792ae29a, type: 3}
       propertyPath: m_IsTrigger

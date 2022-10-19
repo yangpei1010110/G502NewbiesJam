@@ -19,10 +19,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public float health = 1;
+    public float health = 4f;
 
     private void Start() {
         animator = GetComponent<Animator>();
+        health   = 4f;
     }
 
     public void Defeated(){

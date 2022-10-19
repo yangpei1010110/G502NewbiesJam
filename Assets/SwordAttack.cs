@@ -17,6 +17,9 @@ public class SwordAttack : MonoBehaviour
         transform.localPosition = rightAttackOffset;
     }
 
+    /// <summary>
+    /// 触发左边攻击 碰撞盒 x轴反转
+    /// </summary>
     public void AttackLeft() {
         swordCollider.enabled = true;
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
@@ -27,7 +30,7 @@ public class SwordAttack : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Enemy") {
+        if(other.CompareTag("Enemy")) {
             // Deal damage to the enemy
             Enemy enemy = other.GetComponent<Enemy>();
 
