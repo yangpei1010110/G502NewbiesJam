@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
             friction   = .5f,
             bounciness = .5f,
         };
-
+        
         animator       = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         
@@ -65,7 +65,6 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool TryMove(Vector2 direction) {
-        Debug.Log(direction);
         if(direction != Vector2.zero) {
             // Check for potential collisions
             int count = rb.Cast(
