@@ -8,6 +8,7 @@ namespace UI_Scripts
         [SerializeField, Range(10, 500),]   public int   resolution = 10;
         [SerializeField, Range(0.5f, 10f),] public float length     = 10f;
         [SerializeField, Range(0.1f, 2f),]  public float scale      = 0.5f;
+        [SerializeField, Range(0, 1),]      public float functionRange;
 
         [SerializeField] public GameObject pointPrefab;
 
@@ -31,7 +32,7 @@ namespace UI_Scripts
                 position.x = (i) * step - length / 2f;
 
                 point.localPosition = position;
-                point.localScale    = (Vector3.one * step) * scale ;
+                point.localScale    = (Vector3.one * step) * scale;
             }
         }
 
@@ -42,7 +43,8 @@ namespace UI_Scripts
                 Transform point    = _points[i];
                 Vector3   position = point.localPosition;
 
-                position.y = Mathf.Sin(Mathf.PI * (position.x + Time.time));
+                position.y = (1f - functionRange) * WavesLib.Sin(position.x, Time.time)
+                           + functionRange        * WavesLib.MultipleWaves(position.x, Time.time, WavesLib.Sin, WavesLib.Sin2, WavesLib.Sin3);
 
                 point.localPosition = position;
             }

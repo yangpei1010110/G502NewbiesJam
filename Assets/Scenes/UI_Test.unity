@@ -600,6 +600,7 @@ MonoBehaviour:
   resolution: 100
   length: 10
   scale: 1
+  functionRange: 0
   pointPrefab: {fileID: 5278661314444371928, guid: e6f8ce1427104a54bbf6a560428038d4,
     type: 3}
 --- !u!1 &1160234425
@@ -952,7 +953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   display: {fileID: 0}
   sampleDuration: 0.25
-  isFocusChangeFrameRate: 1
+  isFocusChangeFrameRate: 0
   isPrintPath: 1
 --- !u!1 &1800394045
 GameObject:
