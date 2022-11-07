@@ -49,11 +49,11 @@ namespace UI_Scripts
 
             if (duration >= sampleDuration)
             {
-                display.SetText(
-                    $"FPS\n"                     +
-                    $"{1f     / best:0.0}\n"     +
-                    $"{frames / duration:0.0}\n" +
-                    $"{1f     / worst:0.0}");
+                display.SetText(string.Concat(
+                                    "FPS\n",
+                                    $"{1f     / best:0.0}\n",
+                                    $"{frames / duration:0.0}\n",
+                                    $"{1f     / worst:0.0}"));
                 frames   = 0;
                 duration = 0;
                 best     = float.MaxValue;
