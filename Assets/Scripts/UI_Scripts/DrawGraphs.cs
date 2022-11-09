@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace UI_Scripts
@@ -16,37 +17,63 @@ namespace UI_Scripts
 
         private void Awake()
         {
-            _points = new Transform[resolution];
+            _points = new Transform[resolution * resolution];
             if (!pointPrefab)
             {
                 throw new Exception("No point prefab");
             }
 
-            for (int i = 0; i < _points.Length; i++)
+            for (int j = 0; j < resolution; j++)
             {
-                float step = length / _points.Length;
+                for (int i = 0; i < resolution; i++)
+                {
+                    float step = length / resolution;
 
-                Transform point    = _points[i] = Instantiate(pointPrefab).transform;
-                Vector3   position = point.localPosition;
+                    Transform point    = _points[j * resolution + i] = Instantiate(pointPrefab).transform;
+                    Vector3   position = point.localPosition;
 
-                position.x = (i) * step - length / 2f;
+                    position.x = (i) * step - length / 2f;
+                    position.z = (j) * step - length / 2f;
 
-                point.localPosition = position;
-                point.localScale    = (Vector3.one * step) * scale;
+                    point.localPosition = position;
+                    point.localScale    = (Vector3.one * step) * scale;
+                }
             }
+
+            StartCoroutine(BoxUpdate());
         }
 
-        private void Update()
+        private IEnumerator BoxUpdate()
         {
-            for (int i = 0; i < _points.Length; i++)
+            int   count       = 0;
+            int   returnFrame = 1000;
+            float targetFrame = 90f;
+            while (true)
             {
-                Transform point    = _points[i];
-                Vector3   position = point.localPosition;
+                foreach (Transform point in _points)
+                {
+                    count++;
 
-                position.y = (1f - functionRange) * WavesLib.Sin(position.x, Time.time)
-                           + functionRange        * WavesLib.MultipleWaves(position.x, Time.time, WavesLib.Sin, WavesLib.Sin2, WavesLib.Sin3);
 
-                point.localPosition = position;
+                    if (count % returnFrame == 0)
+                    {
+                        returnFrame += 1f / Time.unscaledDeltaTime > targetFrame ? 50 : -50;
+                        returnFrame =  Mathf.Clamp(returnFrame, 50, 10000);
+                        yield return null;
+                    }
+
+                    Vector3 position = point.localPosition;
+
+                    position.y = 1f * WavesLib.SmoothMultipleWaves(position.x, Time.time, functionRange,
+                                                                   WavesLib.Sin,
+                                                                   WavesLib.Ripple2,
+                                                                   // WavesLib.Ripple1,
+                                                                   // WavesLib.Ripple,
+                                                                   WavesLib.Sin2
+                    );
+
+                    point.localPosition = position;
+                }
             }
         }
     }

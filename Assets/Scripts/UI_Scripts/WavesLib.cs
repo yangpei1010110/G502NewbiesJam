@@ -9,15 +9,17 @@ namespace UI_Scripts
     {
         public static float SmoothMultipleWaves(float x, float time, float range, params Func<float, float, float>[] waves)
         {
-            float step     = range / waves.Length;
-            float halfStep = step  / 2;
+            float step     = 1f   / waves.Length;
+            float halfStep = step / 2;
 
             float result = 0;
             for (int i = 0; i < waves.Length; i++)
             {
                 float rangeMid = i * step + halfStep;
-                float length   = Mathf.Abs(rangeMid - range);
-                result += waves[i](x + step * i, time);
+                float length   = Mathf.Abs(range - rangeMid);
+                length = Mathf.Min(step, length);
+                float force = step - length;
+                result += force * waves[i](x, time);
             }
 
             return result;
@@ -59,7 +61,24 @@ namespace UI_Scripts
 
         public static float Ripple(float x, float time)
         {
-            return Mathf.Sin(4f * Mathf.PI * Mathf.Abs(x));
+            float d = Mathf.Abs(x);
+            float y = d;
+            return y;
+        }
+
+        public static float Ripple1(float x, float time)
+        {
+            float d = Mathf.Abs(x);
+            float y = Mathf.Sin(4f * Mathf.PI * d);
+            return y;
+        }
+
+        public static float Ripple2(float x, float time)
+        {
+            float d = Mathf.Abs(x);
+            float y = Mathf.Sin(Mathf.PI * (4f * d - time));
+            y /= 1f + 10f * d;
+            return y;
         }
     }
 }
