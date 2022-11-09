@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Jobs;
 
 namespace UI_Scripts
 {
@@ -13,11 +15,10 @@ namespace UI_Scripts
 
         [SerializeField] public GameObject pointPrefab;
 
-        private Transform[] _points;
 
         private void Awake()
         {
-            _points = new Transform[resolution * resolution];
+            Transform[] points = new Transform[resolution * resolution];
             if (!pointPrefab)
             {
                 throw new Exception("No point prefab");
@@ -29,7 +30,7 @@ namespace UI_Scripts
                 {
                     float step = length / resolution;
 
-                    Transform point    = _points[j * resolution + i] = Instantiate(pointPrefab).transform;
+                    Transform point    = points[j * resolution + i] = Instantiate(pointPrefab).transform;
                     Vector3   position = point.localPosition;
 
                     position.x = (i) * step - length / 2f;
@@ -40,41 +41,54 @@ namespace UI_Scripts
                 }
             }
 
-            StartCoroutine(BoxUpdate());
+            _transformAccessArray = new TransformAccessArray(points);
+            computeUpdate = new ComputeUpdate()
+            {
+                _time          = Time.time,
+                _functionRange = functionRange,
+            };
         }
 
-        private IEnumerator BoxUpdate()
+        private NativeArray<Vector3> nativeArray;
+
+        public static Func<float, float, float, float>[] waves = new Func<float, float, float, float>[]
         {
-            int   count       = 0;
-            int   returnFrame = 1000;
-            float targetFrame = 90f;
-            while (true)
+            WavesLib._Sin4,
+            WavesLib._Ripple2,
+            // WavesLib._Ripple1,
+            // WavesLib._Ripple,
+            WavesLib._Sin2,
+            WavesLib._Ripple3,
+        };
+
+        private TransformAccessArray _transformAccessArray;
+
+        private struct ComputeUpdate : IJobParallelForTransform
+        {
+            public float _time;
+            public float _functionRange;
+
+            public void Execute(int index, TransformAccess transform)
             {
-                foreach (Transform point in _points)
-                {
-                    count++;
-
-
-                    if (count % returnFrame == 0)
-                    {
-                        returnFrame += 1f / Time.unscaledDeltaTime > targetFrame ? 50 : -50;
-                        returnFrame =  Mathf.Clamp(returnFrame, 50, 10000);
-                        yield return null;
-                    }
-
-                    Vector3 position = point.localPosition;
-
-                    position.y = 1f * WavesLib.SmoothMultipleWaves(position.x, Time.time, functionRange,
-                                                                   WavesLib.Sin,
-                                                                   WavesLib.Ripple2,
-                                                                   // WavesLib.Ripple1,
-                                                                   // WavesLib.Ripple,
-                                                                   WavesLib.Sin2
-                    );
-
-                    point.localPosition = position;
-                }
+                Vector3 nativeArrayPoint = transform.position;
+                nativeArrayPoint.y = 3f * WavesLib._SmoothMultipleWaves(nativeArrayPoint.x, nativeArrayPoint.z, _time, _functionRange, waves);
+                transform.position = nativeArrayPoint;
             }
+        }
+
+        private ComputeUpdate computeUpdate;
+
+        private void Update()
+        {
+            computeUpdate._time          = Time.time;
+            computeUpdate._functionRange = functionRange;
+
+            computeUpdate.Schedule(_transformAccessArray);
+        }
+
+        private void OnDestroy()
+        {
+            _transformAccessArray.Dispose();
         }
     }
 }

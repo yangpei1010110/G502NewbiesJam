@@ -32,7 +32,7 @@
             // o.Albedo = input.worldPos;
             // o.Albedo = input.worldPos * 0.5f + 0.5f;
             // o.Albedo.rg = input.worldPos.xy;
-            o.Albedo.rg = input.worldPos.xy * 0.5f + 0.5f;
+            o.Albedo = input.worldPos * 0.5f + 0.5f;
 
             o.Albedo = saturate(o.Albedo);
             o.Smoothness = _Smoothness;
