@@ -24,32 +24,23 @@ namespace UI_Scripts
                 throw new Exception("No point prefab");
             }
 
-            for (int j = 0; j < resolution; j++)
+            float step = length / resolution;
+
+            for (int i = 0; i < points.Length; i++)
             {
-                for (int i = 0; i < resolution; i++)
-                {
-                    float step = length / resolution;
-
-                    Transform point    = points[j * resolution + i] = Instantiate(pointPrefab).transform;
-                    Vector3   position = point.localPosition;
-
-                    position.x = (i) * step - length / 2f;
-                    position.z = (j) * step - length / 2f;
-
-                    point.localPosition = position;
-                    point.localScale    = (Vector3.one * step) * scale;
-                }
+                Transform point = points[i] = Instantiate(pointPrefab).transform;
+                point.localScale = Vector3.one * step * scale;
             }
 
             _transformAccessArray = new TransformAccessArray(points);
-            computeUpdate = new ComputeUpdate()
+            _computeUpdate = new ComputeUpdate()
             {
                 _time          = Time.time,
                 _functionRange = functionRange,
+                _resolution    = resolution,
+                _length        = length,
             };
         }
-
-        private NativeArray<Vector3> nativeArray;
 
         public static Func<float, float, float, float>[] waves = new Func<float, float, float, float>[]
         {
@@ -63,27 +54,46 @@ namespace UI_Scripts
 
         private TransformAccessArray _transformAccessArray;
 
+        private static Func<float, float, float, Vector3>[] _w = new Func<float, float, float, Vector3>[]
+        {
+            WavesLib2.Origin,
+            WavesLib2.Sin,
+            WavesLib2.Sphere0,
+            WavesLib2.Sphere1,
+            WavesLib2.Sphere2,
+        };
+
         private struct ComputeUpdate : IJobParallelForTransform
         {
-            public float _time;
-            public float _functionRange;
+            [ReadOnly] public float _time;
+            [ReadOnly] public float _functionRange;
+            [ReadOnly] public int   _resolution;
+            [ReadOnly] public float _length;
 
             public void Execute(int index, TransformAccess transform)
             {
-                Vector3 nativeArrayPoint = transform.position;
-                nativeArrayPoint.y = 3f * WavesLib._SmoothMultipleWaves(nativeArrayPoint.x, nativeArrayPoint.z, _time, _functionRange, waves);
-                transform.position = nativeArrayPoint;
+                float step = 2f    / _resolution;
+                int   x    = index % _resolution;
+                int   z    = index / _resolution;
+
+                float u = (x + 0.5f) * step - 1f;
+                float v = (z + 0.5f) * step - 1f;
+
+                // transform.position = WavesLib2.Sphere(u, v, _time);
+                transform.position = _length * WavesLib2.SmoothMultipleWaves(u, v, _time, _functionRange, _w);
             }
         }
 
-        private ComputeUpdate computeUpdate;
+        private ComputeUpdate _computeUpdate;
 
         private void Update()
         {
-            computeUpdate._time          = Time.time;
-            computeUpdate._functionRange = functionRange;
+            _computeUpdate._time          = Time.time;
+            _computeUpdate._functionRange = functionRange;
+            _computeUpdate._resolution    = resolution;
+            _computeUpdate._length        = length;
 
-            computeUpdate.Schedule(_transformAccessArray);
+            _computeUpdate.Schedule(_transformAccessArray);
         }
 
         private void OnDestroy()
