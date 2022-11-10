@@ -12,14 +12,9 @@ namespace UI_Scripts
 
             Vector3 result = Vector3.zero;
 
-            range = Mathf.Clamp(range, 0 +halfStep , 1);
+            range = Mathf.Clamp(range, 0f + halfStep, 1f - halfStep);
             for (int i = 0; i < waves.Length; i++)
             {
-                if (i == 0) 
-                {
-                    
-                }
-                
                 float rangeMid = i * step + halfStep;
                 float length   = Mathf.Abs(range - rangeMid);
                 length = Mathf.Min(step, length);

@@ -79,7 +79,6 @@ namespace UI_Scripts
                 float u = (x + 0.5f) * step - 1f;
                 float v = (z + 0.5f) * step - 1f;
 
-                // transform.position = WavesLib2.Sphere(u, v, _time);
                 transform.position = _length * WavesLib2.SmoothMultipleWaves(u, v, _time, _functionRange, _w);
             }
         }
