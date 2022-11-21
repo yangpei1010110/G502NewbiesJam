@@ -83,5 +83,16 @@ namespace UI_Scripts
             p.z = scale * r * Mathf.Cos(Mathf.PI * u);
             return p;
         }
+
+        // public static Vector3 Torus(float u, float v, float t)
+        // {
+        //     float   r = 1f;
+        //     float   s = r * Cos(0.5f * PI * v);
+        //     Vector3 p;
+        //     p.x = s * Sin(PI   * u);
+        //     p.y = r * Sin(0.5f * PI * v);
+        //     p.z = s * Cos(PI   * u);
+        //     return p;
+        // }
     }
 }
