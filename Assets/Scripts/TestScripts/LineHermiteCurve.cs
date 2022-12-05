@@ -35,7 +35,7 @@ namespace TestScripts
 
             return result0 + result1 + result2 + result3;
         }
-
+        
         private void Update()
         {
             Vector3[] tempData = new Vector3[pointCount + 1];
