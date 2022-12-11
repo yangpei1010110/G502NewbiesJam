@@ -4,7 +4,7 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 0
+  m_CurrentQuality: 5
   m_QualitySettings:
   - serializedVersion: 2
     name: Fastest
@@ -13,7 +13,7 @@ QualitySettings:
     shadowResolution: 0
     shadowProjection: 1
     shadowCascades: 1
-    shadowDistance: 10
+    shadowDistance: 15
     shadowNearPlaneOffset: 3
     shadowCascade2Split: 0.33333334
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
@@ -40,7 +40,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Fast
@@ -76,7 +75,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Simple
@@ -112,7 +110,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Good
@@ -148,7 +145,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Beautiful
@@ -184,7 +180,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Fantastic
@@ -220,11 +215,9 @@ QualitySettings:
     asyncUploadBufferSize: 4
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 0
-    Server: 0
     Standalone: 5
     WebGL: 5
     iPhone: 1
