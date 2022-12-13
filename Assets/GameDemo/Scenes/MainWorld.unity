@@ -56898,7 +56898,7 @@ MonoBehaviour:
   PlayerPrefabs:
   - {fileID: 114873785417298432, guid: a200a0b4274de1d4da0e68119fadcbbb, type: 3}
   SceneCharacters: []
-  InitialSpawnPoint: {fileID: 0}
+  InitialSpawnPoint: {fileID: 89338448}
   CurrentCheckpoint: {fileID: 0}
   PointsOfEntry:
   - {fileID: 0}
