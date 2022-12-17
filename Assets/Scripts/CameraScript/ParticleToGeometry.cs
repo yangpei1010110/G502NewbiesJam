@@ -26,6 +26,7 @@ namespace CameraScript
 
         public GameObject    particleTarget;
         public Material      material;
+        public int           kernelIndex;
         public ComputeShader computeShader;
         public Vector3[]     particlePoint;
         public ComputeBuffer particles;
@@ -51,8 +52,9 @@ namespace CameraScript
             {
                 var meshFilters = particleTarget.GetComponentsInChildren<MeshFilter>();
                 _meshCache.ComputeTriangleAreas(meshFilters);
-                particlePoint    = new Vector3[particleCount];
-                particles        = new ComputeBuffer(particleCount, Marshal.SizeOf(typeof(Particle)));
+                particlePoint = new Vector3[particleCount];
+                particles     = new ComputeBuffer(particleCount, Marshal.SizeOf(typeof(Particle)));
+                particles.SetData(particlePoint);
                 buffer_positions = new ComputeBuffer(_meshCache.positions.Length, Marshal.SizeOf(typeof(Vector3)));
                 buffer_positions.SetData(_meshCache.positions);
                 buffer_triangles = new ComputeBuffer(_meshCache.triangles.Length, Marshal.SizeOf(typeof(int)));
@@ -65,6 +67,7 @@ namespace CameraScript
                 buffer_r1Randoms   = new ComputeBuffer(particleCount, Marshal.SizeOf(typeof(float)));
                 _r2Randoms         = new float[particleCount];
                 buffer_r2Randoms   = new ComputeBuffer(particleCount, Marshal.SizeOf(typeof(float)));
+                kernelIndex        = computeShader.FindKernel("Distribution");
             }
         }
 
@@ -82,27 +85,25 @@ namespace CameraScript
                 _r1Randoms[i]   = Random.Range(0.0f, 1.0f);
                 _r2Randoms[i]   = Random.Range(0.0f, 1.0f);
             }
-
-
-            var kernel = computeShader.FindKernel("Distribution");
-            buffer_positions.SetData(_meshCache.positions);
-            computeShader.SetBuffer(kernel, "positions", buffer_positions);
-            buffer_triangles.SetData(_meshCache.triangles);
-            computeShader.SetBuffer(kernel, "triangles", buffer_triangles);
-            buffer_triangleAreas.SetData(_meshCache.triangleAreas);
-            computeShader.SetBuffer(kernel, "triangleAreas", buffer_triangleAreas);
+            
+            // buffer_positions.SetData(_meshCache.positions);
+            computeShader.SetBuffer(kernelIndex, "positions", buffer_positions);
+            // buffer_triangles.SetData(_meshCache.triangles);
+            computeShader.SetBuffer(kernelIndex, "triangles", buffer_triangles);
+            // buffer_triangleAreas.SetData(_meshCache.triangleAreas);
+            computeShader.SetBuffer(kernelIndex, "triangleAreas", buffer_triangleAreas);
             buffer_areaRandoms.SetData(_areaRandoms);
-            computeShader.SetBuffer(kernel, "areaRandoms", buffer_areaRandoms);
+            computeShader.SetBuffer(kernelIndex, "areaRandoms", buffer_areaRandoms);
             buffer_r1Randoms.SetData(_r1Randoms);
-            computeShader.SetBuffer(kernel, "r1Randoms", buffer_r1Randoms);
+            computeShader.SetBuffer(kernelIndex, "r1Randoms", buffer_r1Randoms);
             buffer_r2Randoms.SetData(_r2Randoms);
-            computeShader.SetBuffer(kernel, "r2Randoms", buffer_r2Randoms);
-            particles.SetData(particlePoint);
-            computeShader.SetBuffer(kernel, "resultPoints", particles);
+            computeShader.SetBuffer(kernelIndex, "r2Randoms", buffer_r2Randoms);
+            // particles.SetData(particlePoint);
+            computeShader.SetBuffer(kernelIndex, "resultPoints", particles);
             computeShader.SetInt("triangleAreasCount", _meshCache.triangleAreaCount);
             computeShader.SetFloat("totalArea", _meshCache.totalArea);
             computeShader.SetInt("totalPointCount", particleCount);
-            computeShader.Dispatch(kernel, particleCount / 1024 + 1, 1, 1);
+            computeShader.Dispatch(kernelIndex, particleCount / 1024 + 1, 1, 1);
 
             material.SetBuffer("positions", particles);
             material.SetFloat("_Width", width);
