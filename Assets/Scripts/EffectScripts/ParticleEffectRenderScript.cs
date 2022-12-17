@@ -13,11 +13,14 @@ namespace EffectScripts
 
         private void Awake()
         {
-            Collider2D component = this.GetComponent<Collider2D>();
-            particlePositionCenter = component.bounds.center;
+            if (enabled)
+            {
+                Collider2D component = this.GetComponent<Collider2D>();
+                particlePositionCenter = component.bounds.center;
 
-            var particleSystem = this.GetComponent<ParticleSystem>();
-            particleSystem.GetCustomParticleData(customData, ParticleSystemCustomData.Custom1);
+                var particleSystem = this.GetComponent<ParticleSystem>();
+                particleSystem.GetCustomParticleData(customData, ParticleSystemCustomData.Custom1);
+            }
         }
 
         private void OnDrawGizmos()

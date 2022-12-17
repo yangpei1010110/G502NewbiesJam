@@ -18,28 +18,31 @@ namespace UI_Scripts
 
         private void Awake()
         {
-            Transform[] points = new Transform[resolution * resolution];
-            if (!pointPrefab)
+            if (enabled)
             {
-                throw new Exception("No point prefab");
+                Transform[] points = new Transform[resolution * resolution];
+                if (!pointPrefab)
+                {
+                    throw new Exception("No point prefab");
+                }
+
+                float step = length / resolution;
+
+                for (int i = 0; i < points.Length; i++)
+                {
+                    Transform point = points[i] = Instantiate(pointPrefab).transform;
+                    point.localScale = Vector3.one * step * scale;
+                }
+
+                _transformAccessArray = new TransformAccessArray(points);
+                _computeUpdate = new ComputeUpdate()
+                {
+                    _time          = Time.time,
+                    _functionRange = functionRange,
+                    _resolution    = resolution,
+                    _length        = length,
+                };
             }
-
-            float step = length / resolution;
-
-            for (int i = 0; i < points.Length; i++)
-            {
-                Transform point = points[i] = Instantiate(pointPrefab).transform;
-                point.localScale = Vector3.one * step * scale;
-            }
-
-            _transformAccessArray = new TransformAccessArray(points);
-            _computeUpdate = new ComputeUpdate()
-            {
-                _time          = Time.time,
-                _functionRange = functionRange,
-                _resolution    = resolution,
-                _length        = length,
-            };
         }
 
         public static Func<float, float, float, float>[] waves = new Func<float, float, float, float>[]

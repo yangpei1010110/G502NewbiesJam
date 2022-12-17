@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CameraScript
 {
@@ -8,6 +10,7 @@ namespace CameraScript
         public                   GameObject target;
         [SerializeField] private GameObject current;
         [SerializeField] private Vector3    offset;
+
 
         private void Awake()
         {
@@ -24,6 +27,7 @@ namespace CameraScript
             }
 
             offset = current.transform.position - target.transform.position;
+
         }
 
         private void Update()
