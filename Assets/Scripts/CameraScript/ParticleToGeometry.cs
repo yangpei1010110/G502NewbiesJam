@@ -181,15 +181,29 @@ namespace CameraScript
 
         public int GetTriangleAreaIndex(float area)
         {
-            for (int i = 0; i < triangleAreaCount; i++)
+            int low  = 0;
+            int high = triangleAreaCount - 1;
+            while (low <= high)
             {
-                if (triangleAreas[i] >= area)
+                int mid = low + (high - low) / 2;
+                if (triangleAreas[mid] >= area)
                 {
-                    return i;
+                    high = mid - 1;
+                }
+                else
+                {
+                    low = mid + 1;
                 }
             }
 
-            return -1;
+            if (low < triangleAreaCount)
+            {
+                return low;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public float GetTriangleArea(Vector3 A, Vector3 B, Vector3 C)
