@@ -9,7 +9,7 @@ namespace MoreMountains.TopDownEngine
 	/// This component allows the definition of a level that can then be accessed and loaded. Used mostly in the level map scene.
 	/// </summary>
 	[AddComponentMenu("TopDown Engine/GUI/LevelSelector")]
-	public class LevelSelector : MonoBehaviour
+	public class LevelSelector : TopDownMonoBehaviour
 	{
 		/// the exact name of the target level
 		[Tooltip("the exact name of the target level")]

@@ -5,7 +5,7 @@ using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
-	public class Magnetic : MonoBehaviour
+	public class Magnetic : TopDownMonoBehaviour
 	{
 		/// the possible update modes
 		public enum UpdateModes { Update, FixedUpdate, LateUpdate }

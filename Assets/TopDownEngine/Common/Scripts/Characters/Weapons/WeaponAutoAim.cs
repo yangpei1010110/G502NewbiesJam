@@ -10,7 +10,7 @@ namespace MoreMountains.TopDownEngine
 	/// Extended components should be placed on a weapon with an aim component
 	/// </summary>
 	[RequireComponent(typeof(Weapon))]
-	public abstract class WeaponAutoAim : MonoBehaviour
+	public abstract class WeaponAutoAim : TopDownMonoBehaviour
 	{
 		[Header("Layer Masks")]
 		/// the layermask on which to look for aim targets

@@ -10,7 +10,7 @@ namespace MoreMountains.TopDownEngine
 	/// Link this component to a Health component, and it'll be able to process incoming damage through resistances, handling damage reduction/increase, condition changes, movement multipliers, feedbacks and more.
 	/// </summary>
 	[AddComponentMenu("TopDown Engine/Character/Health/DamageResistanceProcessor")]
-	public class DamageResistanceProcessor : MonoBehaviour
+	public class DamageResistanceProcessor : TopDownMonoBehaviour
 	{
 		[Header("Damage Resistance List")]
 		

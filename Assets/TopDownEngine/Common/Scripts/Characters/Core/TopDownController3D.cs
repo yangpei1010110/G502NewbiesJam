@@ -238,7 +238,6 @@ namespace MoreMountains.TopDownEngine
 			}
 
 			_newVelocity = Velocity;
-
 			_positionLastFrame = _transform.position;
 
 			AddInput();
@@ -452,6 +451,13 @@ namespace MoreMountains.TopDownEngine
 		public virtual void DetachFromGround()
 		{
 			_detached = true;
+		}
+
+		public virtual void DetachFromMovingPlatform()
+		{
+			_movingPlatformVelocity = Vector3.zero;
+			_movingPlatformCurrentHitCollider = null;
+			_movingPlatformHitCollider = null;
 		}
 
 		#endregion

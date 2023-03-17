@@ -8,7 +8,7 @@ namespace MoreMountains.TopDownEngine
 	/// <summary>
 	/// This class is used in the Deadline demos to mark collectibles and disable them if they've been collected in a past visit of the level
 	/// </summary>
-	public class DeadlineCollectible : MonoBehaviour
+	public class DeadlineCollectible : TopDownMonoBehaviour
 	{
 		public string CollectibleName = "";
 		

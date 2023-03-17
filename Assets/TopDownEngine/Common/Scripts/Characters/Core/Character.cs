@@ -17,7 +17,7 @@ namespace MoreMountains.TopDownEngine
 	/// </summary>
 	[SelectionBase]
 	[AddComponentMenu("TopDown Engine/Character/Core/Character")] 
-	public class Character : MonoBehaviour
+	public class Character : TopDownMonoBehaviour
 	{
 		/// the possible initial facing direction for your character
 		public enum FacingDirections { West, East, North, South }

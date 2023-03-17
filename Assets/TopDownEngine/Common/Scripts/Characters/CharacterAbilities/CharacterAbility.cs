@@ -10,7 +10,7 @@ namespace MoreMountains.TopDownEngine
 	/// A class meant to be overridden that handles a character's ability. 
 	/// </summary>
 	//[RequireComponent(typeof(Character))]
-	public class CharacterAbility : MonoBehaviour 
+	public class CharacterAbility : TopDownMonoBehaviour 
 	{
 		/// the sound fx to play when the ability starts
 		[Tooltip("the sound fx to play when the ability starts")]

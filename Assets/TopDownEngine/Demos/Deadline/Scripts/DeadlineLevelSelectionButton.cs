@@ -7,7 +7,7 @@ namespace MoreMountains.TopDownEngine
 	/// <summary>
 	/// A class to handle the display of levels in the Deadline demo level selector
 	/// </summary>
-	public class DeadlineLevelSelectionButton : MonoBehaviour 
+	public class DeadlineLevelSelectionButton : TopDownMonoBehaviour 
 	{
 		/// the name of the scene to bind to this element
 		[Tooltip("the name of the scene to bind to this element")]

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
-	public class DeadlineDoor : MonoBehaviour
+	public class DeadlineDoor : TopDownMonoBehaviour
 	{
 
 		public float DoorMovementDuration = 0.3f;

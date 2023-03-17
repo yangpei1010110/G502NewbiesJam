@@ -9,7 +9,7 @@ namespace MoreMountains.TopDownEngine
 	/// Used by the DamageResistanceProcessor, this class defines the resistance versus a certain type of damage. 
 	/// </summary>
 	[AddComponentMenu("TopDown Engine/Character/Health/Damage Resistance")]
-	public class DamageResistance : MonoBehaviour
+	public class DamageResistance : TopDownMonoBehaviour
 	{
 		public enum DamageModifierModes { Multiplier, Flat }
 

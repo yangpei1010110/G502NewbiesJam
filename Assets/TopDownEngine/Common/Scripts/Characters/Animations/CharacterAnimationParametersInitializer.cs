@@ -28,7 +28,7 @@ namespace MoreMountains.TopDownEngine
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CharacterAnimationParametersInitializer : MonoBehaviour
+	public class CharacterAnimationParametersInitializer : TopDownMonoBehaviour
 	{
 		[Header("Initialization")]
 		/// if this is true, this component will remove itself after adding the character parameters

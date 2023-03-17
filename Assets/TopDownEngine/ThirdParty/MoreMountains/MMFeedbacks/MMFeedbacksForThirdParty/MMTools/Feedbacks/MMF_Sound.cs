@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using MoreMountains.Tools;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace MoreMountains.Feedbacks
 {
@@ -76,7 +78,10 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("the size of the pool when in Pool mode")]
 		[MMFEnumCondition("PlayMethod", (int)PlayMethods.Pool)]
 		public int PoolSize = 10;
-
+		/// if this is true, calling Stop on this feedback will also stop the sound from playing further
+		[Tooltip("if this is true, calling Stop on this feedback will also stop the sound from playing further")]
+		public bool StopSoundOnFeedbackStop = true;
+		
 		[MMFInspectorGroup("Sound Properties", true, 28)]
         
 		[Header("Volume")]
@@ -113,6 +118,7 @@ namespace MoreMountains.Feedbacks
 		protected AudioSource _tempAudioSource;
 		protected float _duration;
 		protected AudioSource _editorAudioSource;
+		protected AudioSource _audioSource;
 
 		public override void InitializeCustomAttributes()
 		{
@@ -236,40 +242,53 @@ namespace MoreMountains.Feedbacks
 			{
 				pitch = -pitch;
 			}
-            
-			if (PlayMethod == PlayMethods.Event)
+
+			switch (PlayMethod)
 			{
-				MMSfxEvent.Trigger(sfx, SfxAudioMixerGroup, volume, pitch, Priority);
+				case PlayMethods.Event:
+					MMSfxEvent.Trigger(sfx, SfxAudioMixerGroup, volume, pitch, Priority);
+					break;
+				case PlayMethods.Cached:
+					// we set that audio source clip to the one in paramaters
+					PlayAudioSource(_cachedAudioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
+					break;
+				case PlayMethods.OnDemand:
+					// we create a temporary game object to host our audio source
+					GameObject temporaryAudioHost = new GameObject("TempAudio");
+					SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, Owner.gameObject.scene);
+					// we set the temp audio's position
+					temporaryAudioHost.transform.position = position;
+					// we add an audio source to that host
+					AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
+					PlayAudioSource(audioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
+					// we destroy the host after the clip has played
+					Owner.ProxyDestroy(temporaryAudioHost, sfx.length);
+					break;
+				case PlayMethods.Pool:
+					_tempAudioSource = GetAudioSourceFromPool();
+					if (_tempAudioSource != null)
+					{
+						PlayAudioSource(_tempAudioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
+					}
+					break;
+			}
+		}
+
+		/// <summary>
+		/// On Stop, we stop our sound if needed
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="feedbacksIntensity"></param>
+		protected override void CustomStopFeedback(Vector3 position, float feedbacksIntensity = 1)
+		{
+			if (!Active || !FeedbackTypeAuthorized)
+			{
 				return;
 			}
-
-			if (PlayMethod == PlayMethods.OnDemand)
+            
+			if (StopSoundOnFeedbackStop && (_audioSource != null))
 			{
-				// we create a temporary game object to host our audio source
-				GameObject temporaryAudioHost = new GameObject("TempAudio");
-				SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, Owner.gameObject.scene);
-				// we set the temp audio's position
-				temporaryAudioHost.transform.position = position;
-				// we add an audio source to that host
-				AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
-				PlayAudioSource(audioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
-				// we destroy the host after the clip has played
-				Owner.ProxyDestroy(temporaryAudioHost, sfx.length);
-			}
-
-			if (PlayMethod == PlayMethods.Cached)
-			{
-				// we set that audio source clip to the one in paramaters
-				PlayAudioSource(_cachedAudioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
-			}
-
-			if (PlayMethod == PlayMethods.Pool)
-			{
-				_tempAudioSource = GetAudioSourceFromPool();
-				if (_tempAudioSource != null)
-				{
-					PlayAudioSource(_tempAudioSource, sfx, volume, pitch, timeSamples, SfxAudioMixerGroup, Priority);
-				}
+				_audioSource.Stop();
 			}
 		}
 
@@ -282,6 +301,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="pitch"></param>
 		protected virtual void PlayAudioSource(AudioSource audioSource, AudioClip sfx, float volume, float pitch, int timeSamples, AudioMixerGroup audioMixerGroup = null, int priority = 128)
 		{
+			_audioSource = audioSource;
 			// we set that audio source clip to the one in paramaters
 			audioSource.clip = sfx;
 			audioSource.timeSamples = timeSamples;

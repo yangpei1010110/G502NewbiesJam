@@ -291,33 +291,7 @@ namespace MoreMountains.Feedbacks
 		{
 			get
 			{
-				if ((Timing != null) && (!Timing.ContributeToTotalDuration))
-				{
-					return 0f;
-				}
-
-				float totalTime = 0f;
-
-				if (Timing == null)
-				{
-					return 0f;
-				}
-
-				if (Timing.InitialDelay != 0)
-				{
-					totalTime += ApplyTimeMultiplier(Timing.InitialDelay);
-				}
-
-				totalTime += FeedbackDuration;
-
-				if (Timing.NumberOfRepeats != 0)
-				{
-					float delayBetweenRepeats = ApplyTimeMultiplier(Timing.DelayBetweenRepeats);
-
-					totalTime += (Timing.NumberOfRepeats * delayBetweenRepeats);
-				}
-
-				return totalTime;
+				return _totalDuration;
 			}
 		}
 
@@ -402,6 +376,7 @@ namespace MoreMountains.Feedbacks
 		protected int CurrentSequenceIndex = 0;
 		protected float LastBeatTimestamp = 0f;
 		protected MMChannelData _channelData;
+		protected float _totalDuration = 0f;
 
 		#endregion Properties
 
@@ -819,6 +794,42 @@ namespace MoreMountains.Feedbacks
 			}
 		}
 
+		/// <summary>
+		/// Computes the total duration of this feedback
+		/// </summary>
+		protected virtual void ComputeTotalDuration()
+		{
+			if ((Timing != null) && (!Timing.ContributeToTotalDuration))
+			{
+				_totalDuration = 0f;
+				return;
+			}
+
+			float totalTime = 0f;
+
+			if (Timing == null)
+			{
+				_totalDuration = 0f;
+				return;
+			}
+
+			if (Timing.InitialDelay != 0)
+			{
+				totalTime += ApplyTimeMultiplier(Timing.InitialDelay);
+			}
+
+			totalTime += FeedbackDuration;
+
+			if (Timing.NumberOfRepeats != 0)
+			{
+				float delayBetweenRepeats = ApplyTimeMultiplier(Timing.DelayBetweenRepeats);
+
+				totalTime += (Timing.NumberOfRepeats * delayBetweenRepeats);
+			}
+				
+			_totalDuration = totalTime;
+		}
+
 		#endregion Time
 
 		#region Direction
@@ -933,6 +944,7 @@ namespace MoreMountains.Feedbacks
 		public virtual void OnValidate()
 		{
 			InitializeCustomAttributes();
+			ComputeTotalDuration();
 		}
 
 		/// <summary>

@@ -55,12 +55,12 @@ namespace MoreMountains.Feedbacks
 			}
 			else
 			{
-				int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
+				/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
 				if (property.depth > 0)
 				{
 					multiplier = property.depth;
-				}
-				return -EditorGUIUtility.standardVerticalSpacing * multiplier;
+				}*/
+				return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/;
 			}
 		}
 	}
@@ -122,12 +122,12 @@ namespace MoreMountains.Feedbacks
 			}
 			else
 			{
-				int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
+				/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
 				if (property.depth > 0)
 				{
-					multiplier = property.depth;
-				}
-				return -EditorGUIUtility.standardVerticalSpacing * multiplier;
+					//multiplier = property.depth;
+				}*/
+				return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/; 
 			}
 		}
 	}

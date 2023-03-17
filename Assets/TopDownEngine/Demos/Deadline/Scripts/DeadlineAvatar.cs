@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace MoreMountains.TopDownEngine
 {
-	public class DeadlineAvatar : MonoBehaviour
+	public class DeadlineAvatar : TopDownMonoBehaviour
 	{
 		public Character NaomiPrefab;
 		public Character JulesPrefab;

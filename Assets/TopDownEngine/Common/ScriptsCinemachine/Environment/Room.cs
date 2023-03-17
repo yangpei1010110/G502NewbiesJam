@@ -16,7 +16,7 @@ namespace MoreMountains.TopDownEngine
 	/// Note that the confiner is different from the collider that defines the room.
 	/// You can see an example of rooms in action in the KoalaRooms demo scene.
 	/// </summary>
-	public class Room : MonoBehaviour, MMEventListener<TopDownEngineEvent>
+	public class Room : TopDownMonoBehaviour, MMEventListener<TopDownEngineEvent>
 	{
 		public enum Modes { TwoD, ThreeD }
 

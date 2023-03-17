@@ -124,7 +124,7 @@ namespace MoreMountains.TopDownEngine
 			{
 				ContextSpeedStack.Clear();
 			}
-			if (_movement != null)
+			if ((_movement != null) && (_movement.CurrentState != CharacterStates.MovementStates.FallingDownHole))
 			{
 				_movement.ChangeState(CharacterStates.MovementStates.Idle);
 			}

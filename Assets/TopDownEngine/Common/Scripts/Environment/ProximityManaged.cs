@@ -9,7 +9,7 @@ namespace MoreMountains.TopDownEngine
 	/// <summary>
 	/// A class to add to any object in your scene to mark it as managed by a proximity manager.
 	/// </summary>
-	public class ProximityManaged : MonoBehaviour
+	public class ProximityManaged : TopDownMonoBehaviour
 	{
 		[Header("Thresholds")]
 		/// the distance from the proximity center (the player) under which the object should be enabled

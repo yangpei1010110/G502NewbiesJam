@@ -3,7 +3,7 @@
 namespace MoreMountains.TopDownEngine
 {	
 	/// <summary>
-	/// A Retro adventure dedicated class that will load the next level
+	/// A Deadline demo dedicated class that will load the next level
 	/// </summary>
 	public class DeadlineFinishLevel : FinishLevel 
 	{

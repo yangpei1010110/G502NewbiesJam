@@ -210,9 +210,11 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			TargetTMPText.gameObject.SetActive(false);
-			TargetTMPText.outlineColor = _initialColor;
-			TargetTMPText.gameObject.SetActive(true);
+			#if MM_TEXTMESHPRO
+				TargetTMPText.gameObject.SetActive(false);
+				TargetTMPText.outlineColor = _initialColor;
+				TargetTMPText.gameObject.SetActive(true);
+			#endif
 		}
 	}
 }

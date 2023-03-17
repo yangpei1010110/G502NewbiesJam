@@ -9,7 +9,7 @@ namespace MoreMountains.TopDownEngine
 {	
 	[RequireComponent(typeof(Weapon))]
 	[AddComponentMenu("TopDown Engine/Weapons/Weapon Ammo")]
-	public class WeaponAmmo : MonoBehaviour, MMEventListener<MMStateChangeEvent<MoreMountains.TopDownEngine.Weapon.WeaponStates>>, MMEventListener<MMInventoryEvent>, MMEventListener<MMGameEvent>
+	public class WeaponAmmo : TopDownMonoBehaviour, MMEventListener<MMStateChangeEvent<MoreMountains.TopDownEngine.Weapon.WeaponStates>>, MMEventListener<MMInventoryEvent>, MMEventListener<MMGameEvent>
 	{
 		[Header("Ammo")]
 		

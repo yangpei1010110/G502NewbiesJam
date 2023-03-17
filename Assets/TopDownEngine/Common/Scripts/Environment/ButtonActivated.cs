@@ -14,7 +14,7 @@ namespace MoreMountains.TopDownEngine
 	/// Extend this class to activate something when a button is pressed in a certain zone
 	/// </summary>
 	[AddComponentMenu("TopDown Engine/Environment/Button Activated")]
-	public class ButtonActivated : MonoBehaviour 
+	public class ButtonActivated : TopDownMonoBehaviour 
 	{
 		public enum ButtonActivatedRequirements { Character, ButtonActivator, Either, None }
 		public enum InputTypes { Default, Button, Key }

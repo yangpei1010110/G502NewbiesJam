@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MoreMountains.TopDownEngine
 {
-	public class DeadlineStartMenuButton : MonoBehaviour
+	public class DeadlineStartMenuButton : TopDownMonoBehaviour
 	{
 		public enum Types { NewGame, Continue }
 

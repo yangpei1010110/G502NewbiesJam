@@ -19,22 +19,7 @@ namespace MoreMountains.Feedbacks
 		{
 			get
 			{
-				float total = 0f;
-				if (FeedbacksList == null)
-				{
-					return InitialDelay;
-				}
-				foreach (MMF_Feedback feedback in FeedbacksList)
-				{
-					if ((feedback != null) && (feedback.Active))
-					{
-						if (total < feedback.TotalDuration)
-						{
-							total = feedback.TotalDuration;    
-						}
-					}
-				}
-				return InitialDelay + total;
+				return _cachedTotalDuration;
 			}
 		}
 
@@ -47,6 +32,7 @@ namespace MoreMountains.Feedbacks
 		public bool SkippingToTheEnd { get; protected set; }
         
 		protected Type _t;
+		protected float _cachedTotalDuration;
         
 		#endregion
         
@@ -338,6 +324,14 @@ namespace MoreMountains.Feedbacks
 				PreparePlay(position, feedbacksIntensity, forceRevert);
 			}
 		}
+		
+		/// <summary>
+		/// Use this method before every PlayFeedbacks() call ONLY if you ever need to play the same MMF Player multiple times a frame
+		/// </summary>
+		public virtual void AllowSameFramePlay()
+		{
+			_lastStartFrame = -1;
+		}
 
 		/// <summary>
 		/// Returns true if this feedback is allowed to play, false otherwise
@@ -484,10 +478,10 @@ namespace MoreMountains.Feedbacks
 					return;
 				}
 				IsPlaying = false;
-				Events.TriggerOnComplete(this);
 				ApplyAutoRevert();
 				this.enabled = false;
 				_shouldStop = false;
+				Events.TriggerOnComplete(this);
 			}
 			if (IsPlaying)
 			{
@@ -1156,6 +1150,8 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
+
+			ComputeCachedTotalDuration();
             
 			DurationMultiplier = Mathf.Clamp(DurationMultiplier, _smallValue, Single.MaxValue);
             
@@ -1172,6 +1168,142 @@ namespace MoreMountains.Feedbacks
 					FeedbacksList[i].OnValidate();	
 				}
 			}
+		}
+
+		/// <summary>
+		/// Computes the total duration of the player's sequence of feedbacks
+		/// </summary>
+		protected virtual void ComputeCachedTotalDuration()
+		{
+			float total = 0f;
+			if (FeedbacksList == null)
+			{
+				_cachedTotalDuration = InitialDelay;
+				return;
+			}
+			
+			CheckForPauses();
+
+			if (!_pauseFound)
+			{
+				foreach (MMF_Feedback feedback in FeedbacksList)
+				{
+					if ((feedback != null) && (feedback.Active) && feedback.ShouldPlayInThisSequenceDirection)
+					{
+						if (total < feedback.TotalDuration)
+						{
+							total = feedback.TotalDuration;    
+						}
+					}
+				}
+			}
+			else
+			{
+				int lastLooperStart = 0;
+				int lastLoopFoundAt = 0;
+				int lastPauseFoundAt = 0;
+				int loopsLeft = 0;
+				int iterations = 0;
+				int maxIterationsSafety = 1000;
+				float currentPauseDelay = 0f;
+				int i = (Direction == Directions.TopToBottom) ? 0 : Feedbacks.Count-1;
+				float intermediateTotal = 0f;
+				while ((i >= 0) && (i < FeedbacksList.Count) && (iterations < maxIterationsSafety))
+				{
+					iterations++;
+					
+					if ((FeedbacksList[i] != null) && FeedbacksList[i].Active && FeedbacksList[i].ShouldPlayInThisSequenceDirection)
+					{
+						if (FeedbacksList[i].Pause != null)
+						{
+							// pause
+							if (FeedbacksList[i].HoldingPause)
+							{
+								intermediateTotal += (FeedbacksList[i] as MMF_Pause).PauseDuration;
+								total += intermediateTotal;
+								intermediateTotal = 0f;
+							}
+							else
+							{
+								currentPauseDelay += (FeedbacksList[i] as MMF_Pause).PauseDuration;
+							}
+							
+							//loops
+							if (FeedbacksList[i].LooperStart)
+							{
+								lastLooperStart = i;
+							}
+
+							if (!FeedbacksList[i].LooperPause)
+							{
+								lastPauseFoundAt = i;
+							}
+
+							// TODO : looper pause maths still doesn't work 
+							if (FeedbacksList[i].LooperPause && ((FeedbacksList[i] as MMF_Looper).NumberOfLoops > 0))
+							{
+								if (i == lastLoopFoundAt)
+								{
+									loopsLeft--;
+									if (loopsLeft <= 0)
+									{
+										i += (Direction == Directions.TopToBottom) ? 1 : -1;
+										continue;
+									}
+								}
+								else
+								{
+									lastLoopFoundAt = i;
+									loopsLeft = (FeedbacksList[i] as MMF_Looper).NumberOfLoops - 1;
+								}
+								
+								if ((FeedbacksList[i] as MMF_Looper).InfiniteLoop)
+								{
+									_cachedTotalDuration = 999f; 
+									return;
+								}
+
+								if ((FeedbacksList[i] as MMF_Looper).LoopAtLastPause)
+								{
+									i = lastPauseFoundAt;
+									total += intermediateTotal;
+									intermediateTotal = 0f;
+									currentPauseDelay = 0f;
+									continue;
+								}
+								else if ((FeedbacksList[i] as MMF_Looper).LoopAtLastLoopStart)
+								{
+									i = lastLooperStart;
+									total += intermediateTotal;
+									intermediateTotal = 0f;
+									currentPauseDelay = 0f;
+									continue;
+								}
+								else
+								{
+									i = 0;
+									total += intermediateTotal;
+									intermediateTotal = 0f;
+									currentPauseDelay = 0f;
+									continue;
+								}
+							}	
+						}
+						else
+						{
+							float feedbackDuration = FeedbacksList[i].TotalDuration + currentPauseDelay;
+							if (intermediateTotal < feedbackDuration)
+							{
+								intermediateTotal = feedbackDuration;    
+							}
+						}
+					}
+					
+					i += (Direction == Directions.TopToBottom) ? 1 : -1;
+				}
+				total += intermediateTotal;
+			}
+			_cachedTotalDuration = InitialDelay + total;
 		}
 
 		/// <summary>

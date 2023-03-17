@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 23
-  productGUID: c450aa38a5dadd74fb4f833a01bcdb6e
+  productGUID: 5934a61e7c4b7114f8a9503fbc5a9bbe
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -169,7 +169,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.moremountains.topdownengine
-    Standalone: com.DefaultCompany.G502NewbiesJam
+    Standalone: unity.MoreMountains.TopDown
     Tizen: com.Company.ProductName
     iPhone: com.moremountains.topdownengine
     tvOS: com.Company.ProductName

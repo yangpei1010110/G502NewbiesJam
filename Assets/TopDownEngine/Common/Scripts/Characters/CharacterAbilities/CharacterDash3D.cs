@@ -140,6 +140,7 @@ namespace MoreMountains.TopDownEngine
 			_dashTimer = 0f;
 			_dashOrigin = this.transform.position;
 			_controller.FreeMovement = false;
+			_controller3D.DetachFromMovingPlatform();
 			DashFeedback?.PlayFeedbacks(this.transform.position);
 			PlayAbilityStartFeedbacks();
 			_dashStartedThisFrame = true;
