@@ -92,8 +92,6 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		public virtual void TimeControlStop()
 		{
-			StopStartFeedbacks();
-			PlayAbilityStopFeedbacks();
 			Cooldown.Stop();
 		}
 
@@ -113,6 +111,27 @@ namespace MoreMountains.TopDownEngine
 					MMTimeScaleEvent.Trigger(MMTimeScaleMethods.Unfreeze, 1f, 0f, false, 0f, false);    
 				}
 			}
+		}
+
+		protected virtual void OnCooldownStateChange(MMCooldown.CooldownStates newState)
+		{
+			if (newState == MMCooldown.CooldownStates.Stopped)
+			{
+				StopStartFeedbacks();
+				PlayAbilityStopFeedbacks();
+			}
+		}
+		
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			Cooldown.OnStateChange += OnCooldownStateChange;
+		}
+		
+		protected override void OnDisable()
+		{
+			base.OnDisable();
+			Cooldown.OnStateChange -= OnCooldownStateChange;
 		}
 	}
 }

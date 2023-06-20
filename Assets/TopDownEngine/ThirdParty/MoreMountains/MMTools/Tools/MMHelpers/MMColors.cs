@@ -349,6 +349,49 @@ namespace MoreMountains.Tools
 
 			return c;
 		}
+		
+		/// <summary>
+		/// Returns a uniform "flat" gradient from the specified color and alpha
+		/// </summary>
+		/// <param name="color">the color to use for both ends of the gradient</param>
+		/// <param name="alpha">the alpha to use for both ends of the gradient</param>
+		/// <returns></returns>
+		public static Gradient FlatGradient(Color32 color, float alpha = 1f)
+		{
+			return new Gradient()
+			{
+				colorKeys = new GradientColorKey[2]
+				{
+					new GradientColorKey(color, 0), new GradientColorKey(color, 1f)
+				}, alphaKeys = new GradientAlphaKey[2]
+				{
+					new GradientAlphaKey(alpha, 0), new GradientAlphaKey(alpha, 1)
+				}
+			};
+		}
+
+		/// <summary>
+		/// Returns a simple gradient made of the two specified colors and alphas
+		/// </summary>
+		/// <param name="startColor">the color to use for the left side of the gradient</param>
+		/// <param name="endColor">the color to use for the right side of the gradient</param>
+		/// <param name="startAlpha">the alpha to use for the left side of the gradient</param>
+		/// <param name="endAlpha">the alpha to use for the right side of the gradient</param>
+		/// <returns></returns>
+		public static Gradient SimpleGradient(Color32 startColor, Color32 endColor, float startAlpha = 1f,
+			float endAlpha = 1f)
+		{
+			return new Gradient()
+			{
+				colorKeys = new GradientColorKey[2]
+				{
+					new GradientColorKey(startColor, 0), new GradientColorKey(endColor, 1f)
+				}, alphaKeys = new GradientAlphaKey[2]
+				{
+					new GradientAlphaKey(startAlpha, 0), new GradientAlphaKey(endAlpha, 1)
+				}
+			};
+		}
 
 
 		/// <summary>

@@ -262,6 +262,11 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		public virtual void ResetContextSpeedMultiplier()
 		{
+			if (ContextSpeedStack.Count <= 0)
+			{
+				return;
+			}
+			
 			ContextSpeedStack.Pop();
 		}
 

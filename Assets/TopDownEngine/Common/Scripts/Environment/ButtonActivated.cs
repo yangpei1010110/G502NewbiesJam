@@ -84,7 +84,12 @@ namespace MoreMountains.TopDownEngine
 		public InputTypes InputType = InputTypes.Default;
 		#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 			/// the input action to use for this button activated object
-			public InputAction InputSystemAction;
+			public InputActionProperty InputSystemAction = new InputActionProperty(
+				new InputAction(
+					name: "ButtonActivatedAction",
+					type: InputActionType.Button, 
+					binding: "Keyboard/space", 
+					interactions: "Press(behavior=2)"));
 		#else
 			/// the selected button string used to activate this zone
 			[MMEnumCondition("InputType", (int)InputTypes.Button)]
@@ -190,7 +195,7 @@ namespace MoreMountains.TopDownEngine
 			get
 			{
 				#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-					return InputSystemAction.WasPerformedThisFrame();
+					return InputSystemAction.action.WasPressedThisFrame();
 				#else
 					return false;
 				#endif
@@ -226,7 +231,7 @@ namespace MoreMountains.TopDownEngine
 			}
 			
 			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-				InputSystemAction.Enable();
+				InputSystemAction.action.Enable();
 			#endif
 		}
 		
@@ -236,7 +241,7 @@ namespace MoreMountains.TopDownEngine
 		protected virtual void OnDisable()
 		{
 			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-				InputSystemAction.Disable();
+				InputSystemAction.action.Disable();
 			#endif
 		}
 
@@ -399,7 +404,7 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Enables the button activated zone
+		/// Disables the button activated zone
 		/// </summary>
 		public virtual void DisableZone()
 		{
@@ -423,12 +428,21 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
-		/// Disables the button activated zone
+		/// Enables the button activated zone
 		/// </summary>
 		public virtual void EnableZone()
 		{
 			Activable = true;
-			_collider.enabled = true;
+            
+			if (_collider != null)
+			{
+				_collider.enabled = true;
+			}
+
+			if (_collider2D != null)
+			{
+				_collider2D.enabled = true;
+			}
 		}
 
 		/// <summary>

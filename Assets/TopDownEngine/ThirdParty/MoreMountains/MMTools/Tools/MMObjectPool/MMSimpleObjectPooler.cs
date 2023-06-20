@@ -17,9 +17,6 @@ namespace MoreMountains.Tools
 		public int PoolSize = 20;
 		/// if true, the pool will automatically add objects to the itself if needed
 		public bool PoolCanExpand = true;
-
-		/// the actual object pool
-		protected List<GameObject> _pooledGameObjects;
 	    
 		public List<MMSimpleObjectPooler> Owner { get; set; }
 		private void OnDestroy() { Owner?.Remove(this); }
@@ -42,15 +39,11 @@ namespace MoreMountains.Tools
 
 			CreateWaitingPool ();
 
-			// we initialize the list we'll use to 
-			_pooledGameObjects = new List<GameObject>();
-
 			int objectsToSpawn = PoolSize;
 
 			if (_objectPool != null)
 			{
 				objectsToSpawn -= _objectPool.PooledGameObjects.Count;
-				_pooledGameObjects = new List<GameObject>(_objectPool.PooledGameObjects);
 			}
 
 			// we add to the pool the specified number of objects
@@ -76,12 +69,12 @@ namespace MoreMountains.Tools
 		public override GameObject GetPooledGameObject()
 		{
 			// we go through the pool looking for an inactive object
-			for (int i=0; i< _pooledGameObjects.Count; i++)
+			for (int i=0; i< _objectPool.PooledGameObjects.Count; i++)
 			{
-				if (!_pooledGameObjects[i].gameObject.activeInHierarchy)
+				if (!_objectPool.PooledGameObjects[i].gameObject.activeInHierarchy)
 				{
 					// if we find one, we return it
-					return _pooledGameObjects[i];
+					return _objectPool.PooledGameObjects[i];
 				}
 			}
 			// if we haven't found an inactive object (the pool is empty), and if we can extend it, we add one new object to the pool, and return it		
@@ -114,9 +107,7 @@ namespace MoreMountains.Tools
 			{
 				newGameObject.transform.SetParent(_waitingPool.transform);	
 			}
-			newGameObject.name = GameObjectToPool.name + "-" + _pooledGameObjects.Count;
-
-			_pooledGameObjects.Add(newGameObject);
+			newGameObject.name = GameObjectToPool.name + "-" + _objectPool.PooledGameObjects.Count;
 
 			_objectPool.PooledGameObjects.Add(newGameObject);
 

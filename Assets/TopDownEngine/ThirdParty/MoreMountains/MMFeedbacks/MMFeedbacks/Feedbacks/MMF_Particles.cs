@@ -19,11 +19,14 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		/// sets the inspector color for this feedback
 		#if UNITY_EDITOR
+		public override float FeedbackDuration { get { return ApplyTimeMultiplier(DeclaredDuration); } set { DeclaredDuration = value;  } }
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.ParticlesColor; } }
 		public override bool EvaluateRequiresSetup() { return (BoundParticleSystem == null); }
 		public override string RequiredTargetText { get { return BoundParticleSystem != null ? BoundParticleSystem.name : "";  } }
 		public override string RequiresSetupText { get { return "This feedback requires that a BoundParticleSystem be set to be able to work properly. You can set one below."; } }
 		#endif
+		public override bool HasAutomatedTargetAcquisition => true;
+		protected override void AutomateTargetAcquisition() => BoundParticleSystem = FindAutomatedTarget<ParticleSystem>();
         
 		public enum Modes { Play, Stop, Pause }
 
@@ -46,6 +49,9 @@ namespace MoreMountains.Feedbacks
 		/// if this is true, the particle system will be stopped on initialization
 		[Tooltip("if this is true, the particle system will be stopped on initialization")]
 		public bool StopSystemOnInit = true;
+		/// the duration for the player to consider. This won't impact your particle system, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.
+		[Tooltip("the duration for the player to consider. This won't impact your particle system, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.")]
+		public float DeclaredDuration = 0f;
 
 		/// <summary>
 		/// On init we stop our particle system

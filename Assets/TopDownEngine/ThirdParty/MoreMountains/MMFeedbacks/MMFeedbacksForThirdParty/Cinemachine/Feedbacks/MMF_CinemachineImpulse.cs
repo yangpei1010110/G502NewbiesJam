@@ -36,7 +36,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public bool ClearImpulseOnStop = false;
 
 		/// the duration of this feedback is the duration of the impulse
-		public override float FeedbackDuration { get { return m_ImpulseDefinition.m_TimeEnvelope.Duration; } }
+		public override float FeedbackDuration { get { return m_ImpulseDefinition != null ? m_ImpulseDefinition.m_TimeEnvelope.Duration : 0f; } }
 		#endif
 
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)

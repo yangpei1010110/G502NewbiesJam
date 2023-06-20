@@ -111,7 +111,12 @@ namespace MoreMountains.TopDownEngine
 					{
 						return;
 					}
-					GetPrimaryMovementAim();                    
+
+					if (_weapon.Owner.LinkedInputManager.PrimaryMovement.magnitude > MinimumMagnitude)
+					{
+						GetPrimaryMovementAim();
+					}
+
 					break;
 
 				case AimControls.SecondaryMovement:
@@ -119,7 +124,12 @@ namespace MoreMountains.TopDownEngine
 					{
 						return;
 					}
-					GetSecondaryMovementAim();                    
+
+					if (_weapon.Owner.LinkedInputManager.SecondaryMovement.magnitude > MinimumMagnitude)
+					{
+						GetSecondaryMovementAim();
+					}
+
 					break;                    
 
 				case AimControls.PrimaryThenSecondaryMovement:

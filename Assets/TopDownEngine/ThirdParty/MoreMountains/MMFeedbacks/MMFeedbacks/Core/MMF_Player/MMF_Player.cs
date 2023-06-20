@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MoreMountains.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -28,6 +29,9 @@ namespace MoreMountains.Feedbacks
 		public bool PerformanceMode = false;
 		[Tooltip("if this is true, StopFeedbacks will be called on all feedbacks on Disable")]
 		public bool ForceStopFeedbacksOnDisable = true;
+		[Tooltip("how many times this player has started playing")]
+		[MMReadOnly]
+		public int PlayCount = 0;
 
 		public bool SkippingToTheEnd { get; protected set; }
         
@@ -62,6 +66,7 @@ namespace MoreMountains.Feedbacks
 			InitializeFeedbackList();
 			ExtraInitializationChecks();
 			CheckForLoops();
+			ComputeCachedTotalDuration();
 		}
 
 		/// <summary>
@@ -118,9 +123,15 @@ namespace MoreMountains.Feedbacks
 			}
 			if (AutoPlayOnEnable && Application.isPlaying)
 			{
+				if (_lastOnEnableFrame == Time.frameCount)
+				{
+					return;
+				}
+				
 				// if we're in the very first frames, we delay our play for 2 frames to avoid Unity bugs
 				if (Time.frameCount < 2)
 				{
+					_lastOnEnableFrame = 2;
 					StartCoroutine(PlayFeedbacksAfterFrames(2));
 				}
 				else
@@ -157,7 +168,7 @@ namespace MoreMountains.Feedbacks
 			{
 				if (FeedbacksList[i] != null)
 				{
-					FeedbacksList[i].Initialization(this);
+					FeedbacksList[i].Initialization(this, i);
 				}                
 			}
 		}
@@ -304,6 +315,7 @@ namespace MoreMountains.Feedbacks
 			_lastStartAt = _startTime;
 			this.enabled = true;
 			IsPlaying = true;
+			PlayCount++;
 			ComputeNewRandomDurationMultipliers();
 			_totalDuration = TotalDuration;
 			CheckForPauses();
@@ -324,14 +336,6 @@ namespace MoreMountains.Feedbacks
 				PreparePlay(position, feedbacksIntensity, forceRevert);
 			}
 		}
-		
-		/// <summary>
-		/// Use this method before every PlayFeedbacks() call ONLY if you ever need to play the same MMF Player multiple times a frame
-		/// </summary>
-		public virtual void AllowSameFramePlay()
-		{
-			_lastStartFrame = -1;
-		}
 
 		/// <summary>
 		/// Returns true if this feedback is allowed to play, false otherwise
@@ -345,14 +349,14 @@ namespace MoreMountains.Feedbacks
 			{
 				return false;
 			}
-
-			if (Time.frameCount == _lastStartFrame)
-			{
-				return false;
-			}
 			
 			// if we're already playing and can't play while already playing, we're not allowed to play 
 			if (IsPlaying && !CanPlayWhileAlreadyPlaying)
+			{
+				return false;
+			}
+
+			if (AutoPlayOnEnable && (_lastStartFrame == Time.frameCount))
 			{
 				return false;
 			}
@@ -674,7 +678,7 @@ namespace MoreMountains.Feedbacks
 				yield return null;
 			}
 			SkippingToTheEnd = true;
-			Events.TriggerOnSkip(this);
+			Events.TriggerOnSkipToTheEnd(this);
 			int count = FeedbacksList.Count;
 			for (int i = 0; i < count; i++)
 			{
@@ -694,7 +698,7 @@ namespace MoreMountains.Feedbacks
 		#region STOP
 
 		/// <summary>
-		/// Stops all further feedbacks from playing, without stopping individual feedbacks 
+		/// Stops all further feedbacks from playing, as well as stopping individual feedbacks 
 		/// </summary>
 		public override void StopFeedbacks()
 		{
@@ -758,6 +762,30 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
+		/// Sets the direction of the player to the one specified in parameters
+		/// </summary>
+		public virtual void SetDirection(Directions newDirection)
+		{
+			Direction = newDirection;
+		}
+		
+		/// <summary>
+		/// Sets the direction to top to bottom
+		/// </summary>
+		public void SetDirectionTopToBottom()
+		{
+			Direction = Directions.TopToBottom;
+		}
+
+		/// <summary>
+		/// Sets the direction to bottom to top
+		/// </summary>
+		public void SetDirectionBottomToTop()
+		{
+			Direction = Directions.BottomToTop;
+		}
+
+		/// <summary>
 		/// Pauses execution of a sequence, which can then be resumed by calling ResumeFeedbacks()
 		/// </summary>
 		public override void PauseFeedbacks()
@@ -772,14 +800,21 @@ namespace MoreMountains.Feedbacks
 		/// </summary>
 		public virtual void RestoreInitialValues()
 		{
+			if (PlayCount <= 0)
+			{
+				return;
+			}
+			
 			int count = FeedbacksList.Count;
-			for (int i = 0; i < count; i++)
+			for (int i = count - 1; i >= 0; i--)
 			{
 				if ((FeedbacksList[i] != null) && (FeedbacksList[i].Active))
 				{
 					FeedbacksList[i].RestoreInitialValues();    
 				}
 			}
+
+			Events.TriggerOnRestoreInitialValues(this);
 		}
 
 		/// <summary>
@@ -813,6 +848,7 @@ namespace MoreMountains.Feedbacks
 			newFeedback.Owner = this;
 			newFeedback.UniqueID = Guid.NewGuid().GetHashCode();
 			FeedbacksList.Add(newFeedback);
+			newFeedback.OnAddFeedback();
 			newFeedback.CacheRequiresSetup();
 			newFeedback.InitializeCustomAttributes();
 		}
@@ -822,14 +858,19 @@ namespace MoreMountains.Feedbacks
 		/// </summary>
 		/// <param name="feedbackType"></param>
 		/// <returns></returns>
-		public new MMF_Feedback AddFeedback(System.Type feedbackType)
+		public new MMF_Feedback AddFeedback(System.Type feedbackType, bool add = true)
 		{
 			InitializeFeedbackList();
 			MMF_Feedback newFeedback = (MMF_Feedback)Activator.CreateInstance(feedbackType);
 			newFeedback.Label = FeedbackPathAttribute.GetFeedbackDefaultName(feedbackType);
 			newFeedback.Owner = this;
+			newFeedback.Timing = new MMFeedbackTiming();
 			newFeedback.UniqueID = Guid.NewGuid().GetHashCode();
-			FeedbacksList.Add(newFeedback);
+			if (add)
+			{
+				FeedbacksList.Add(newFeedback);	
+			}
+			newFeedback.OnAddFeedback();
 			newFeedback.InitializeCustomAttributes();
 			newFeedback.CacheRequiresSetup();
 			return newFeedback;
@@ -1017,6 +1058,99 @@ namespace MoreMountains.Feedbacks
 		#endregion
 
 		#region ACCESS
+		
+		public enum AccessMethods { First, Previous, Closest, Next, Last }
+		
+		/// <summary>
+		/// Returns the first feedback found in this player's list based on the chosen method and type
+		/// First : first feedback of the matching type in the list, from top to bottom
+		/// Previous : first feedback of the matching type located before (so above) the feedback at the reference index
+		/// Closest : first feedback of the matching type located before or after the feedback at the reference index
+		/// Next : first feedback of the matching type located after (so below) the feedback at the reference index
+		/// First : last feedback of the matching type in the list, from top to bottom
+		/// </summary>
+		/// <param name="method"></param>
+		/// <param name="referenceIndex"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public virtual T GetFeedbackOfType<T>(AccessMethods method, int referenceIndex) where T:MMF_Feedback
+		{
+			_t = typeof(T);
+
+			referenceIndex = Mathf.Clamp(referenceIndex, 0, FeedbacksList.Count);
+			
+			switch (method)
+			{
+				case AccessMethods.First:
+					for (int i = 0; i < FeedbacksList.Count; i++)
+					{
+						if (Check(i)) { return (T)FeedbacksList[i]; }
+					}
+					break;
+				case AccessMethods.Previous:
+					for (int i = referenceIndex; i >= 0; i--)
+					{
+						if (Check(i)) { return (T)FeedbacksList[i]; }
+					}
+					break;
+				case AccessMethods.Closest:
+					int closestIndexBack = referenceIndex;
+					int closestIndexForward = referenceIndex;
+					for (int i = referenceIndex; i >= 0; i--)
+					{
+						if (Check(i))
+						{
+							closestIndexBack = i;
+							break;
+						}
+					}
+
+					for (int i = referenceIndex; i < FeedbacksList.Count; i++)
+					{
+						if (Check(i))
+						{
+							closestIndexForward = i;
+							break;
+						}
+					}
+
+					int foundIndex;
+					if ((closestIndexBack != referenceIndex) || (closestIndexForward != referenceIndex))
+					{
+						if (closestIndexBack == referenceIndex) { foundIndex = closestIndexForward; }
+						else if (closestIndexForward == referenceIndex) { foundIndex = closestIndexBack; }
+						else
+						{
+							int distanceBack = Mathf.Abs(referenceIndex - closestIndexBack);
+							int distanceForward = Mathf.Abs(referenceIndex - closestIndexForward);
+							foundIndex = (distanceBack > distanceForward) ? closestIndexForward : closestIndexBack;
+						}
+						return (T)FeedbacksList[foundIndex];
+					}
+					else
+					{
+						return null;
+					}
+				case AccessMethods.Next:
+					for (int i = referenceIndex; i < FeedbacksList.Count; i++)
+					{
+						if (Check(i)) { return (T)FeedbacksList[i]; }
+					}
+					break;
+				case AccessMethods.Last:
+					for (int i = FeedbacksList.Count - 1; i >= 0; i--)
+					{
+						if (Check(i)) { return (T)FeedbacksList[i]; }
+					}
+					break;
+			}
+			return null;
+
+			bool Check(int i)
+			{
+				return (FeedbacksList[i].GetType() == _t);
+			}
+		}
 
 		/// <summary>
 		/// Returns the first feedback of the searched type on this MMF_Player
@@ -1139,6 +1273,14 @@ namespace MoreMountains.Feedbacks
 		protected override void OnValidate()
 		{
 			RefreshCache();
+
+			if ((FeedbacksList != null) && (FeedbacksList.Count > 0))
+			{
+				for (int i = FeedbacksList.Count - 1; i >= 0; i--)
+				{
+					FeedbacksList[i].OnValidate();	
+				}	
+			}
 		}
 
 		/// <summary>
@@ -1150,8 +1292,6 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-
-			ComputeCachedTotalDuration();
             
 			DurationMultiplier = Mathf.Clamp(DurationMultiplier, _smallValue, Single.MaxValue);
             
@@ -1165,9 +1305,10 @@ namespace MoreMountains.Feedbacks
 				{
 					FeedbacksList[i].Owner = this;
 					FeedbacksList[i].CacheRequiresSetup();
-					FeedbacksList[i].OnValidate();	
 				}
 			}
+
+			ComputeCachedTotalDuration();
 		}
 
 		/// <summary>
@@ -1188,6 +1329,7 @@ namespace MoreMountains.Feedbacks
 			{
 				foreach (MMF_Feedback feedback in FeedbacksList)
 				{
+					feedback.ComputeTotalDuration();
 					if ((feedback != null) && (feedback.Active) && feedback.ShouldPlayInThisSequenceDirection)
 					{
 						if (total < feedback.TotalDuration)
@@ -1214,6 +1356,7 @@ namespace MoreMountains.Feedbacks
 					
 					if ((FeedbacksList[i] != null) && FeedbacksList[i].Active && FeedbacksList[i].ShouldPlayInThisSequenceDirection)
 					{
+						FeedbacksList[i].ComputeTotalDuration();
 						if (FeedbacksList[i].Pause != null)
 						{
 							// pause
@@ -1239,7 +1382,6 @@ namespace MoreMountains.Feedbacks
 								lastPauseFoundAt = i;
 							}
 
-							// TODO : looper pause maths still doesn't work 
 							if (FeedbacksList[i].LooperPause && ((FeedbacksList[i] as MMF_Looper).NumberOfLoops > 0))
 							{
 								if (i == lastLoopFoundAt)
@@ -1331,7 +1473,7 @@ namespace MoreMountains.Feedbacks
             
 			for (int i = FeedbacksList.Count - 1; i >= 0; i--)
 			{
-				FeedbacksList[i].OnDrawGizmosSelected();
+				FeedbacksList[i].OnDrawGizmosSelectedHandler();
 			}
 		}
 

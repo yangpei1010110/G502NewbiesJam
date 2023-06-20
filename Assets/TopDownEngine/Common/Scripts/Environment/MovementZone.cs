@@ -48,7 +48,6 @@ namespace MoreMountains.TopDownEngine
 			}
 			base.TriggerButtonAction();
 			ChangeSpeed();
-			ActivateZone();
 		}
 
 		/// <summary>

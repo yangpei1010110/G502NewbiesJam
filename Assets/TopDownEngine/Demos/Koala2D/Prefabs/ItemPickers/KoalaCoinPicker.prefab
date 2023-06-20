@@ -93,7 +93,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 281d79aafca9eb44b9a6545ee42eb5ae, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -182,6 +182,9 @@ MonoBehaviour:
   DisableObjectOnPick: 1
   DisableDelay: 0
   DisableModelOnPick: 0
+  DisableTargetObjectOnPick: 0
+  TargetObjectToDisable: {fileID: 0}
+  TargetObjectDisableDelay: 1
   Model: {fileID: 0}
 --- !u!114 &114366886109299466
 MonoBehaviour:
@@ -197,8 +200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item: {fileID: 11400000, guid: 1592bd12b16c62a438df214272ff2b45, type: 2}
   Quantity: 1
+  RemainingQuantity: 1
   PickableIfInventoryIsFull: 0
-  PickAsMuchQuantityAsPossible: 0
   DisableObjectWhenDepleted: 0
 --- !u!114 &2578904003073367510
 MonoBehaviour:
@@ -215,6 +218,7 @@ MonoBehaviour:
   Events:
   - AutoExecuteOnAwake: 0
     AutoExecuteOnEnable: 0
+    AutoExecuteOnDisable: 0
     AutoExecuteOnStart: 0
     AutoExecuteOnInstantiate: 1
     Event:
@@ -375,7 +379,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 180561207ebf5244d9e3a0272498d23f, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -437,7 +441,71 @@ MonoBehaviour:
   - {fileID: 1440616568587849997}
   InitializationMode: 2
   SafeMode: 3
+  Direction: 0
+  AutoChangeDirectionOnEnd: 0
   AutoPlayOnStart: 0
+  AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
+  DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
+  DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
+  CooldownDuration: 0
+  InitialDelay: 0
+  CanPlay: 1
+  CanPlayWhileAlreadyPlaying: 1
+  ChanceToPlay: 100
+  FeedbacksIntensity: 1
+  Events:
+    TriggerMMFeedbacksEvents: 0
+    TriggerUnityEvents: 1
+    OnPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    OnPause:
+      m_PersistentCalls:
+        m_Calls: []
+    OnResume:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRevert:
+      m_PersistentCalls:
+        m_Calls: []
+    OnComplete:
+      m_PersistentCalls:
+        m_Calls: []
   DebugActive: 0
 --- !u!114 &8169511557060997880
 MonoBehaviour:
@@ -456,11 +524,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
@@ -477,6 +554,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!114 &3462468333080274363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,24 +572,36 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
     TargetBPM: 120
   DebugActive: 0
-  VfxToInstantiate: {fileID: 1381411408848946, guid: 096fea04a94809d47b8855d14e80f500,
+  GameObjectToInstantiate: {fileID: 1381411408848946, guid: 096fea04a94809d47b8855d14e80f500,
     type: 3}
   PositionMode: 0
+  AlsoApplyRotation: 0
+  AlsoApplyScale: 0
   TargetTransform: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  VfxPositionOffset: {x: 0, y: 0, z: 0}
-  VfxCreateObjectPool: 0
-  VfxObjectPoolSize: 5
+  PositionOffset: {x: 0, y: 0, z: 0}
+  CreateObjectPool: 0
+  ObjectPoolSize: 5
+  MutualizePools: 0
 --- !u!114 &5726928340240586961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,11 +619,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
@@ -659,11 +758,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
@@ -728,7 +836,71 @@ MonoBehaviour:
   - {fileID: 409357551803840767}
   InitializationMode: 1
   SafeMode: 3
+  Direction: 0
+  AutoChangeDirectionOnEnd: 0
   AutoPlayOnStart: 0
+  AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
+  DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
+  DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
+  CooldownDuration: 0
+  InitialDelay: 0
+  CanPlay: 1
+  CanPlayWhileAlreadyPlaying: 1
+  ChanceToPlay: 100
+  FeedbacksIntensity: 1
+  Events:
+    TriggerMMFeedbacksEvents: 0
+    TriggerUnityEvents: 1
+    OnPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    OnPause:
+      m_PersistentCalls:
+        m_Calls: []
+    OnResume:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRevert:
+      m_PersistentCalls:
+        m_Calls: []
+    OnComplete:
+      m_PersistentCalls:
+        m_Calls: []
   DebugActive: 0
 --- !u!114 &3971600518697131567
 MonoBehaviour:
@@ -747,11 +919,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
@@ -768,6 +949,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!114 &6352150808112375482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -785,24 +967,36 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
     TargetBPM: 120
   DebugActive: 0
-  VfxToInstantiate: {fileID: 4436764824198135487, guid: d88b268321284024c91d46a128981f88,
+  GameObjectToInstantiate: {fileID: 4436764824198135487, guid: d88b268321284024c91d46a128981f88,
     type: 3}
   PositionMode: 0
+  AlsoApplyRotation: 0
+  AlsoApplyScale: 0
   TargetTransform: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  VfxPositionOffset: {x: 0, y: 0, z: 0}
-  VfxCreateObjectPool: 0
-  VfxObjectPoolSize: 5
+  PositionOffset: {x: 0, y: 0, z: 0}
+  CreateObjectPool: 0
+  ObjectPoolSize: 5
+  MutualizePools: 0
 --- !u!114 &7338593885617636530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,11 +1014,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0
@@ -950,11 +1153,20 @@ MonoBehaviour:
   Chance: 100
   Timing:
     TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
     Sequence: {fileID: 0}
     TrackID: 0
     Quantized: 0

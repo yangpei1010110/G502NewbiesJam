@@ -17,8 +17,14 @@ namespace MoreMountains.InventoryEngine
 
 		[MMInformation("Here you can define the keys your hotbar will listen to to activate the hotbar's action.",MMInformationAttribute.InformationType.Info,false)]
 		#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-		/// the key used to open/close the inventory
-		public Key HotbarKey = Key.I;
+		
+		public InputActionProperty HotbarInputAction = new InputActionProperty(
+			new InputAction(
+				name: "IM_Demo_LeftKey",
+				type: InputActionType.Button, 
+				binding: "", 
+				interactions: "Press(behavior=2)"));
+		
 		#else
 		/// the key associated to the hotbar, that will trigger the action when pressed
 		public string HotbarKey;
@@ -48,6 +54,29 @@ namespace MoreMountains.InventoryEngine
 					return;
 				}
 			}
+		}
+		
+		/// <summary>
+		/// On Enable, we start listening for MMInventoryEvents
+		/// </summary>
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+			HotbarInputAction.action.Enable();
+			#endif
+		}
+
+		/// <summary>
+		/// On Disable, we stop listening for MMInventoryEvents
+		/// </summary>
+		protected override void OnDisable()
+		{
+			base.OnDisable();
+			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+			HotbarInputAction.action.Disable();
+			#endif
+			
 		}
 	}
 }

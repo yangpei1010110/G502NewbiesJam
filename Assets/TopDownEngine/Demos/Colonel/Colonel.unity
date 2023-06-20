@@ -511,6 +511,13 @@ MonoBehaviour:
   m_ChannelMask: 1
   m_Gain: 1
   m_Use2DDistance: 0
+  m_UseCameraSpace: 0
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 0
+    m_FrequencyGain: 0
+    m_Duration: 0
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &77875327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +530,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51662a222e352d74a8ad12e5843f7501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ZoomCurve:
     serializedVersion: 2
     m_Curve:
@@ -565,7 +574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d66462bf720d28469c8db4b2e52720c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   DefaultShakeAmplitude: 0.3
   DefaultShakeFrequency: 20
   IdleAmplitude: 0
@@ -636,8 +647,8 @@ MonoBehaviour:
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    GateFit: 2
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -696,8 +707,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e997f38a2e2884e89b9bd8ad830fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefabs: []
   AutoAttributePlayerIDs: 1
+  PlayerPrefabs: []
   SceneCharacters:
   - {fileID: 1624848537}
   InitialSpawnPoint: {fileID: 0}
@@ -734,6 +745,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    Initialized: 0
   RespawnDelay: 2
   DelayBeforeDeathScreen: 1
   UseLevelBounds: 1
@@ -758,6 +770,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      Initialized: 0
     ExitFadeTween:
       MMTweenDefinitionType: 0
       MMTweenCurve: 0
@@ -767,9 +780,12 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      Initialized: 0
     ProgressBarSpeed: 5
     FadeMode: 0
     UnloadMethod: 2
+    AntiSpillSceneName: 
+  SetPlayerAsFeedbackRangeCenter: 0
 --- !u!4 &114583944 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 487350, guid: 13f7a2e2a04268d4f8cee777011fef35,
@@ -890,6 +906,7 @@ Transform:
   - {fileID: 1016372252}
   - {fileID: 119485922}
   - {fileID: 658682754}
+  - {fileID: 775157091}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1431,6 +1448,13 @@ MonoBehaviour:
   m_ChannelMask: 1
   m_Gain: 1
   m_Use2DDistance: 0
+  m_UseCameraSpace: 0
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 0
+    m_FrequencyGain: 0
+    m_Duration: 0
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &227748550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,7 +1467,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51662a222e352d74a8ad12e5843f7501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ZoomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1485,7 +1511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d66462bf720d28469c8db4b2e52720c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   DefaultShakeAmplitude: 0.3
   DefaultShakeFrequency: 20
   IdleAmplitude: 0
@@ -1544,7 +1572,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 11
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
@@ -1556,8 +1584,8 @@ MonoBehaviour:
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    GateFit: 2
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2670,6 +2698,7 @@ MonoBehaviour:
       m_Calls: []
   DrawGizmos: 1
   GizmosColor: {r: 1, g: 0.155166, b: 0, a: 0.5372549}
+  RequiresPlayerCharacter: 1
 --- !u!65 &442177943
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2766,7 +2795,7 @@ PrefabInstance:
     - target: {fileID: 1269696021557207029, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
         type: 3}
       propertyPath: m_Name
-      value: ColonelWeaponPicker (1)
+      value: ColonelPicker - RifleMouseAim
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfbc13de64fdf0c4e87c57e3a93633d1, type: 3}
@@ -3379,7 +3408,7 @@ PrefabInstance:
     - target: {fileID: 1269696021557207029, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
         type: 3}
       propertyPath: m_Name
-      value: ColonelWeaponPicker (3)
+      value: ColonelPicker - RifleAutoShoot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfbc13de64fdf0c4e87c57e3a93633d1, type: 3}
@@ -4165,6 +4194,7 @@ MonoBehaviour:
       m_Calls: []
   DrawGizmos: 1
   GizmosColor: {r: 0, g: 0.8124628, b: 1, a: 0.5372549}
+  RequiresPlayerCharacter: 1
 --- !u!65 &718246319
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4313,6 +4343,195 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1452049700041732536, guid: 17f8727b1ec73e44db904926e9be0c34,
     type: 3}
   m_PrefabInstance: {fileID: 965102955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &775157090
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 139856175}
+    m_Modifications:
+    - target: {fileID: 1921009434707176, guid: 242af4d12a7b75b4bbb0f5d9b8207580, type: 3}
+      propertyPath: m_Name
+      value: SignPost3D (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114506393550963912, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.3764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 114506393550963912, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114506393550963912, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114506393550963912, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114687565823369108, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Pickable Charge Weapon
+
+        <color=black>Keep E pressed to charge
+        it,
+
+        release E to shoot.</color>'
+      objectReference: {fileID: 0}
+    - target: {fileID: 224524113520603282, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224524113520603282, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.009999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.009999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -14.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 17.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224960395141809158, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 242af4d12a7b75b4bbb0f5d9b8207580, type: 3}
+--- !u!224 &775157091 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 224704701410533446, guid: 242af4d12a7b75b4bbb0f5d9b8207580,
+    type: 3}
+  m_PrefabInstance: {fileID: 775157090}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &780946807 stripped
 Transform:
@@ -6439,6 +6658,13 @@ MonoBehaviour:
   m_ChannelMask: 1
   m_Gain: 1
   m_Use2DDistance: 0
+  m_UseCameraSpace: 0
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 0
+    m_FrequencyGain: 0
+    m_Duration: 0
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &1114551978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6451,7 +6677,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51662a222e352d74a8ad12e5843f7501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ZoomCurve:
     serializedVersion: 2
     m_Curve:
@@ -6493,7 +6721,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d66462bf720d28469c8db4b2e52720c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   DefaultShakeAmplitude: 0.3
   DefaultShakeFrequency: 20
   IdleAmplitude: 0
@@ -6564,8 +6794,8 @@ MonoBehaviour:
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    GateFit: 2
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7045,6 +7275,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 37201463}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1249821638
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264040015736913935, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269696021557207028, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: WeaponToGive
+      value: 
+      objectReference: {fileID: 7604191449524207127, guid: 60347b15db553e84a9a6895beff2a12f,
+        type: 3}
+    - target: {fileID: 1269696021557207029, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
+        type: 3}
+      propertyPath: m_Name
+      value: ColonelPicker - ChargeWeapon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cfbc13de64fdf0c4e87c57e3a93633d1, type: 3}
 --- !u!4 &1253202714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 487350, guid: 13f7a2e2a04268d4f8cee777011fef35,
@@ -7559,7 +7864,7 @@ PrefabInstance:
     - target: {fileID: 1269696021557207029, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
         type: 3}
       propertyPath: m_Name
-      value: ColonelWeaponPicker (2)
+      value: ColonelPicker - RifleAutoAim
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfbc13de64fdf0c4e87c57e3a93633d1, type: 3}
@@ -9782,13 +10087,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7de9ef06f04864391a928af29f4b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalTimescale: 1
-  DefaultLerpSpeed: 1
-  DefaultLerpTimescale: 0
+  NormalTimeScale: 1
   CurrentTimeScale: 1
   TargetTimeScale: 1
-  LerpTimescale: 1
-  LerpSpeed: 0
   TestButton: 0
 --- !u!4 &1747894642 stripped
 Transform:
@@ -9924,6 +10225,7 @@ MonoBehaviour:
       m_Calls: []
   DrawGizmos: 1
   GizmosColor: {r: 1, g: 0.54901963, b: 0, a: 0.5372549}
+  RequiresPlayerCharacter: 1
 --- !u!65 &1756614326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12472,7 +12774,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243818282187889}
   m_LocalRotation: {x: 0.45841685, y: -0, z: -0, w: 0.8887373}
-  m_LocalPosition: {x: 23.354591, y: 36.055393, z: -54.09582}
+  m_LocalPosition: {x: -18.41541, y: 36.055393, z: -46.975822}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4847470036273939}
@@ -12805,6 +13107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: 
   DoNotUseLevelManager: 0
+  DestroyPersistentCharacter: 0
 --- !u!114 &114022706172388903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13689,7 +13992,9 @@ MonoBehaviour:
   TargetCamera: {fileID: 20646996888046739}
   HorizontalAxisEnabled: 1
   VerticalAxisEnabled: 1
+  MaxRangeMode: 0
   MaxRange: 1.5
+  MaxRangeTransform: {fileID: 0}
   JoystickValue:
     m_PersistentCalls:
       m_Calls:
@@ -14063,10 +14368,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5463d50a0cd9b2449a50f538278303d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   FlashID: 0
+  Interruptable: 0
+  FlashInTween:
+    MMTweenDefinitionType: 0
+    MMTweenCurve: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Initialized: 0
+  FlashOutTween:
+    MMTweenDefinitionType: 0
+    MMTweenCurve: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Initialized: 0
   DebugSettings:
+    ChannelMode: 0
     Channel: 0
+    MMChannelDefinition: {fileID: 0}
     FlashColor: {r: 1, g: 1, b: 1, a: 1}
     FlashDuration: 0.2
     FlashAlpha: 1
@@ -14365,6 +14731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: 
   DoNotUseLevelManager: 0
+  DestroyPersistentCharacter: 0
 --- !u!114 &114453272709097695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14597,6 +14964,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: 
   DoNotUseLevelManager: 0
+  DestroyPersistentCharacter: 0
 --- !u!114 &114506099913229171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15140,6 +15508,7 @@ MonoBehaviour:
   BumpOnDecrease: 0
   BumpDuration: 0.2
   ChangeColorWhenBumping: 1
+  StoreBarColorOnPlay: 1
   BumpColor: {r: 1, g: 1, b: 1, a: 1}
   BumpScaleAnimationCurve:
     serializedVersion: 2
@@ -15273,6 +15642,8 @@ MonoBehaviour:
   TextSuffix: 
   TextValueMultiplier: 1
   TextFormat: '{000}'
+  DisplayTotal: 0
+  TotalSeparator: ' / '
   DebugNewTargetValue: 0
   DebugUpdateBarButton: 0
   DebugSetBarButton: 0
@@ -15548,6 +15919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: LevelSelection
   DoNotUseLevelManager: 0
+  DestroyPersistentCharacter: 0
 --- !u!114 &114734556440948083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15665,6 +16037,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    Initialized: 0
   IgnoreTimescale: 1
   CanFadeToCurrentAlpha: 1
   ShouldBlockRaycasts: 0
@@ -15911,6 +16284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: LevelSelection
   DoNotUseLevelManager: 0
+  DestroyPersistentCharacter: 0
 --- !u!114 &114837496782082763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18116,9 +18490,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efc6a4a233d87b4fbc72cda82ca4a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 0.8
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -18236,9 +18613,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04189ce672fd8c349b61eb900b1dc0ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 0.2
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -18328,9 +18708,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4792d6bb2cfe7644da1e6972d3da260d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 2
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -18573,7 +18956,7 @@ PrefabInstance:
     - target: {fileID: 5190518919415899240, guid: 727378de08137ae478b02772f9ef3013,
         type: 3}
       propertyPath: m_Name
-      value: ColonelDashPicker
+      value: ColonelPicker - Dash
       objectReference: {fileID: 0}
     - target: {fileID: 5196156761827883922, guid: 727378de08137ae478b02772f9ef3013,
         type: 3}
@@ -18703,7 +19086,7 @@ PrefabInstance:
     - target: {fileID: 1269696021557207029, guid: cfbc13de64fdf0c4e87c57e3a93633d1,
         type: 3}
       propertyPath: m_Name
-      value: ColonelWeaponPicker
+      value: ColonelPicker - NoWeapon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfbc13de64fdf0c4e87c57e3a93633d1, type: 3}
@@ -18719,9 +19102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1297b688774526f418895a2f09176619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 0.2
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -18793,9 +19179,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416f266b197306a49975dadec6e05526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 0.8
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -18955,9 +19344,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81cf12de3b3c98d489779a3382046725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   ShakeDuration: 0.2
   PlayOnAwake: 0
+  PermanentShake: 0
   Interruptible: 1
   AlwaysResetTargetValuesAfterShake: 0
   CooldownBetweenShakes: 0
@@ -19000,3 +19392,49 @@ MonoBehaviour:
     m_RotationOrder: 4
   RemapIntensityZero: 0
   RemapIntensityOne: 0.1
+  InterpolateColor: 0
+  ColorCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.05
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.95
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapColorZero: 0
+  RemapColorOne: 1
+  TargetColor: {r: 1, g: 0, b: 0, a: 1}

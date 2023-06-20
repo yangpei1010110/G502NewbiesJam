@@ -24,40 +24,54 @@ namespace MoreMountains.InventoryEngine
 	{
 		[Header("ID and Target")]
 		/// the (unique) ID of the item
-		[MMInformation("The unique name of your object.",MMInformationAttribute.InformationType.Info,false)]
+		[Tooltip("the (unique) ID of the item")]
 		public string ItemID;
-		
 		/// the inventory name into which this item will be stored
+		[Tooltip("the inventory name into which this item will be stored")]
 		public string TargetInventoryName = "MainInventory";
-
 		/// if this is true, the item won't be added anywhere's there's room in the inventory, but instead at the specified TargetIndex slot
+		[Tooltip("if this is true, the item won't be added anywhere's there's room in the inventory, but instead at the specified TargetIndex slot")]
 		public bool ForceSlotIndex = false;
 		/// if ForceSlotIndex is true, this is the index at which the item will be added in the target inventory
+		[Tooltip("if ForceSlotIndex is true, this is the index at which the item will be added in the target inventory")]
 		[MMCondition("ForceSlotIndex", true)]
 		public int TargetIndex = 0;
 
 		[Header("Permissions")]
 		/// whether or not this item can be "used" (via the Use method) - important, this is only the INITIAL state of this object, IsUsable is to be used anytime after that
-		[MMInformation("Here you can determine whether your object is Usable, Equippable, or both. Usable objects are typically bombs, potions, stuff like that. Equippables are usually weapons or armor.",MMInformationAttribute.InformationType.Info,false)]
+		[Tooltip("whether or not this item can be 'used' (via the Use method) - important, this is only the INITIAL state of this object, IsUsable is to be used anytime after that")]
 		public bool Usable = false;
 		/// if this is true, calling Use on that object will consume one unit of it
+		[Tooltip("if this is true, calling Use on that object will consume one unit of it")]
 		[MMCondition("Usable", true)] 
 		public bool Consumable = true;
 		/// if this item is consumable, determines how many will be consumed per use (usually one)
+		[Tooltip("if this item is consumable, determines how many will be consumed per use (usually one)")]
 		[MMCondition("Consumable", true)] 
 		public int ConsumeQuantity = 1;
 		/// whether or not this item can be equipped - important, this is only the INITIAL state of this object, IsEquippable is to be used anytime after that
+		[Tooltip("whether or not this item can be equipped - important, this is only the INITIAL state of this object, IsEquippable is to be used anytime after that")]
 		public bool Equippable = false;
+		/// whether or not this item can be equipped if its target inventory is full
+		[Tooltip("whether or not this item can be equipped if its target inventory is full")]
+		[MMCondition("Equippable", true)]
+		public bool EquippableIfInventoryIsFull = true;
 		/// if this is true, this item will be removed from its original inventory when equipped, and moved to its EquipmentInventory
+		[Tooltip("if this is true, this item will be removed from its original inventory when equipped, and moved to its EquipmentInventory")]
+		[MMCondition("Equippable", true)]
 		public bool MoveWhenEquipped = true;
 		
 		/// if this is true, this item can be dropped
+		[Tooltip("if this is true, this item can be dropped")]
 		public bool Droppable = true;
 		/// if this is true, objects can be moved
+		[Tooltip("if this is true, objects can be moved")]
 		public bool CanMoveObject=true;
 		/// if this is true, objects can be swapped with another object
+		[Tooltip("if this is true, objects can be swapped with another object")]
 		public bool CanSwapObject=true;
 		/// a set of properties defining whether or not to show inventory action buttons when that item is selected 
+		[Tooltip("a set of properties defining whether or not to show inventory action buttons when that item is selected")]
 		public InventoryItemDisplayProperties DisplayProperties;
 		
 		/// whether or not this object can be used
@@ -69,57 +83,69 @@ namespace MoreMountains.InventoryEngine
 		/// the base quantity of this item
 		public int Quantity = 1;
 
-
 		[Header("Basic info")]
 		/// the name of the item - will be displayed in the details panel
-		[MMInformation("The name of the item as you want it to appear in the display panel",MMInformationAttribute.InformationType.Info,false)]
+		[Tooltip("the name of the item - will be displayed in the details panel")]
 		public string ItemName;
+		/// the item's short description to display in the details panel
 		[TextArea]
-		[MMInformation("The Short and 'long' descriptions will be used to display in the InventoryDetails panel.",MMInformationAttribute.InformationType.Info,false)]
-		/// the item's short description
+		[Tooltip("the item's short description to display in the details panel")]
 		public string ShortDescription;
 		[TextArea]
-		/// the item's long description
+		/// the item's long description to display in the details panel
+		[Tooltip("the item's long description to display in the details panel")]
 		public string Description;
 
 		[Header("Image")]
 		/// the icon that will be shown on the inventory's slot
-		[MMInformation("The image that will be displayed inside InventoryDisplay panels and InventoryDetails.",MMInformationAttribute.InformationType.Info,false)]
+		[Tooltip("the icon that will be shown on the inventory's slot")]
 		public Sprite Icon;
 
 		[Header("Prefab Drop")]
-		[MMInformation("The prefab that will be spawned in the scene should the item be dropped from its inventory. Here you can also specify the min and max distance at which the prefab should be spawned.",MMInformationAttribute.InformationType.Info,false)]
 		/// the prefab to instantiate when the item is dropped
+		[Tooltip("the prefab to instantiate when the item is dropped")]
 		public GameObject Prefab;
+		/// if this is true, the quantity of the object will be forced to PrefabDropQuantity when dropped
+		[Tooltip("if this is true, the quantity of the object will be forced to PrefabDropQuantity when dropped")]
+		public bool ForcePrefabDropQuantity = false;
+		/// the quantity to force on the spawned item if ForcePrefabDropQuantity is true
+		[Tooltip("the quantity to force on the spawned item if ForcePrefabDropQuantity is true")]
+		[MMCondition("ForcePrefabDropQuantity", true)]
+		public int PrefabDropQuantity = 1;
 		/// the minimal distance at which the object should be spawned when dropped
+		[Tooltip("the minimal distance at which the object should be spawned when dropped")]
 		public MMSpawnAroundProperties DropProperties;
 
 		[Header("Inventory Properties")]
-		[MMInformation("If this object can be stacked (multiple instances in a single inventory slot), you can specify here the maximum size of that stack. You can also specify the item class (useful for equipment items mostly)",MMInformationAttribute.InformationType.Info,false)]
-		/// the maximum number of items you can stack in one slot
+		/// If this object can be stacked (multiple instances in a single inventory slot), you can specify here the maximum size of that stack.
+		[Tooltip("If this object can be stacked (multiple instances in a single inventory slot), you can specify here the maximum size of that stack.")]
 		public int MaximumStack = 1;
 		/// the class of the item
+		[Tooltip("the class of the item")]
 		public ItemClasses ItemClass;
 
 		[Header("Equippable")]
-		[MMInformation("If this item is equippable, you can set here its target inventory name (for example ArmorInventory). Of course you'll need an inventory with a matching name in your scene. You can also specify a sound to play when this item is equipped. If you don't, a default sound will be played.",MMInformationAttribute.InformationType.Info,false)]
-		/// if the item is equippable, specify here the name of the inventory the item should go to when equipped
+		/// If this item is equippable, you can set here its target inventory name (for example ArmorInventory). Of course you'll need an inventory with a matching name in your scene.
+		[Tooltip("If this item is equippable, you can set here its target inventory name (for example ArmorInventory). Of course you'll need an inventory with a matching name in your scene.")]
 		public string TargetEquipmentInventoryName;
 		/// the sound the item should play when equipped (optional)
+		[Tooltip("the sound the item should play when equipped (optional)")]
 		public AudioClip EquippedSound;
 
 		[Header("Usable")]
-		[MMInformation("If this item can be used, you can set here a sound to play when it gets used, if you don't a default sound will be played.",MMInformationAttribute.InformationType.Info,false)]
-		/// the sound the item should play when used (optional)
+		/// If this item can be used, you can set here a sound to play when it gets used, if you don't a default sound will be played.
+		[Tooltip("If this item can be used, you can set here a sound to play when it gets used, if you don't a default sound will be played.")]
 		public AudioClip UsedSound;
 
 		[Header("Sounds")]
-		[MMInformation("Here you can override the default sounds for move and drop events.",MMInformationAttribute.InformationType.Info,false)]
 		/// the sound the item should play when moved (optional)
+		[Tooltip("the sound the item should play when moved (optional)")]
 		public AudioClip MovedSound;
 		/// the sound the item should play when dropped (optional)
+		[Tooltip("the sound the item should play when dropped (optional)")]
 		public AudioClip DroppedSound;
 		/// if this is set to false, default sounds won't be used and no sound will be played
+		[Tooltip("if this is set to false, default sounds won't be used and no sound will be played")]
 		public bool UseDefaultSoundsIfNull = true;
 
 		protected Inventory _targetInventory = null;
@@ -199,8 +225,11 @@ namespace MoreMountains.InventoryEngine
 					GameObject droppedObject=(GameObject)Instantiate(Prefab);
 					if (droppedObject.GetComponent<ItemPicker>()!=null)
 					{
-						droppedObject.GetComponent<ItemPicker>().Quantity = Quantity;
-						droppedObject.GetComponent<ItemPicker>().RemainingQuantity = Quantity;
+						if (ForcePrefabDropQuantity)
+						{
+							droppedObject.GetComponent<ItemPicker>().Quantity = PrefabDropQuantity;
+							droppedObject.GetComponent<ItemPicker>().RemainingQuantity = PrefabDropQuantity;	
+						}
 					}
 
 					MMSpawnAround.ApplySpawnAroundProperties(droppedObject, DropProperties,

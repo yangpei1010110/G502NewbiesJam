@@ -10,6 +10,7 @@ namespace MoreMountains.TopDownEngine
 	[AddComponentMenu("TopDown Engine/Items/Pickable Weapon")]
 	public class PickableWeapon : PickableItem
 	{
+		[Header("Pickable Weapon")]
 		/// the new weapon the player gets when collecting this object
 		[Tooltip("the new weapon the player gets when collecting this object")]
 		public Weapon WeaponToGive;

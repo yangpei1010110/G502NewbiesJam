@@ -298,7 +298,7 @@ namespace MoreMountains.TopDownEngine
 		/// <summary>
 		/// Pauses the game or unpauses it depending on the current state
 		/// </summary>
-		public virtual void Pause(PauseMethods pauseMethod = PauseMethods.PauseMenu)
+		public virtual void Pause(PauseMethods pauseMethod = PauseMethods.PauseMenu, bool unpauseIfPaused = true)
 		{	
 			if ((pauseMethod == PauseMethods.PauseMenu) && _inventoryOpen)
 			{
@@ -323,7 +323,10 @@ namespace MoreMountains.TopDownEngine
 			}
 			else
 			{
-				UnPause(pauseMethod);
+				if (unpauseIfPaused)
+				{
+					UnPause(pauseMethod);	
+				}
 			}		
 			LevelManager.Instance.ToggleCharacterPause();
 		}
@@ -485,14 +488,14 @@ namespace MoreMountains.TopDownEngine
 				case "inventoryOpens":
 					if (PauseGameWhenInventoryOpens)
 					{
-						Pause(PauseMethods.NoPauseMenu);
+						Pause(PauseMethods.NoPauseMenu, false);
 					}					
 					break;
 
 				case "inventoryCloses":
 					if (PauseGameWhenInventoryOpens)
 					{
-						Pause(PauseMethods.NoPauseMenu);
+						UnPause(PauseMethods.NoPauseMenu);
 					}
 					break;
 			}

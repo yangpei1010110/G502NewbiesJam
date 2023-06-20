@@ -9,35 +9,41 @@ using System.Linq;
 namespace MoreMountains.Tools
 {
 	[CustomPropertyDrawer(typeof(MMPropertyPicker), true)]
-	[CanEditMultipleObjects]
 	public class MMPropertyPickerDrawer : PropertyDrawer
 	{
-		protected UnityEngine.Object _TargetObject;
-		protected GameObject _TargetGameObject;
+		public class PropertyPickerViewData
+		{
+			public UnityEngine.Object _TargetObject;
+			public GameObject _TargetGameObject;
 
-		protected const int _lineHeight = 20;
-		protected const int _lineMargin = 2;
+			public const int _lineHeight = 20;
+			public const int _lineMargin = 2;
 
-		protected int _selectedComponentIndex = 0;
-		protected int _selectedPropertyIndex = 0;
+			public int _selectedComponentIndex = 0;
+			public int _selectedPropertyIndex = 0;
 
-		public const string _undefinedComponentString = "<Undefined Component>";
-		public const string _undefinedPropertyString = "<Undefined Property>";
+			public const string _undefinedComponentString = "<Undefined Component>";
+			public const string _undefinedPropertyString = "<Undefined Property>";
 
-		protected bool _initialized = false;
+			public bool _initialized = false;
 
-		protected string[] _componentNames;
-		protected List<Component> _componentList;
+			public string[] _componentNames;
+			public List<Component> _componentList;
 
-		protected string[] _propertiesNames;
-		protected List<string> _propertiesList;
-		protected Type _propertyType = null;
+			public string[] _propertiesNames;
+			public List<string> _propertiesList;
+			public Type _propertyType = null;
 
-		protected int _numberOfLines = 0;
-		protected Color _progressBarBackground = new Color(0, 0, 0, 0.5f);
+			public int _numberOfLines = 0;
+			public Color _progressBarBackground = new Color(0, 0, 0, 0.5f);
 
-		protected Type[] _authorizedTypes;
-		protected bool _targetIsScriptableObject;
+			public Type[] _authorizedTypes;
+			public bool _targetIsScriptableObject;
+		}
+		
+		private Dictionary<string, PropertyPickerViewData> _propertyPickerViewData = new Dictionary<string, PropertyPickerViewData>();
+		
+		
 
 		/// <summary>
 		/// Defines the height of the drawer
@@ -47,28 +53,34 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			Initialization(property);
-
-			_numberOfLines = 2;
-
-			if (_TargetObject != null)
+			if (!_propertyPickerViewData.TryGetValue(property.propertyPath, out var viewData))
 			{
-				_numberOfLines = 3;
-				if (_selectedComponentIndex != 0)
+				viewData = new PropertyPickerViewData();
+				_propertyPickerViewData[property.propertyPath] = viewData;
+			}
+			
+			Initialization(property, viewData);
+
+			viewData._numberOfLines = 2;
+
+			if (viewData._TargetObject != null)
+			{
+				viewData._numberOfLines = 3;
+				if (viewData._selectedComponentIndex != 0)
 				{
-					_numberOfLines = 4;
+					viewData._numberOfLines = 4;
 				}
 			}
 
-			if (_targetIsScriptableObject)
+			if (viewData._targetIsScriptableObject)
 			{
-				_numberOfLines = 4;
+				viewData._numberOfLines = 4;
 			}
 
-			return _lineHeight * _numberOfLines + _lineMargin * _numberOfLines - 1 + AdditionalHeight();
+			return PropertyPickerViewData._lineHeight * viewData._numberOfLines + PropertyPickerViewData._lineMargin * viewData._numberOfLines - 1 + AdditionalHeight(viewData);
 		}
 
-		public virtual float AdditionalHeight()
+		public virtual float AdditionalHeight(PropertyPickerViewData viewData)
 		{
 			return 0f;
 		}
@@ -77,24 +89,25 @@ namespace MoreMountains.Tools
 		/// Initializes the dropdowns
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void Initialization(SerializedProperty property)
+		protected virtual void Initialization(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			if (_initialized)
+			
+			if (viewData._initialized)
 			{
 				return;
 			}
 
-			FillAuthorizedTypes();
+			FillAuthorizedTypes(viewData);
 
-			FillComponentsList(property);
-			FillPropertyList(property);
+			FillComponentsList(property, viewData);
+			FillPropertyList(property, viewData);
 
-			GetComponentIndex(property);
-			GetPropertyIndex(property);
+			GetComponentIndex(property, viewData);
+			GetPropertyIndex(property, viewData);
 
-			_propertyType = GetPropertyType(property);
+			viewData._propertyType = GetPropertyType(property, viewData);
 
-			_initialized = true;
+			viewData._initialized = true;
 		}
 
 		protected static bool AuthorizedType(Type[] typeArray, Type checkedType)
@@ -109,9 +122,9 @@ namespace MoreMountains.Tools
 			return false;
 		}
 
-		protected virtual void FillAuthorizedTypes()
+		protected virtual void FillAuthorizedTypes(PropertyPickerViewData viewData)
 		{
-			_authorizedTypes = new Type[]
+			viewData._authorizedTypes = new Type[]
 			{
 				typeof(String),
 				typeof(float),
@@ -134,13 +147,19 @@ namespace MoreMountains.Tools
 		/// <param name="label"></param>
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			Initialization(property);
-            
+			if (!_propertyPickerViewData.TryGetValue(property.propertyPath, out var viewData))
+			{
+				viewData = new PropertyPickerViewData();
+				_propertyPickerViewData[property.propertyPath] = viewData;
+			}
+			
+			Initialization(property, viewData);
+			
 			// rectangles
-			Rect targetLabelRect = new Rect(position.x, position.y, position.width, _lineHeight);
-			Rect targetObjectRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin), position.width, _lineHeight);
-			Rect targetComponentRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * 2, position.width, _lineHeight);
-			Rect targetPropertyRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * 3, position.width, _lineHeight);
+			Rect targetLabelRect = new Rect(position.x, position.y, position.width, PropertyPickerViewData._lineHeight);
+			Rect targetObjectRect = new Rect(position.x, position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin), position.width, PropertyPickerViewData._lineHeight);
+			Rect targetComponentRect = new Rect(position.x, position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin) * 2, position.width, PropertyPickerViewData._lineHeight);
+			Rect targetPropertyRect = new Rect(position.x, position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin) * 3, position.width, PropertyPickerViewData._lineHeight);
 
 			EditorGUI.BeginProperty(position, label, property);
 
@@ -158,48 +177,48 @@ namespace MoreMountains.Tools
 			if (EditorGUI.EndChangeCheck())
 			{
 				property.serializedObject.ApplyModifiedProperties();
-				_TargetObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as UnityEngine.Object;
-				FillComponentsList(property);
-				_selectedComponentIndex = 0;
-				_selectedPropertyIndex = 0;
-				SetTargetComponent(property);
-				if (_targetIsScriptableObject)
+				viewData._TargetObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as UnityEngine.Object;
+				FillComponentsList(property, viewData);
+				viewData._selectedComponentIndex = 0;
+				viewData._selectedPropertyIndex = 0;
+				SetTargetComponent(property, viewData);
+				if (viewData._targetIsScriptableObject)
 				{
-					FillPropertyList(property);
+					FillPropertyList(property, viewData);
 				}
 			}
 
 			// displays a label for scriptable objects
-			if (_targetIsScriptableObject)
+			if (viewData._targetIsScriptableObject)
 			{
 				EditorGUI.LabelField(targetComponentRect, "Type", "Scriptable Object");
 			}
 
 			// displays the component dropdown for gameobjects
-			if ((_componentNames != null) && (_componentNames.Length > 0))
+			if ((viewData._componentNames != null) && (viewData._componentNames.Length > 0))
 			{
 				EditorGUI.BeginChangeCheck();
-				_selectedComponentIndex = EditorGUI.Popup(targetComponentRect, "Component", _selectedComponentIndex, _componentNames);
+				viewData._selectedComponentIndex = EditorGUI.Popup(targetComponentRect, "Component", viewData._selectedComponentIndex, viewData._componentNames);
 				if (EditorGUI.EndChangeCheck())
 				{
-					SetTargetComponent(property);
-					_selectedPropertyIndex = 0;
-					FillPropertyList(property);
+					SetTargetComponent(property, viewData);
+					viewData._selectedPropertyIndex = 0;
+					FillPropertyList(property, viewData);
 				}
 			}
 
 			// displays the properties dropdown
-			if (((_selectedComponentIndex != 0) || _targetIsScriptableObject) && (_propertiesNames != null) && (_propertiesNames.Length > 0))
+			if (((viewData._selectedComponentIndex != 0) || viewData._targetIsScriptableObject) && (viewData._propertiesNames != null) && (viewData._propertiesNames.Length > 0))
 			{
 				EditorGUI.BeginChangeCheck();
-				_selectedPropertyIndex = EditorGUI.Popup(targetPropertyRect, "Property", _selectedPropertyIndex, _propertiesNames);
+				viewData._selectedPropertyIndex = EditorGUI.Popup(targetPropertyRect, "Property", viewData._selectedPropertyIndex, viewData._propertiesNames);
 				if (EditorGUI.EndChangeCheck())
 				{
-					SetTargetProperty(property);
+					SetTargetProperty(property, viewData);
 				}
 			}
 
-			DisplayAdditionalProperties(position, property, label);
+			DisplayAdditionalProperties(position, property, label, viewData);
 
 			EditorGUI.indentLevel--;
 
@@ -207,18 +226,18 @@ namespace MoreMountains.Tools
 		}
 		#endif
 
-		protected virtual void DisplayAdditionalProperties(Rect position, SerializedProperty property, GUIContent label)
+		protected virtual void DisplayAdditionalProperties(Rect position, SerializedProperty property, GUIContent label, PropertyPickerViewData viewData)
 		{
 
 		}
 
-		protected virtual void DrawLevelProgressBar(Rect position, float level, Color frontColor, Color negativeColor)
+		protected virtual void DrawLevelProgressBar(Rect position, float level, Color frontColor, Color negativeColor, PropertyPickerViewData viewData)
 		{
-			Rect levelLabelRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
-			Rect levelValueRect = new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
+			Rect levelLabelRect = new Rect(position.x, position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin) * (viewData._numberOfLines - 1), position.width, PropertyPickerViewData._lineHeight);
+			Rect levelValueRect = new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4, position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin) * (viewData._numberOfLines - 1), position.width, PropertyPickerViewData._lineHeight);
 
 			float progressX = position.x - 5 + EditorGUIUtility.labelWidth + 60;
-			float progressY = position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1) + 6;
+			float progressY = position.y + (PropertyPickerViewData._lineHeight + PropertyPickerViewData._lineMargin) * (viewData._numberOfLines - 1) + 6;
 			float progressHeight = 10f;
 			float fullProgressWidth = position.width - EditorGUIUtility.labelWidth - 60 + 5;
 
@@ -237,7 +256,7 @@ namespace MoreMountains.Tools
 
 			EditorGUI.LabelField(levelLabelRect, new GUIContent("Level"));
 			EditorGUI.LabelField(levelValueRect, new GUIContent(displayLevel.ToString("F4")));
-			EditorGUI.DrawRect(levelProgressBg, _progressBarBackground);
+			EditorGUI.DrawRect(levelProgressBg, viewData._progressBarBackground);
 			if (negative)
 			{
 				EditorGUI.DrawRect(levelProgressFront, negativeColor);
@@ -252,90 +271,90 @@ namespace MoreMountains.Tools
 		/// Fills a list of all the components on the target object
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void FillComponentsList(SerializedProperty property)
+		protected virtual void FillComponentsList(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			_TargetObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as UnityEngine.Object;
-			_TargetGameObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as GameObject;
-
-			_targetIsScriptableObject = false;
+			viewData._TargetObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as UnityEngine.Object;
+			viewData._TargetGameObject = property.FindPropertyRelative("TargetObject").objectReferenceValue as GameObject;
+			
+			viewData._targetIsScriptableObject = false;
 			if (property.FindPropertyRelative("TargetObject").objectReferenceValue is ScriptableObject)
 			{
-				_targetIsScriptableObject = true;
+				viewData._targetIsScriptableObject = true;
 			}
 
-			if (_TargetGameObject == null)
+			if (viewData._TargetGameObject == null)
 			{
-				_componentNames = null;
+				viewData._componentNames = null;
 				return;
 			}
 
 			// we create a list of components and an array of names
-			_componentList = new List<Component>();
-			_componentNames = new string[0];
+			viewData._componentList = new List<Component>();
+			viewData._componentNames = new string[0];
 
 			// we create a temp list to fill our array with
 			List<string> tempComponentsNameList = new List<string>();
-			tempComponentsNameList.Add(_undefinedComponentString);
-			_componentList.Add(null);
+			tempComponentsNameList.Add(PropertyPickerViewData._undefinedComponentString);
+			viewData._componentList.Add(null);
 
 			// we add all components to the list
-			Component[] components = _TargetGameObject.GetComponents(typeof(Component));
+			Component[] components = viewData._TargetGameObject.GetComponents(typeof(Component));
 			foreach (Component component in components)
 			{
-				_componentList.Add(component);
+				viewData._componentList.Add(component);
 				tempComponentsNameList.Add(component.GetType().Name);
 			}
-			_componentNames = tempComponentsNameList.ToArray();
+			viewData._componentNames = tempComponentsNameList.ToArray();
 		}
 
 		/// <summary>
 		/// Fills a list of all properties and fields on the target component
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void FillPropertyList(SerializedProperty property)
+		protected virtual void FillPropertyList(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			if (_TargetObject == null)
+			if (viewData._TargetObject == null)
 			{
 				return;
 			}
 
 			if ((property.FindPropertyRelative("TargetComponent").objectReferenceValue == null)
-			    && !_targetIsScriptableObject)
+			    && !viewData._targetIsScriptableObject)
 			{
 				return;
 			}
 
 			// we create a list of components and an array of names
-			_propertiesNames = new string[0];
-			_propertiesList = new List<string>();
+			viewData._propertiesNames = Array.Empty<string>();
+			viewData._propertiesList = new List<string>();
 
 			// we create a temp list to fill our array with
 			List<string> tempPropertiesList = new List<string>();
-			tempPropertiesList.Add(_undefinedPropertyString);
-			_propertiesList.Add("");
+			tempPropertiesList.Add(PropertyPickerViewData._undefinedPropertyString);
+			viewData._propertiesList.Add("");
 
-			if (!_targetIsScriptableObject)
+			if (!viewData._targetIsScriptableObject)
 			{
 				// Find all fields
 				var fieldsList = property.FindPropertyRelative("TargetComponent").objectReferenceValue.GetType()
 					.GetFields(BindingFlags.Public | BindingFlags.Instance)
 					.Where(field =>
-						(AuthorizedType(_authorizedTypes, field.FieldType))
+						(AuthorizedType(viewData._authorizedTypes, field.FieldType))
 					)
 					.OrderBy(prop => prop.FieldType.Name).ToList();
 
-				foreach (FieldInfo fieldInfo in fieldsList)
+				foreach (FieldInfo thisFieldInfo in fieldsList)
 				{
-					string newEntry = fieldInfo.Name + " [Field - " + fieldInfo.FieldType.Name + "]";
+					string newEntry = thisFieldInfo.Name + " [Field - " + thisFieldInfo.FieldType.Name + "]";
 					tempPropertiesList.Add(newEntry);
-					_propertiesList.Add(fieldInfo.Name);
+					viewData._propertiesList.Add(thisFieldInfo.Name);
 				}
 
 				// finds all properties
 				var propertiesList = property.FindPropertyRelative("TargetComponent").objectReferenceValue.GetType()
 					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 					.Where(prop =>
-						(AuthorizedType(_authorizedTypes, prop.PropertyType))
+						(AuthorizedType(viewData._authorizedTypes, prop.PropertyType))
 					)
 					.OrderBy(prop => prop.PropertyType.Name).ToList();
 
@@ -343,7 +362,7 @@ namespace MoreMountains.Tools
 				{
 					string newEntry = foundProperty.Name + " [Property - " + foundProperty.PropertyType.Name + "]";
 					tempPropertiesList.Add(newEntry);
-					_propertiesList.Add(foundProperty.Name);
+					viewData._propertiesList.Add(foundProperty.Name);
 				}
 			}
 			else
@@ -353,22 +372,22 @@ namespace MoreMountains.Tools
 				var fieldsList = property.FindPropertyRelative("TargetObject").objectReferenceValue.GetType()
 					.GetFields(BindingFlags.Public | BindingFlags.Instance)
 					.Where(field =>
-						(AuthorizedType(_authorizedTypes, field.FieldType))
+						(AuthorizedType(viewData._authorizedTypes, field.FieldType))
 					)
 					.OrderBy(prop => prop.FieldType.Name).ToList();
 
-				foreach (FieldInfo fieldInfo in fieldsList)
+				foreach (FieldInfo thisFieldInfo in fieldsList)
 				{
-					string newEntry = fieldInfo.Name + " [Field - " + fieldInfo.FieldType.Name + "]";
+					string newEntry = thisFieldInfo.Name + " [Field - " + thisFieldInfo.FieldType.Name + "]";
 					tempPropertiesList.Add(newEntry);
-					_propertiesList.Add(fieldInfo.Name);
+					viewData._propertiesList.Add(thisFieldInfo.Name);
 				}
 
 				// finds all properties
 				var propertiesList = property.FindPropertyRelative("TargetObject").objectReferenceValue.GetType()
 					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 					.Where(prop =>
-						(AuthorizedType(_authorizedTypes, prop.PropertyType))
+						(AuthorizedType(viewData._authorizedTypes, prop.PropertyType))
 					)
 					.OrderBy(prop => prop.PropertyType.Name).ToList();
 
@@ -376,33 +395,33 @@ namespace MoreMountains.Tools
 				{
 					string newEntry = foundProperty.Name + " [Property - " + foundProperty.PropertyType.Name + "]";
 					tempPropertiesList.Add(newEntry);
-					_propertiesList.Add(foundProperty.Name);
+					viewData._propertiesList.Add(foundProperty.Name);
 				}
 			}
 
-			_propertiesNames = tempPropertiesList.ToArray();
+			viewData._propertiesNames = tempPropertiesList.ToArray();
 		}
 
 		/// <summary>
 		/// Sets the target property
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void SetTargetProperty(SerializedProperty property)
+		protected virtual void SetTargetProperty(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			if (_selectedPropertyIndex > 0)
+			if (viewData._selectedPropertyIndex > 0)
 			{
 				property.serializedObject.Update();
-				property.FindPropertyRelative("TargetPropertyName").stringValue = _propertiesList[_selectedPropertyIndex];
+				property.FindPropertyRelative("TargetPropertyName").stringValue = viewData._propertiesList[viewData._selectedPropertyIndex];
 				property.serializedObject.ApplyModifiedProperties();
-				_propertyType = GetPropertyType(property);
+				viewData._propertyType = GetPropertyType(property, viewData);
 			}
 			else
 			{
 				property.serializedObject.Update();
 				property.FindPropertyRelative("TargetPropertyName").stringValue = "";
 				property.serializedObject.ApplyModifiedProperties();
-				_selectedPropertyIndex = 0;
-				_propertyType = null;
+				viewData._selectedPropertyIndex = 0;
+				viewData._propertyType = null;
 			}
 		}
 
@@ -410,9 +429,9 @@ namespace MoreMountains.Tools
 		/// Sets the target component
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void SetTargetComponent(SerializedProperty property)
+		protected virtual void SetTargetComponent(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			if (_targetIsScriptableObject)
+			if (viewData._targetIsScriptableObject)
 			{
 				property.serializedObject.Update();
 				property.FindPropertyRelative("TargetScriptableObject").objectReferenceValue = property.FindPropertyRelative("TargetObject").objectReferenceValue as ScriptableObject;
@@ -421,10 +440,10 @@ namespace MoreMountains.Tools
 				return;
 			}
 
-			if (_selectedComponentIndex > 0)
+			if (viewData._selectedComponentIndex > 0)
 			{
 				property.serializedObject.Update();
-				property.FindPropertyRelative("TargetComponent").objectReferenceValue = _componentList[_selectedComponentIndex];
+				property.FindPropertyRelative("TargetComponent").objectReferenceValue = viewData._componentList[viewData._selectedComponentIndex];
 				property.FindPropertyRelative("TargetScriptableObject").objectReferenceValue = null;
 				property.serializedObject.ApplyModifiedProperties();
 			}
@@ -434,8 +453,8 @@ namespace MoreMountains.Tools
 				property.FindPropertyRelative("TargetComponent").objectReferenceValue = null;
 				property.FindPropertyRelative("TargetPropertyName").stringValue = "";
 				property.FindPropertyRelative("TargetScriptableObject").objectReferenceValue = null;
-				_selectedComponentIndex = 0;
-				_selectedPropertyIndex = 0;
+				viewData._selectedComponentIndex = 0;
+				viewData._selectedPropertyIndex = 0;
 				property.serializedObject.ApplyModifiedProperties();
 			}
 		}
@@ -444,31 +463,31 @@ namespace MoreMountains.Tools
 		/// Gets the component index
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void GetComponentIndex(SerializedProperty property)
+		protected virtual void GetComponentIndex(SerializedProperty property, PropertyPickerViewData viewData)
 		{
 			int index = 0;
 			bool found = false;
 
 			Component targetComponent = property.FindPropertyRelative("TargetComponent").objectReferenceValue as Component;
 
-			if ((_componentList == null) || (_componentList.Count == 0))
+			if ((viewData._componentList == null) || (viewData._componentList.Count == 0))
 			{
-				_selectedComponentIndex = 0;
+				viewData._selectedComponentIndex = 0;
 				return;
 			}
 
-			foreach (Component component in _componentList)
+			foreach (Component component in viewData._componentList)
 			{
 				if (component == targetComponent)
 				{
-					_selectedComponentIndex = index;
+					viewData._selectedComponentIndex = index;
 					found = true;
 				}
 				index++;
 			}
 			if (!found)
 			{
-				_selectedComponentIndex = 0;
+				viewData._selectedComponentIndex = 0;
 			}
 		}
 
@@ -476,7 +495,7 @@ namespace MoreMountains.Tools
 		/// Gets the property index
 		/// </summary>
 		/// <param name="property"></param>
-		protected virtual void GetPropertyIndex(SerializedProperty property)
+		protected virtual void GetPropertyIndex(SerializedProperty property, PropertyPickerViewData viewData)
 		{
 			int index = 0;
 			bool found = false;
@@ -491,38 +510,38 @@ namespace MoreMountains.Tools
 
 			string targetProperty = property.FindPropertyRelative("TargetPropertyName").stringValue;
 
-			if ((_propertiesList == null) || (_propertiesList.Count == 0))
+			if ((viewData._propertiesList == null) || (viewData._propertiesList.Count == 0))
 			{
-				_selectedPropertyIndex = 0;
+				viewData._selectedPropertyIndex = 0;
 				return;
 			}
 
-			foreach (string prop in _propertiesList)
+			foreach (string prop in viewData._propertiesList)
 			{
 				if (prop == targetProperty)
 				{
-					_selectedPropertyIndex = index;
+					viewData._selectedPropertyIndex = index;
 					found = true;
 				}
 				index++;
 			}
 			if (!found)
 			{
-				_selectedPropertyIndex = 0;
+				viewData._selectedPropertyIndex = 0;
 			}
 
 		}
 
-		protected virtual Type GetPropertyType(SerializedProperty property)
+		protected virtual Type GetPropertyType(SerializedProperty property, PropertyPickerViewData viewData)
 		{
-			if (_selectedPropertyIndex == 0)
+			if (viewData._selectedPropertyIndex == 0)
 			{
 				return null;
 			}
 
 			MMProperty tempProperty;
 
-			tempProperty = MMProperty.FindProperty(_propertiesList[_selectedPropertyIndex], property.FindPropertyRelative("TargetComponent").objectReferenceValue as Component, null, property.FindPropertyRelative("TargetObject").objectReferenceValue as ScriptableObject);
+			tempProperty = MMProperty.FindProperty(viewData._propertiesList[viewData._selectedPropertyIndex], property.FindPropertyRelative("TargetComponent").objectReferenceValue as Component, null, property.FindPropertyRelative("TargetObject").objectReferenceValue as ScriptableObject);
                         
 			if (tempProperty != null)
 			{

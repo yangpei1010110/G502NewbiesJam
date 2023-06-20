@@ -381,13 +381,18 @@ namespace MoreMountains.InventoryEngine
 				DrawSlot(i);
 			}
 
-			if (Application.isPlaying)
+			if (_slotPrefab != null)
 			{
-				Destroy (_slotPrefab.gameObject);	
-			}
-			else
-			{
-				DestroyImmediate (_slotPrefab.gameObject);	
+				if (Application.isPlaying)
+				{
+					Destroy(_slotPrefab.gameObject);
+					_slotPrefab = null;
+				}
+				else
+				{
+					DestroyImmediate(_slotPrefab.gameObject);
+					_slotPrefab = null;
+				}	
 			}
 
 			if (EnableNavigation)
@@ -593,7 +598,7 @@ namespace MoreMountains.InventoryEngine
 				}
 			}
 
-			if (_slotPrefab == null)
+			if ((_slotPrefab == null) || (!_slotPrefab.isActiveAndEnabled))
 			{
 				InitializeSlotPrefab ();
 			}
@@ -699,9 +704,13 @@ namespace MoreMountains.InventoryEngine
 				SlotContainer[0].Select();
 			}		
 
-			if (EventSystem.current.currentSelectedGameObject == null) 		
-			{	
-				EventSystem.current.SetSelectedGameObject (transform.GetComponentInChildren<InventorySlot> ().gameObject);	
+			if (EventSystem.current.currentSelectedGameObject == null)
+			{
+				InventorySlot newSlot = transform.GetComponentInChildren<InventorySlot>();
+				if (newSlot != null)
+				{
+					EventSystem.current.SetSelectedGameObject (newSlot.gameObject);	
+				}
 			}			
 		}
 

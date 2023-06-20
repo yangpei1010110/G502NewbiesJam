@@ -64,6 +64,11 @@ namespace MoreMountains.Tools
 		/// the chosen way to unload scenes (none, only the active scene, all loaded scenes)
 		[Tooltip("the chosen way to unload scenes (none, only the active scene, all loaded scenes)")]
 		public UnloadMethods UnloadMethod = UnloadMethods.AllScenes;
+		/// the name of the anti spill scene to use when loading additively.
+		/// If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.
+		[Tooltip("the name of the anti spill scene to use when loading additively." +
+		         "If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.")]
+		public string AntiSpillSceneName = "";
 	}
 	
 	/// <summary>
@@ -156,6 +161,7 @@ namespace MoreMountains.Tools
 		protected bool _setInterpolatedProgressValueIsNull;
 		protected const float _asyncProgressLimit = 0.9f;
 		protected MMSceneLoadingAntiSpill _antiSpill = new MMSceneLoadingAntiSpill();
+		protected static string _antiSpillSceneName = "";
 
 		/// <summary>
 		/// Call this static method to load a scene from anywhere (packed settings signature)
@@ -166,7 +172,7 @@ namespace MoreMountains.Tools
 		{
 			LoadScene(sceneToLoadName, settings.LoadingSceneName, settings.ThreadPriority, settings.SecureLoad, settings.InterpolateProgress,
 				settings.BeforeEntryFadeDelay, settings.EntryFadeDuration, settings.AfterEntryFadeDelay, settings.BeforeExitFadeDelay,
-				settings.ExitFadeDuration, settings.EntryFadeTween, settings.ExitFadeTween, settings.ProgressBarSpeed, settings.FadeMode, settings.UnloadMethod);
+				settings.ExitFadeDuration, settings.EntryFadeTween, settings.ExitFadeTween, settings.ProgressBarSpeed, settings.FadeMode, settings.UnloadMethod, settings.AntiSpillSceneName);
 		}
         
 		/// <summary>
@@ -184,7 +190,8 @@ namespace MoreMountains.Tools
 			MMTweenType entryFadeTween = null, MMTweenType exitFadeTween = null,
 			float progressBarSpeed = 5f, 
 			FadeModes fadeMode = FadeModes.FadeInThenOut,
-			MMAdditiveSceneLoadingManagerSettings.UnloadMethods unloadMethod = MMAdditiveSceneLoadingManagerSettings.UnloadMethods.AllScenes)
+			MMAdditiveSceneLoadingManagerSettings.UnloadMethods unloadMethod = MMAdditiveSceneLoadingManagerSettings.UnloadMethods.AllScenes,
+			string antiSpillSceneName = "")
 		{
 			if (_loadingInProgress)
 			{
@@ -236,6 +243,7 @@ namespace MoreMountains.Tools
 			_exitFadeTween = exitFadeTween;
 			_fadeMode = fadeMode;
 			_interpolateProgress = interpolateProgress;
+			_antiSpillSceneName = antiSpillSceneName;
 
 			SceneManager.LoadScene(_loadingScreenSceneName, LoadSceneMode.Additive);
 		}
@@ -331,7 +339,7 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected virtual IEnumerator LoadSequence()
 		{
-			_antiSpill?.PrepareAntiFill(_sceneToLoadName);
+			_antiSpill?.PrepareAntiFill(_sceneToLoadName, _antiSpillSceneName);
 			InitiateLoad();
 			yield return ProcessDelayBeforeEntryFade();
 			yield return EntryFade();

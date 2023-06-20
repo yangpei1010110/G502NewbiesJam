@@ -131,16 +131,16 @@ namespace MoreMountains.Tools
 			{
 				if (KnobCanvasGroup != null)
 				{
-					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, MaxRange);	
+					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 				else
 				{
-					Handles.DrawWireDisc(this.transform.position, Vector3.forward, MaxRange);	
+					Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 			}
 			else
 			{
-				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, MaxRange);
+				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, ComputedMaxRange);
 			}
 		}
 		#endif

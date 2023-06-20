@@ -10,10 +10,9 @@ namespace MoreMountains.InventoryEngine
 	/// </summary>
 	public class ChangeLevel : MonoBehaviour 
 	{
-		/// <summary>
-		/// The name of the level to go to when entering the ChangeLevel zone
-		/// </summary>
+		/// The exact name of the scene to go to when entering the ChangeLevel zone
 		[MMInformation("This demo component, when added to a BoxCollider2D, will change the scene to the one specified in the field below when the character enters the collider.", MMInformationAttribute.InformationType.Info,false)]
+		[Tooltip("The exact name of the scene to go to when entering the ChangeLevel zone")]
 		public string Destination;
 
 		/// <summary>

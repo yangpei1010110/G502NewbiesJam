@@ -39,7 +39,7 @@ namespace MoreMountains.Tools
 		/// <summary>
 		/// Stores animation parameters hashes
 		/// </summary>
-		protected virtual void Initialization()
+		public virtual void Initialization()
 		{
 			if (TargetAnimator == null)
 			{

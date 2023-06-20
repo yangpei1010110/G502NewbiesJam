@@ -166,6 +166,7 @@ namespace MoreMountains.TopDownEngine
 			if ((_movement.CurrentState != CharacterStates.MovementStates.Crouching) && (_movement.CurrentState != CharacterStates.MovementStates.Crawling))
 			{
 				// we play the crouch start sound 
+				PlayAbilityStartFeedbacks();
 				PlayAbilityStartSfx();
 				PlayAbilityUsedSfx();
 			}
@@ -299,6 +300,8 @@ namespace MoreMountains.TopDownEngine
 			// we play our exit sound
 			StopAbilityUsedSfx();
 			PlayAbilityStopSfx();
+			StopStartFeedbacks();
+			PlayAbilityStopFeedbacks();
 
 			// we go back to Idle state and reset our collider's size
 			if ((_movement.CurrentState == CharacterStates.MovementStates.Crawling) ||

@@ -39,7 +39,7 @@ namespace  MoreMountains.Feedbacks
 		static public void Register(Delegate callback) { OnEvent += callback; }
 		static public void Unregister(Delegate callback) { OnEvent -= callback; }
 
-		public enum EventTypes { Play, Pause, Resume, Revert, Complete, Skip }
+		public enum EventTypes { Play, Pause, Resume, Revert, Complete, SkipToTheEnd, RestoreInitialValues }
 		public delegate void Delegate(MMFeedbacks source, EventTypes type);
 		static public void Trigger(MMFeedbacks source, EventTypes type)
 		{
@@ -92,12 +92,20 @@ namespace  MoreMountains.Feedbacks
 		/// This event will fire every time this MMFeedbacks plays its last MMFeedback
 		[Tooltip("This event will fire every time this MMFeedbacks plays its last MMFeedback")]
 		public UnityEvent OnComplete;
+		/// This event will fire every time this MMFeedbacks gets restored to its initial values
+		[Tooltip("This event will fire every time this MMFeedbacks gets restored to its initial values")]
+		public UnityEvent OnRestoreInitialValues;
+		/// This event will fire every time this MMFeedbacks gets skipped to the end
+		[Tooltip("This event will fire every time this MMFeedbacks gets skipped to the end")]
+		public UnityEvent OnSkipToTheEnd;
 
 		public bool OnPlayIsNull { get; protected set; }
 		public bool OnPauseIsNull { get; protected set; }
 		public bool OnResumeIsNull { get; protected set; }
 		public bool OnRevertIsNull { get; protected set; }
 		public bool OnCompleteIsNull { get; protected set; }
+		public bool OnRestoreInitialValuesIsNull { get; protected set; }
+		public bool OnSkipToTheEndIsNull { get; protected set; }
 
 		/// <summary>
 		/// On init we store for each event whether or not we have one to invoke
@@ -109,6 +117,8 @@ namespace  MoreMountains.Feedbacks
 			OnResumeIsNull = OnResume == null;
 			OnRevertIsNull = OnRevert == null;
 			OnCompleteIsNull = OnComplete == null;
+			OnRestoreInitialValuesIsNull = OnRestoreInitialValues == null;
+			OnSkipToTheEndIsNull = OnSkipToTheEnd == null;
 		}
 
 		/// <summary>
@@ -142,23 +152,6 @@ namespace  MoreMountains.Feedbacks
 			if (TriggerMMFeedbacksEvents)
 			{
 				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.Pause);
-			}
-		}
-
-		/// <summary>
-		/// Fires skip events if needed
-		/// </summary>
-		/// <param name="source"></param>
-		public virtual void TriggerOnSkip(MMFeedbacks source)
-		{
-			if (!OnPauseIsNull && TriggerUnityEvents)
-			{
-				OnPause.Invoke();
-			}
-
-			if (TriggerMMFeedbacksEvents)
-			{
-				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.Skip);
 			}
 		}
 
@@ -210,6 +203,40 @@ namespace  MoreMountains.Feedbacks
 			if (TriggerMMFeedbacksEvents)
 			{
 				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.Complete);
+			}
+		}
+
+		/// <summary>
+		/// Fires skip events if needed
+		/// </summary>
+		/// <param name="source"></param>
+		public virtual void TriggerOnSkipToTheEnd(MMFeedbacks source)
+		{
+			if (!OnSkipToTheEndIsNull && TriggerUnityEvents)
+			{
+				OnSkipToTheEnd.Invoke();
+			}
+
+			if (TriggerMMFeedbacksEvents)
+			{
+				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.SkipToTheEnd);
+			}
+		}
+
+		/// <summary>
+		/// Fires revert events if needed
+		/// </summary>
+		/// <param name="source"></param>
+		public virtual void TriggerOnRestoreInitialValues(MMFeedbacks source)
+		{
+			if (!OnRestoreInitialValuesIsNull && TriggerUnityEvents)
+			{
+				OnRestoreInitialValues.Invoke();
+			}
+
+			if (TriggerMMFeedbacksEvents)
+			{
+				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.RestoreInitialValues);
 			}
 		}
 	}

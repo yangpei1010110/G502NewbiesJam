@@ -15,18 +15,63 @@ namespace MoreMountains.Tools
 		protected Scene _destinationScene;
 		protected UnityAction<Scene, Scene> _onActiveSceneChangedCallback;
 		protected string _sceneToLoadName;
+		protected string _antiSpillSceneName;
 		protected List<GameObject> _spillSceneRoots = new List<GameObject>(50);
+		protected static List<string> _scenesInBuild;
 		
 		/// <summary>
 		/// Creates the temporary scene
 		/// </summary>
 		/// <param name="sceneToLoadName"></param>
-		public virtual void PrepareAntiFill(string sceneToLoadName)
+		public virtual void PrepareAntiFill(string sceneToLoadName, string antiSpillSceneName = "")
 		{
-			_antiSpillScene = SceneManager.CreateScene($"AntiSpill_{sceneToLoadName}");
 			_destinationScene = default; 
 			_sceneToLoadName = sceneToLoadName;
+			
+			if (antiSpillSceneName == "")
+			{
+				_antiSpillScene = SceneManager.CreateScene($"AntiSpill_{sceneToLoadName}");
 
+				PrepareAntiFillSetSceneActive();
+			}
+			else
+			{
+				_scenesInBuild = MMScene.GetScenesInBuild();
+				if (!_scenesInBuild.Contains(antiSpillSceneName))
+				{
+					Debug.LogError("MMSceneLoadingAntiSpill : impossible to load the '"+antiSpillSceneName+"' scene, " +
+					               "there is no such scene in the project's build settings.");
+					return;
+				}
+				
+				SceneManager.LoadScene(antiSpillSceneName, LoadSceneMode.Additive);
+				_antiSpillScene = SceneManager.GetSceneByName(antiSpillSceneName);
+				_antiSpillSceneName = _antiSpillScene.name;
+				SceneManager.sceneLoaded += PrepareAntiFillOnSceneLoaded;
+			}
+		}
+
+		/// <summary>
+		/// When not creating an anti fill scene, acts once the scene has been actually created and is ready to be set active
+		/// This is bypassed when creating the scene
+		/// </summary>
+		/// <param name="newScene"></param>
+		/// <param name="mode"></param>
+		protected virtual void PrepareAntiFillOnSceneLoaded(Scene newScene, LoadSceneMode mode)
+		{
+			if (newScene.name != _antiSpillSceneName)
+			{
+				return;
+			}
+			SceneManager.sceneLoaded -= PrepareAntiFillOnSceneLoaded;
+			PrepareAntiFillSetSceneActive();
+		}
+
+		/// <summary>
+		/// Sets the anti spill scene active
+		/// </summary>
+		protected virtual void PrepareAntiFillSetSceneActive()
+		{
 			if (_onActiveSceneChangedCallback != null) { SceneManager.activeSceneChanged -= _onActiveSceneChangedCallback; }
 			_onActiveSceneChangedCallback = OnActiveSceneChanged;
 			SceneManager.activeSceneChanged += _onActiveSceneChangedCallback;

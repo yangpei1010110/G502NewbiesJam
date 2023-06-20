@@ -67,14 +67,14 @@ MonoBehaviour:
   StartMagnetOnEnter: 1
   StopMagnetOnExit: 0
   MagneticTypeID: 0
-  FollowPosition: 1
-  Target: {fileID: 0}
   Offset: {x: 0, y: 0, z: 0}
   InterpolatePosition: 1
   FollowPositionSpeed: 5
   FollowAcceleration: 0.75
   UpdateMode: 0
   CopyState: {fileID: 0}
+  Target: {fileID: 0}
+  FollowPosition: 1
 --- !u!1001 &3217551552211900680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85,6 +85,10 @@ PrefabInstance:
     - target: {fileID: 1136408400419902, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
       propertyPath: m_Name
       value: KoalaCoinPicker (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
       propertyPath: m_LocalPosition.x
@@ -99,6 +103,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -110,13 +118,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4546384692137108, guid: 78d526a077e4aa341b992c1070338a64, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
+    - target: {fileID: 95243579942162096, guid: 78d526a077e4aa341b992c1070338a64,
+        type: 3}
+      propertyPath: m_CullingMode
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78d526a077e4aa341b992c1070338a64, type: 3}

@@ -14,6 +14,8 @@ namespace MoreMountains.TopDownEngine
 	[AddComponentMenu("TopDown Engine/Character/Abilities/Character Pathfinder 3D")]
 	public class CharacterPathfinder3D : CharacterAbility
 	{
+		public enum PathRefreshModes { None, TimeBased, SpeedThresholdBased }
+		
 		[Header("PathfindingTarget")]
 
 		/// the target the character should pathfind to
@@ -29,8 +31,22 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("a minimum delay (in seconds) between two navmesh requests - longer delay means better performance but less accuracy")]
 		public float MinimumDelayBeforePollingNavmesh = 0.1f;
 
-		[Header("Debug")]
+		[Header("Path Refresh")]
+		/// the chosen mode in which to refresh the path (none : nothing will happen and path will only refresh on set new destination,
+		/// time based : path will refresh every x seconds, speed threshold based : path will refresh every x seconds if the character's speed is below a certain threshold
+		[Tooltip("the chosen mode in which to refresh the path (none : nothing will happen and path will only refresh on set new destination, " +
+		         "time based : path will refresh every x seconds, speed threshold based : path will refresh every x seconds if the character's speed is below a certain threshold")]
+		public PathRefreshModes PathRefreshMode = PathRefreshModes.None;
+		/// the speed under which the path should be recomputed, usually if the character blocks against an obstacle
+		[Tooltip("the speed under which the path should be recomputed, usually if the character blocks against an obstacle")]
+		[MMEnumCondition("PathRefreshMode", (int)PathRefreshModes.SpeedThresholdBased)]
+		public float RefreshSpeedThreshold = 1f;
+		/// the interval at which to refresh the path, in seconds
+		[Tooltip("the interval at which to refresh the path, in seconds")]
+		[MMEnumCondition("PathRefreshMode", (int)PathRefreshModes.TimeBased, (int)PathRefreshModes.SpeedThresholdBased)]
+		public float RefreshInterval = 2f;
 
+		[Header("Debug")]
 		/// whether or not we should draw a debug line to show the current path of the character
 		[Tooltip("whether or not we should draw a debug line to show the current path of the character")]
 		public bool DebugDrawPath;
@@ -93,7 +109,7 @@ namespace MoreMountains.TopDownEngine
 				return;
 			}
 			Target = destinationTransform;
-			DeterminePath(this.transform.position, destinationTransform.position);
+			DeterminePath(this.transform.position, Target.position);
 		}
 
 		/// <summary>
@@ -111,7 +127,8 @@ namespace MoreMountains.TopDownEngine
 			{
 				return;
 			}
-            
+
+			PerformRefresh();
 			DrawDebugPath();
 			DetermineNextWaypoint();
 			DetermineDistanceToNextWaypoint();
@@ -136,6 +153,40 @@ namespace MoreMountains.TopDownEngine
 				_characterMovement.SetMovement(_newMovement);
 			}
 		}
+
+		protected virtual void PerformRefresh()
+		{
+			if (PathRefreshMode == PathRefreshModes.None)
+			{
+				return;
+			}
+			
+			if (NextWaypointIndex <= 0)
+			{
+				return;
+			}
+
+			bool refreshNeeded = false;
+
+			if (Time.time - _lastRequestAt > RefreshInterval)
+			{
+				refreshNeeded = true;
+				_lastRequestAt = Time.time;
+			}
+
+			if (PathRefreshMode == PathRefreshModes.SpeedThresholdBased)
+			{
+				if (_controller.Speed.magnitude > RefreshSpeedThreshold)
+				{
+					refreshNeeded = false;
+				}
+			}
+
+			if (refreshNeeded)
+			{
+				DeterminePath(this.transform.position, Target.position, true);
+			}
+		}
         
 		/// <summary>
 		/// Determines the next path position for the agent. NextPosition will be zero if a path couldn't be found
@@ -143,13 +194,13 @@ namespace MoreMountains.TopDownEngine
 		/// <param name="startingPos"></param>
 		/// <param name="targetPos"></param>
 		/// <returns></returns>        
-		protected virtual void DeterminePath(Vector3 startingPosition, Vector3 targetPosition)
+		protected virtual void DeterminePath(Vector3 startingPosition, Vector3 targetPosition, bool ignoreDelay = false)
 		{
-			if (Time.time - _lastRequestAt < MinimumDelayBeforePollingNavmesh)
+			if (!ignoreDelay && (Time.time - _lastRequestAt < MinimumDelayBeforePollingNavmesh))
 			{
 				return;
 			}
-
+			
 			_lastRequestAt = Time.time;
 			
 			NextWaypointIndex = 0;

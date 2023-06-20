@@ -10422,10 +10422,11 @@ MonoBehaviour:
   CrawlAuthorized: 1
   CrawlSpeed: 2
   ResizeColliderWhenCrouched: 1
+  TranslateColliderOnCrouch: 0
   CrouchedColliderHeight: 0.6
   ObjectsToOffset:
   - {fileID: 1254771915079489432}
-  OffsetCrouch: {x: 0, y: -0.5, z: 0}
+  OffsetCrouch: {x: 0, y: -0.8, z: 0.2}
   OffsetCrawl: {x: 0, y: -0.25, z: 0}
   OffsetSpeed: 10
   InATunnel: 0
@@ -10592,7 +10593,9 @@ MonoBehaviour:
   InventoryTransform: {fileID: 0}
   WeaponRotationMode: 0
   AutoPickItems: []
+  AutoPickOnlyIfMainInventoryIsEmpty: 0
   AutoEquipWeaponOnStart: {fileID: 0}
+  AutoEquipOnlyIfMainInventoryIsEmpty: 0
   CharacterHandleWeapon: {fileID: 0}
 --- !u!114 &114990486581502156
 MonoBehaviour:
@@ -10625,6 +10628,8 @@ MonoBehaviour:
   ContinuousPress: 0
   GettingHitInterruptsAttack: 0
   UseSecondaryAxisThresholdToShoot: 0
+  ForceWeaponAimControl: 0
+  ForcedWeaponAimControl: 1
   BufferInput: 0
   NewInputExtendsBuffer: 0
   MaximumBufferDuration: 0.25
@@ -10650,6 +10655,16 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  MuteSfxTrackSounds: 1
+  MuteUITrackSounds: 0
+  MuteMusicTrackSounds: 0
+  MuteMasterTrackSounds: 0
+  OnPause:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUnpause:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &114250739022748346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12343,8 +12358,40 @@ MonoBehaviour:
   ForceTimescaleMode: 0
   ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
   PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
@@ -12460,6 +12507,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!1 &3213418158246542721
 GameObject:
   m_ObjectHideFlags: 0
@@ -12525,8 +12573,40 @@ MonoBehaviour:
   ForceTimescaleMode: 0
   ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
   PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
@@ -12590,6 +12670,16 @@ MonoBehaviour:
   DebugActive: 0
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
+    m_ImpulseShape: 0
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 3
+    m_DissipationRate: 0
     m_RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
     m_AmplitudeGain: 1
     m_FrequencyGain: 1
@@ -12826,6 +12916,7 @@ MonoBehaviour:
   MinPitch: 0.8
   MaxPitch: 1.3
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!114 &1854800078600449644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17866,8 +17957,40 @@ MonoBehaviour:
   ForceTimescaleMode: 0
   ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
   PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
@@ -18163,6 +18286,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!1 &5980377892767067951
 GameObject:
   m_ObjectHideFlags: 0
@@ -23158,8 +23282,40 @@ MonoBehaviour:
   ForceTimescaleMode: 0
   ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
   PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
@@ -23275,3 +23431,4 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128

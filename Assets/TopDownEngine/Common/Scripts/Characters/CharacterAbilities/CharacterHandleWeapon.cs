@@ -66,7 +66,10 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("if ForceWeaponAimControl is true, the AimControls mode to apply to all weapons equipped by this character")]
 		[MMCondition("ForceWeaponAimControl", true)]
 		public WeaponAim.AimControls ForcedWeaponAimControl = WeaponAim.AimControls.PrimaryMovement;
-        
+		/// if this is true, the character will continuously fire its weapon
+		[Tooltip("if this is true, the character will continuously fire its weapon")]
+		public bool ForceAlwaysShoot = false;
+
 		[Header("Buffering")]
 		/// whether or not attack input should be buffered, letting you prepare an attack while another is being performed, making it easier to chain them
 		[Tooltip("whether or not attack input should be buffered, letting you prepare an attack while another is being performed, making it easier to chain them")]
@@ -234,6 +237,11 @@ namespace MoreMountains.TopDownEngine
 			{
 				inputAuthorized = CurrentWeapon.InputAuthorized;
 			}
+
+			if (ForceAlwaysShoot)
+			{
+				ShootStart();
+			}
 			
 			if (inputAuthorized && ((_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonDown) || (_inputManager.ShootAxis == MMInput.ButtonStates.ButtonDown)))
 			{
@@ -257,6 +265,7 @@ namespace MoreMountains.TopDownEngine
 			if (inputAuthorized && ((_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonUp) || (_inputManager.ShootAxis == MMInput.ButtonStates.ButtonUp)))
 			{
 				ShootStop();
+				CurrentWeapon.WeaponInputReleased();
 			}
 
 			if ((CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBetweenUses)
@@ -424,7 +433,19 @@ namespace MoreMountains.TopDownEngine
 				if (!combo)
 				{
 					ShootStop();
+
 					if (_weaponAim != null) { _weaponAim.RemoveReticle(); }
+					if (_character._animator != null)
+					{
+						AnimatorControllerParameter[] parameters = _character._animator.parameters;
+						foreach(AnimatorControllerParameter parameter in parameters)
+						{
+							if (parameter.name == CurrentWeapon.EquippedAnimationParameter)
+							{
+								MMAnimatorExtensions.UpdateAnimatorBool(_animator, CurrentWeapon.EquippedAnimationParameter, false);
+							}
+						}
+					}
 					Destroy(CurrentWeapon.gameObject);
 				}
 			}

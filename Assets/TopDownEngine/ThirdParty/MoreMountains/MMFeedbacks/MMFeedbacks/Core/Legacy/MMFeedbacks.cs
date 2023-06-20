@@ -187,6 +187,7 @@ namespace MoreMountains.Feedbacks
 		protected bool _shouldStop = false;
 		protected const float _smallValue = 0.001f;
 		protected float _randomDurationMultiplier = 1f;
+		protected float _lastOnEnableFrame = -1;
 
 		#region INITIALIZATION
 
@@ -566,7 +567,7 @@ namespace MoreMountains.Feedbacks
 			int count = Feedbacks.Count;
 			for (int i = 0; i < count; i++)
 			{
-				if (Feedbacks[i].IsPlaying)
+				if ((Feedbacks[i] != null) && (Feedbacks[i].IsPlaying))
 				{
 					return true;
 				}
@@ -766,7 +767,10 @@ namespace MoreMountains.Feedbacks
 			{
 				for (int i = 0; i < Feedbacks.Count; i++)
 				{
-					Feedbacks[i].Stop(position, feedbacksIntensity);
+					if (Feedbacks[i] != null)
+					{
+						Feedbacks[i].Stop(position, feedbacksIntensity);	
+					}
 				}    
 			}
 			IsPlaying = false;
@@ -832,7 +836,7 @@ namespace MoreMountains.Feedbacks
         
 		#region MODIFICATION
         
-		public virtual MMFeedback AddFeedback(System.Type feedbackType)
+		public virtual MMFeedback AddFeedback(System.Type feedbackType, bool add = true)
 		{
 			MMFeedback newFeedback;
             
@@ -929,6 +933,16 @@ namespace MoreMountains.Feedbacks
 		/// <returns></returns>
 		protected bool FeedbackCanPlay(MMFeedback feedback)
 		{
+			if (feedback == null)
+			{
+				return false;
+			}
+			
+			if (feedback.Timing == null)
+			{
+				return false;
+			}
+			
 			if (feedback.Timing.MMFeedbacksDirectionCondition == MMFeedbackTiming.MMFeedbacksDirectionConditions.Always)
 			{
 				return true;

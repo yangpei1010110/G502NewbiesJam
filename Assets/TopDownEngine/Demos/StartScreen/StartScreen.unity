@@ -1280,6 +1280,7 @@ MonoBehaviour:
     ProgressBarSpeed: 5
     FadeMode: 0
     UnloadMethod: 2
+    AntiSpillSceneName: 
   SetPlayerAsFeedbackRangeCenter: 0
 --- !u!1 &105339013
 GameObject:
@@ -9303,6 +9304,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   RotationMode: 1
   CharacterRotationAuthorized: 1
   ShouldRotateToFaceMovementDirection: 1
@@ -9342,6 +9344,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   MaximumSpeed: 8
   Acceleration: 20
   CurrentSpeed: 0
@@ -10248,6 +10251,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   RotationMode: 1
   CharacterRotationAuthorized: 1
   ShouldRotateToFaceMovementDirection: 1
@@ -10287,6 +10291,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   MaximumSpeed: 8
   Acceleration: 20
   CurrentSpeed: 0
@@ -19400,8 +19405,8 @@ MonoBehaviour:
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 0
-    m_SensorSize: {x: 1.7774936, y: 1}
+    GateFit: 2
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -22918,7 +22923,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 3.1.1
+  m_Text: 3.2
 --- !u!222 &1745617613
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26148,6 +26153,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   RotationMode: 1
   CharacterRotationAuthorized: 1
   ShouldRotateToFaceMovementDirection: 1
@@ -26187,6 +26193,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   MaximumSpeed: 8
   Acceleration: 20
   CurrentSpeed: 0
@@ -28244,6 +28251,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   RotationMode: 1
   CharacterRotationAuthorized: 1
   ShouldRotateToFaceMovementDirection: 1
@@ -28326,6 +28334,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  BlockingWeaponStates: 
   MaximumSpeed: 8
   Acceleration: 20
   CurrentSpeed: 0

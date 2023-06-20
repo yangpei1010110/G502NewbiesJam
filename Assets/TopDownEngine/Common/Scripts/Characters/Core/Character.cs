@@ -265,6 +265,25 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
+		/// Forces the (re)initialization of the character's abilities
+		/// </summary>
+		public virtual void ForceAbilitiesInitialization()
+		{
+			for (int i = 0; i < _characterAbilities.Length; i++)
+			{
+				_characterAbilities[i].ForceInitialization();
+			}
+			for (int j = 0; j < AdditionalAbilityNodes.Count; j++)
+			{
+				CharacterAbility[] tempArray = AdditionalAbilityNodes[j].GetComponentsInChildren<CharacterAbility>();
+				foreach(CharacterAbility ability in tempArray)
+				{
+					ability.ForceInitialization();
+				}
+			}
+		}
+
+		/// <summary>
 		/// A method to check whether a Character has a certain ability or not
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -304,6 +323,29 @@ namespace MoreMountains.TopDownEngine
 			}
 
 			return null;
+		}
+		
+		/// <summary>
+		/// A method to check whether a Character has a certain ability or not
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public List<T> FindAbilities<T>() where T:CharacterAbility
+		{
+			CacheAbilitiesAtInit();
+
+			List<T> resultList = new List<T>();
+			Type searchedAbilityType = typeof(T);
+
+			foreach (CharacterAbility ability in _characterAbilities)
+			{
+				if (ability is T characterAbility)
+				{
+					resultList.Add(characterAbility);
+				}
+			}
+
+			return resultList;
 		}
 
 		/// <summary>
@@ -572,10 +614,6 @@ namespace MoreMountains.TopDownEngine
 			_controller.Reset();
 
 			// we kill all potential velocity
-			if (this.gameObject.MMGetComponentNoAlloc<Rigidbody>() != null)
-			{
-				this.gameObject.MMGetComponentNoAlloc<Rigidbody>().velocity = Vector3.zero;
-			}
 			if (this.gameObject.MMGetComponentNoAlloc<Rigidbody2D>() != null)
 			{
 				this.gameObject.MMGetComponentNoAlloc<Rigidbody2D>().velocity = Vector3.zero;

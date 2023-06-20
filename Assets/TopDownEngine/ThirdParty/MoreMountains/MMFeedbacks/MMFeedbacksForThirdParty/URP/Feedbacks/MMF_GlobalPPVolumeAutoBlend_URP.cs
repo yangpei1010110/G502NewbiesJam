@@ -31,6 +31,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override string RequiredTargetText { get { return TargetAutoBlend != null ? TargetAutoBlend.name : "";  } }
 		public override string RequiresSetupText { get { return "This feedback requires that a TargetCanvasGroup be set to be able to work properly. You can set one below."; } }
 		#endif
+		public override bool HasAutomatedTargetAcquisition => true;
+		protected override void AutomateTargetAcquisition() => TargetAutoBlend = FindAutomatedTarget<MMGlobalPostProcessingVolumeAutoBlend_URP>();
+
 		/// defines the duration of the feedback
 		public override float FeedbackDuration
 		{
@@ -115,6 +118,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			}
 			else
 			{
+				TargetAutoBlend.TimeScale = (ComputedTimescaleMode == TimescaleModes.Scaled) ? MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales.Scaled : MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales.Unscaled;
 				TargetAutoBlend.BlendDuration = FeedbackDuration;
 				TargetAutoBlend.Curve = BlendCurve;
 				TargetAutoBlend.InitialWeight = InitialWeight;

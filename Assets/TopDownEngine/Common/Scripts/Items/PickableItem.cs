@@ -70,6 +70,14 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("the visual representation of this picker")]
 		public GameObject Model;
 
+		[Header("Pick Conditions")]
+		/// if this is true, this pickable item will only be pickable by objects with a Character component 
+		[Tooltip("if this is true, this pickable item will only be pickable by objects with a Character component")]
+		public bool RequireCharacterComponent = true;
+		/// if this is true, this pickable item will only be pickable by objects with a Character component of type player
+		[Tooltip("if this is true, this pickable item will only be pickable by objects with a Character component of type player")]
+		public bool RequirePlayerType = true;
+
 		protected Collider _collider;
 		protected Collider2D _collider2D;
 		protected GameObject _collidingObject;
@@ -132,7 +140,7 @@ namespace MoreMountains.TopDownEngine
 				{
 					Model.gameObject.SetActive(false);
 				}
-
+				
 				if (DisableObjectOnPick)
 				{
 					// we desactivate the gameobject
@@ -180,13 +188,17 @@ namespace MoreMountains.TopDownEngine
 		{
 			// if what's colliding with the coin ain't a characterBehavior, we do nothing and exit
 			_character = _collidingObject.GetComponent<Character>();
-			if (_character == null)
+			if (RequireCharacterComponent)
 			{
-				return false;
-			}
-			if (_character.CharacterType != Character.CharacterTypes.Player)
-			{
-				return false;
+				if (_character == null)
+				{
+					return false;
+				}
+				
+				if (RequirePlayerType && (_character.CharacterType != Character.CharacterTypes.Player))
+				{
+					return false;
+				}
 			}
 			if (_itemPicker != null)
 			{

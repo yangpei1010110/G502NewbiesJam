@@ -42,12 +42,33 @@ namespace MoreMountains.Tools
 	public class MMStateMachine<T> : MMIStateMachine where T : struct, IComparable, IConvertible, IFormattable
 	{
 		/// If you set TriggerEvents to true, the state machine will trigger events when entering and exiting a state. 
-		/// Additionnally, it has options to trigger events for the current state on FixedUpdate, LateUpdate, but also
-		/// on Update (separated in EarlyUpdate, Update and EndOfUpdate, triggered in this order at Update()
-		/// To listen to these events, from any class, in its Start() method (or wherever you prefer), use MMEventManager.StartListening(gameObject.GetInstanceID().ToString()+"XXXEnter",OnXXXEnter);
-		/// where XXX is the name of the state you're listening to, and OnXXXEnter is the method you want to call when that event is triggered.
-		/// MMEventManager.StartListening(gameObject.GetInstanceID().ToString()+"CrouchingEarlyUpdate",OnCrouchingEarlyUpdate); for example will listen to the Early Update event of the Crouching state, and 
-		/// will trigger the OnCrouchingEarlyUpdate() method. 
+		/// Additionnally, it has options to trigger events on state change that can be listened to from any listener, without a delegate's hard binding, like so :
+		/// let's assume in some class we have a public MMStateMachine<CharacterStates.MovementStates> MovementState, and we use that to track the state of a moving character (idle, walking, running etc)
+		/// in any other class, we could do :
+		/// public class TestListener : MonoBehaviour, MMEventListener<MMStateChangeEvent<CharacterStates.MovementStates>>
+		/// {
+		/// 	// triggered every time a state change event occurs
+		/// 	public void OnMMEvent(MMStateChangeEvent<CharacterStates.MovementStates> stateChangeEvent)
+		/// 	{
+		/// 		if (stateChangeEvent.NewState == CharacterStates.MovementStates.Crawling)
+		/// 		{
+		/// 			//do something - in a real life scenario you'd probably make sure you have the right target, etc.
+		/// 		}
+		/// 	}
+		/// 
+		/// 	private void OnEnable() // on enable we start listening for these events
+		/// 	{
+		/// 		MMEventManager.AddListener<MMStateChangeEvent<CharacterStates.MovementStates>>(this);
+		/// 	}
+		/// 
+		/// 	private void OnDisable() // on disable we stop listening for these events
+		/// 	{
+		/// 		MMEventManager.RemoveListener<MMStateChangeEvent<CharacterStates.MovementStates>>(this);
+		/// 	}
+		/// }
+		/// Now every time this character's movement state changes, the OnMMEvent method will be called, and you can do whatever you want with it.
+		/// 
+		/// whether or not this state machine broadcasts events 
 		public bool TriggerEvents { get; set; }
 		/// the name of the target gameobject
 		public GameObject Target;

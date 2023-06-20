@@ -10,23 +10,32 @@ namespace MoreMountains.InventoryEngine
 	/// </summary>
 	public class ItemPicker : MonoBehaviour 
 	{
+		[Header("Item to pick")]
 		/// the item that should be picked 
 		[MMInformation("Add this component to a Trigger box collider 2D and it'll make it pickable, and will add the specified item to its target inventory. Just drag a previously created item into the slot below. For more about how to create items, have a look at the documentation. Here you can also specify how many of that item should be picked when picking the object.",MMInformationAttribute.InformationType.Info,false)]
 		public InventoryItem Item ;
+		
 		[Header("Pick Quantity")]
 		/// the initial quantity of that item that should be added to the inventory when picked
+		[Tooltip("the initial quantity of that item that should be added to the inventory when picked")]
 		public int Quantity = 1;
 		/// the current quantity of that item that should be added to the inventory when picked
 		[MMReadOnly]
+		[Tooltip("the current quantity of that item that should be added to the inventory when picked")]
 		public int RemainingQuantity = 1;
+		
 		[Header("Conditions")]
 		/// if you set this to true, a character will be able to pick this item even if its inventory is full
+		[Tooltip("if you set this to true, a character will be able to pick this item even if its inventory is full")]
 		public bool PickableIfInventoryIsFull = false;
 		/// if you set this to true, the object will be disabled when picked
+		[Tooltip("if you set this to true, the object will be disabled when picked")]
 		public bool DisableObjectWhenDepleted = false;
+		/// if this is true, this object will only be allowed to be picked by colliders with a Player tag
+		[Tooltip("if this is true, this object will only be allowed to be picked by colliders with a Player tag")]
+		public bool RequirePlayerTag = true;
 
 		protected int _pickedQuantity = 0;
-
 		protected Inventory _targetInventory;
 
 		/// <summary>
@@ -61,7 +70,7 @@ namespace MoreMountains.InventoryEngine
 		public virtual void OnTriggerEnter(Collider collider)
 		{
 			// if what's colliding with the picker ain't a characterBehavior, we do nothing and exit
-			if (!collider.CompareTag("Player"))
+			if (RequirePlayerTag && (!collider.CompareTag("Player")))
 			{
 				return;
 			}
@@ -83,7 +92,7 @@ namespace MoreMountains.InventoryEngine
 		public virtual void OnTriggerEnter2D (Collider2D collider) 
 		{
 			// if what's colliding with the picker ain't a characterBehavior, we do nothing and exit
-			if (!collider.CompareTag("Player"))
+			if (RequirePlayerTag && (!collider.CompareTag("Player")))
 			{
 				return;
 			}

@@ -201,10 +201,10 @@ namespace MoreMountains.Tools
 			base.OnDrag(eventData);
 
 			float distance = Vector2.Distance(_knobTransform.position, BackgroundCanvasGroup.transform.position); 
-			if (distance >= MaxRange)
+			if (distance >= ComputedMaxRange)
 			{
 				_backgroundPositionTarget = BackgroundCanvasGroup.transform.position +
-				                            (_knobTransform.position - BackgroundCanvasGroup.transform.position).normalized * (distance - MaxRange);
+				                            (_knobTransform.position - BackgroundCanvasGroup.transform.position).normalized * (distance - ComputedMaxRange);
 			}
 
 			ConstrainBackground();
@@ -217,7 +217,7 @@ namespace MoreMountains.Tools
 		protected virtual void ComputeJoystickValue()
 		{
 			float distance = Vector2.Distance(_knobTransform.position, BackgroundCanvasGroup.transform.position);
-			if (distance <= MaxRange)
+			if (distance <= ComputedMaxRange)
 			{
 				RawValue.x = EvaluateInputValue(_knobTransform.position.x - BackgroundCanvasGroup.transform.position.x);
 				RawValue.y = EvaluateInputValue(_knobTransform.position.y - BackgroundCanvasGroup.transform.position.y);	
@@ -289,16 +289,16 @@ namespace MoreMountains.Tools
 			{
 				if (KnobCanvasGroup != null)
 				{
-					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, MaxRange);	
+					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 				else
 				{
-					Handles.DrawWireDisc(this.transform.position, Vector3.forward, MaxRange);	
+					Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
 				}
 			}
 			else
 			{
-				Handles.DrawWireDisc(_backgroundRectTransform.position, Vector3.forward, MaxRange);
+				Handles.DrawWireDisc(_backgroundRectTransform.position, Vector3.forward, ComputedMaxRange);
 			}
 			
 			// Draws corners

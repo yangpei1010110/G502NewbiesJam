@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace MoreMountains.Feedbacks
@@ -26,6 +27,8 @@ namespace MoreMountains.Feedbacks
 		/// the duration of this feedback is the duration of the Image, or 0 if instant
 		public override float FeedbackDuration { get { return (Mode == Modes.Instant) ? 0f : ApplyTimeMultiplier(Duration); } set { Duration = value; } }
 		public override bool HasChannel => true;
+		public override bool HasAutomatedTargetAcquisition => true;
+		protected override void AutomateTargetAcquisition() => BoundImage = FindAutomatedTarget<Image>();
 
 		/// the possible modes for this feedback
 		public enum Modes { OverTime, Instant }
@@ -41,9 +44,6 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("how long the Image should change over time")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 0.2f;
-		/// whether or not that Image should be turned off on start
-		[Tooltip("whether or not that Image should be turned off on start")]
-		public bool StartsOff = false;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
 		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
 		public bool AllowAdditivePlays = false;
@@ -58,6 +58,16 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("the color to move to in instant mode")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public Color InstantColor;
+		/// whether or not that Image should be turned off on start
+		[Tooltip("whether or not that Image should be turned off on start")]
+		[FormerlySerializedAs("StartsOff")]
+		public bool DisableOnInit = false;
+		/// if this is true, the target will be enabled when this feedback gets played
+		[Tooltip("if this is true, the target will be enabled when this feedback gets played")] 
+		public bool EnableOnPlay = true;
+		/// if this is true, the target disabled after the color over time change ends
+		[Tooltip("if this is true, the target disabled after the color over time change ends")]
+		public bool DisableOnSequenceEnd = true;
 		/// if this is true, the target will be disabled when this feedbacks is stopped
 		[Tooltip("if this is true, the target will be disabled when this feedbacks is stopped")] 
 		public bool DisableOnStop = true;
@@ -75,7 +85,7 @@ namespace MoreMountains.Feedbacks
 
 			if (Active)
 			{
-				if (StartsOff)
+				if (DisableOnInit)
 				{
 					Turn(false);
 				}
@@ -95,7 +105,10 @@ namespace MoreMountains.Feedbacks
 			}
         
 			_initialColor = BoundImage.color;
-			Turn(true);
+			if (EnableOnPlay)
+			{
+				Turn(true);	
+			}
 			switch (Mode)
 			{
 				case Modes.Instant:
@@ -133,7 +146,7 @@ namespace MoreMountains.Feedbacks
 				yield return null;
 			}
 			SetImageValues(FinalNormalizedTime);
-			if (StartsOff)
+			if (DisableOnSequenceEnd)
 			{
 				Turn(false);
 			}

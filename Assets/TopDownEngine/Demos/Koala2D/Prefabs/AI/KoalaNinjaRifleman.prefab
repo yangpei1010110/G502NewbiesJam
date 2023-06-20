@@ -5053,6 +5053,7 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   FacingMode: 3
+  FacingBase: 0
   ModelShouldFlip: 0
   ModelFlipValueLeft: {x: -1, y: 1, z: 1}
   ModelFlipValueRight: {x: 1, y: 1, z: 1}
@@ -5175,6 +5176,8 @@ MonoBehaviour:
   ContinuousPress: 0
   GettingHitInterruptsAttack: 0
   UseSecondaryAxisThresholdToShoot: 0
+  ForceWeaponAimControl: 0
+  ForcedWeaponAimControl: 1
   BufferInput: 0
   NewInputExtendsBuffer: 0
   MaximumBufferDuration: 0.25
@@ -5199,10 +5202,12 @@ MonoBehaviour:
   MaximumHealth: 30
   ResetHealthOnEnable: 1
   ImmuneToDamage: 0
-  ImmuneToKnockback: 0
   DamageMMFeedbacks: {fileID: 5416683875187244353}
   FeedbackIsProportionalToDamage: 0
   PreventTakeSelfDamage: 0
+  ImmuneToKnockback: 0
+  ImmuneToKnockbackIfZeroDamage: 0
+  KnockbackForceMultiplier: 1
   DestroyOnDeath: 0
   DelayBeforeDestruction: 0
   PointsWhenDestroyed: 0
@@ -5220,6 +5225,7 @@ MonoBehaviour:
   ColorMaterialPropertyName: _Color
   UseMaterialPropertyBlocks: 0
   MasterHealth: {fileID: 0}
+  TargetDamageResistanceProcessor: {fileID: 0}
   TargetAnimator: {fileID: 0}
   DisableAnimatorLogs: 1
 --- !u!114 &2437730220603187569
@@ -5234,7 +5240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec89e4158bf96841b9bc830fc5385ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BrainActive: 1
   Owner: {fileID: 0}
   States:
   - StateName: Moving
@@ -5268,6 +5273,9 @@ MonoBehaviour:
   TimeInThisState: 0
   Target: {fileID: 0}
   _lastKnownTargetPosition: {x: 0, y: 0, z: 0}
+  BrainActive: 1
+  ResetBrainOnStart: 1
+  ResetBrainOnEnable: 0
   ActionsFrequency: 0
   DecisionFrequency: 0
   RandomizeFrequencies: 0
@@ -5324,6 +5332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561ab803e1e9aa94ab096724696e5475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitializationMode: 0
   Label: 
 --- !u!114 &2437789940715566383
 MonoBehaviour:
@@ -5337,11 +5346,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b1affdc8ddb97d40b6a8b805c494909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitializationMode: 0
   Label: 
   TargetHandleWeaponAbility: {fileID: 0}
   AimOrigin: 0
   FaceTarget: 1
   AimAtTarget: 1
+  OnlyAimWhenInState: 1
 --- !u!114 &2439401147963574603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5372,6 +5383,7 @@ MonoBehaviour:
   HealthBarType: 1
   TimeScale: 0
   HealthBarPrefab: {fileID: 0}
+  TargetProgressBar: {fileID: 0}
   Size: {x: 1.5, y: 0.4}
   BackgroundPadding: {x: 0.05, y: 0.05}
   InitialRotationAngles: {x: 0, y: 0, z: 0}
@@ -5552,6 +5564,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   FollowTargetMode: 2
   NestDrawnHealthBar: 0
+  Billboard: 0
   InstantiatedOnDeath: {fileID: 0}
   HealthBarOffset: {x: 0, y: 2.5, z: 0}
   AlwaysVisible: 0
@@ -5570,6 +5583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5758bd960e1ca6d41828c58712425d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitializationMode: 0
   Label: 
 --- !u!114 &467072190
 MonoBehaviour:
@@ -5583,6 +5597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8135bf55f3495254099bc5daee8423d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitializationMode: 0
   Label: 
   MaximumDurationInADirection: 2
   ObstacleLayerMask:
@@ -10578,10 +10593,46 @@ MonoBehaviour:
   AutoChangeDirectionOnEnd: 0
   AutoPlayOnStart: 0
   AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
+  CanPlay: 1
   CanPlayWhileAlreadyPlaying: 1
   ChanceToPlay: 100
   FeedbacksIntensity: 1
@@ -10695,6 +10746,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!1 &3656023103259124891
 GameObject:
   m_ObjectHideFlags: 0
@@ -10749,10 +10801,46 @@ MonoBehaviour:
   AutoChangeDirectionOnEnd: 0
   AutoPlayOnStart: 0
   AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
   DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
   CooldownDuration: 0
   InitialDelay: 0
+  CanPlay: 1
   CanPlayWhileAlreadyPlaying: 1
   ChanceToPlay: 100
   FeedbacksIntensity: 1
@@ -10822,6 +10910,7 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!114 &6203902710378635327
 MonoBehaviour:
   m_ObjectHideFlags: 0

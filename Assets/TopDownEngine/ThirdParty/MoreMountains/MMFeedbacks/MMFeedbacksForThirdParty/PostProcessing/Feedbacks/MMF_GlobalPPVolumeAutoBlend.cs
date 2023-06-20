@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -21,6 +22,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override string RequiredTargetText { get { return TargetAutoBlend != null ? TargetAutoBlend.name : "";  } }
 		public override string RequiresSetupText { get { return "This feedback requires that a TargetAutoBlend be set to be able to work properly. You can set one below."; } }
 		#endif
+		public override bool HasAutomatedTargetAcquisition => true;
+		protected override void AutomateTargetAcquisition() => TargetAutoBlend = FindAutomatedTarget<MMGlobalPostProcessingVolumeAutoBlend>();
         
 		/// a static bool used to disable all feedbacks of this type at once
 		public static bool FeedbackTypeAuthorized = true;
@@ -37,7 +40,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			{
 				if (Mode == Modes.Override)
 				{
-					return BlendDuration;
+					return ApplyTimeMultiplier(BlendDuration);
 				}
 				else
 				{
@@ -47,7 +50,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 					}
 					else
 					{
-						return TargetAutoBlend.BlendDuration;
+						return ApplyTimeMultiplier(TargetAutoBlend.BlendDuration);
 					}
 				}
 			}
@@ -135,8 +138,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 			}
 			else
 			{
-				TargetAutoBlend.BlendDuration = BlendDuration;
+				TargetAutoBlend.BlendDuration = ApplyTimeMultiplier(BlendDuration);
 				TargetAutoBlend.Curve = BlendCurve;
+				TargetAutoBlend.TimeScale = (ComputedTimescaleMode == TimescaleModes.Scaled) ? MMGlobalPostProcessingVolumeAutoBlend.TimeScales.Scaled : MMGlobalPostProcessingVolumeAutoBlend.TimeScales.Unscaled;
 				if (!NormalPlayDirection)
 				{
 					TargetAutoBlend.InitialWeight = FinalWeight;

@@ -200,11 +200,12 @@ namespace MoreMountains.TopDownEngine
 		}
 		
 		protected List<InterruptiblesDamageOverTimeCoroutine> _interruptiblesDamageOverTimeCoroutines;
+		protected List<InterruptiblesDamageOverTimeCoroutine> _damageOverTimeCoroutines;
 
 		#region Initialization
 		
 		/// <summary>
-		/// On Start, we initialize our health
+		/// On Awake, we initialize our health
 		/// </summary>
 		protected virtual void Awake()
 		{
@@ -276,6 +277,7 @@ namespace MoreMountains.TopDownEngine
 			}
 
 			_interruptiblesDamageOverTimeCoroutines = new List<InterruptiblesDamageOverTimeCoroutine>();
+			_damageOverTimeCoroutines = new List<InterruptiblesDamageOverTimeCoroutine>();
 			_initialLayer = gameObject.layer;
 
 			_autoRespawn = this.gameObject.GetComponentInParent<AutoRespawn>();
@@ -504,6 +506,19 @@ namespace MoreMountains.TopDownEngine
 			{
 				StopCoroutine(coroutine.DamageOverTimeCoroutine);
 			}
+			_interruptiblesDamageOverTimeCoroutines.Clear();
+		}
+
+		/// <summary>
+		/// Interrupts all damage over time, even the non interruptible ones (usually on death)
+		/// </summary>
+		public virtual void StopAllDamageOverTime()
+		{
+			foreach (InterruptiblesDamageOverTimeCoroutine coroutine in _damageOverTimeCoroutines)
+			{
+				StopCoroutine(coroutine.DamageOverTimeCoroutine);
+			}
+			_damageOverTimeCoroutines.Clear();
 		}
 
 		/// <summary>
@@ -549,7 +564,7 @@ namespace MoreMountains.TopDownEngine
 			damageOverTime.DamageOverTimeCoroutine = StartCoroutine(DamageOverTimeCo(damage, instigator, flickerDuration,
 				invincibilityDuration, damageDirection, typedDamages, amountOfRepeats, durationBetweenRepeats,
 				interruptible));
-			
+			_damageOverTimeCoroutines.Add(damageOverTime);
 			if (interruptible)
 			{
 				_interruptiblesDamageOverTimeCoroutines.Add(damageOverTime);
@@ -676,12 +691,47 @@ namespace MoreMountains.TopDownEngine
 							}
 						}
 					}
-
 					_characterMovement?.ApplyMovementMultiplier(typedDamage.MovementMultiplier,
 						typedDamage.MovementMultiplierDuration);
 				}
 			}
-			
+		}
+		
+		/// <summary>
+		/// Determines a new knockback force by processing it through resistances
+		/// </summary>
+		/// <param name="knockbackForce"></param>
+		/// <param name="typedDamages"></param>
+		/// <returns></returns>
+		public virtual Vector2 ComputeKnockbackForce(Vector3 knockbackForce, List<TypedDamage> typedDamages = null)
+		{
+			return (TargetDamageResistanceProcessor == null) ? knockbackForce : TargetDamageResistanceProcessor.ProcessKnockbackForce(knockbackForce, typedDamages);;
+
+		}
+
+		/// <summary>
+		/// Returns true if this Health can get knockbacked, false otherwise
+		/// </summary>
+		/// <param name="typedDamages"></param>
+		/// <returns></returns>
+		public virtual bool CanGetKnockback(List<TypedDamage> typedDamages) 
+		{
+			if (ImmuneToKnockback)
+			{
+				return false;
+			}
+			if (TargetDamageResistanceProcessor != null)
+			{
+				if (TargetDamageResistanceProcessor.isActiveAndEnabled)
+				{
+					bool checkResistance = TargetDamageResistanceProcessor.CheckPreventKnockback(typedDamages);
+					if (checkResistance)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -708,6 +758,7 @@ namespace MoreMountains.TopDownEngine
 			SetHealth(0);
 
 			// we prevent further damage
+			StopAllDamageOverTime();
 			DamageDisabled();
 
 			DeathMMFeedbacks?.PlayFeedbacks(this.transform.position);

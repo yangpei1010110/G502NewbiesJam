@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using MoreMountains.Tools;
 
 namespace MoreMountains.Feedbacks
 {
@@ -136,6 +137,7 @@ namespace MoreMountains.Feedbacks
 		public Vector3 remapZero;
 		public Vector3 remapOne;
 		public float curveDirection;
+		public bool ping;
 	}
 
 	/// <summary>
@@ -255,7 +257,7 @@ namespace MoreMountains.Feedbacks
 			RandomizeVector3(ref internalProperties.remapOne, properties.RemapCurveOneMin, properties.RemapCurveOneMax);
 
 			internalProperties.newValue = DetermineNewValue(properties, internalProperties.newValue, internalProperties.initialValue, ref internalProperties.startValue, 
-				ref internalProperties.randomAmplitude, ref internalProperties.randomFrequency, ref internalProperties.pauseDuration);
+				ref internalProperties.randomAmplitude, ref internalProperties.randomFrequency, ref internalProperties.pauseDuration, true);
 		}
 
 		/// <summary>
@@ -439,7 +441,7 @@ namespace MoreMountains.Feedbacks
 			{
 				float curveProgress = (internalProperties.curveDirection == 1f) ? 1f : 0f;
 
-				EvaluateCurve(properties.Curve, curveProgress, internalProperties.remapZero, internalProperties.remapOne, ref internalProperties.newValue);
+				EvaluateCurve(properties.Curve, curveProgress, internalProperties.remapZero, internalProperties.remapOne, ref internalProperties.newValue, properties);
 				if (properties.RelativeCurveAmplitude)
 				{
 					internalProperties.newValue += internalProperties.initialValue;
@@ -461,7 +463,7 @@ namespace MoreMountains.Feedbacks
 					curveProgress = 1 - curveProgress;
 				}
 
-				EvaluateCurve(properties.Curve, curveProgress, internalProperties.remapZero, internalProperties.remapOne, ref internalProperties.newValue);
+				EvaluateCurve(properties.Curve, curveProgress, internalProperties.remapZero, internalProperties.remapOne, ref internalProperties.newValue, properties);
                 
 				if (internalProperties.timeSinceLastChange > internalProperties.randomFrequency)
 				{
@@ -480,15 +482,16 @@ namespace MoreMountains.Feedbacks
 			{
 				internalProperties.newValue = internalProperties.initialValue + internalProperties.newValue;
 			}
-
+			
 			return internalProperties.newValue;
 		}
 
-		protected virtual void EvaluateCurve(AnimationCurve curve, float percent, Vector3 remapMin, Vector3 remapMax, ref Vector3 returnValue)
+		protected virtual void EvaluateCurve(AnimationCurve curve, float percent, Vector3 remapMin, Vector3 remapMax, ref Vector3 returnValue, WiggleProperties properties)
 		{
 			returnValue.x = MMFeedbacksHelpers.Remap(curve.Evaluate(percent), 0f, 1f, remapMin.x, remapMax.x);
 			returnValue.y = MMFeedbacksHelpers.Remap(curve.Evaluate(percent), 0f, 1f, remapMin.y, remapMax.y);
 			returnValue.z = MMFeedbacksHelpers.Remap(curve.Evaluate(percent), 0f, 1f, remapMin.z, remapMax.z);
+			returnValue *= ApplyFalloff(properties);
 		}
 
 		/// <summary>
@@ -541,7 +544,6 @@ namespace MoreMountains.Feedbacks
 					movedValue = Vector3.LerpUnclamped(startValue, destinationValue, curvePercent);
 				}
 
-
 				if (timeSinceLastValueChange > frequency)
 				{
 					timeSinceLastValueChange = 0f;
@@ -566,31 +568,44 @@ namespace MoreMountains.Feedbacks
 		/// <param name="pauseDuration"></param>
 		/// <returns></returns>
 		protected virtual Vector3 DetermineNewValue(WiggleProperties properties, Vector3 newValue, Vector3 initialValue, ref Vector3 startValue, 
-			ref Vector3 randomAmplitude, ref float randomFrequency, ref float pauseDuration)
+			ref Vector3 randomAmplitude, ref float randomFrequency, ref float pauseDuration, bool firstPlay = false)
 		{
 			switch (properties.WiggleType)
 			{
 				case WiggleTypes.PingPong:
-
 					if (properties.RelativeAmplitude)
 					{
-						if (newValue == properties.AmplitudeMin + initialValue)
+						if (firstPlay)
 						{
-							newValue = properties.AmplitudeMax;
-							startValue = properties.AmplitudeMin;
+							startValue = properties.AmplitudeMin * ApplyFalloff(properties) + initialValue;
+							newValue = properties.AmplitudeMax * ApplyFalloff(properties) + initialValue;
 						}
 						else
 						{
-							newValue = properties.AmplitudeMin;
-							startValue = properties.AmplitudeMax;
+							if (newValue == properties.AmplitudeMin + initialValue)
+							{
+								startValue = newValue;
+								newValue = properties.AmplitudeMax * ApplyFalloff(properties) + initialValue;
+							}
+							else
+							{
+								startValue = newValue;
+								newValue = properties.AmplitudeMin  * ApplyFalloff(properties) + initialValue;
+							}
 						}
-						startValue += initialValue;
-						newValue += initialValue;
 					}
 					else
 					{
-						newValue = (newValue == properties.AmplitudeMin) ? properties.AmplitudeMax : properties.AmplitudeMin;
-						startValue = (newValue == properties.AmplitudeMin) ? properties.AmplitudeMax : properties.AmplitudeMin;
+						if (firstPlay)
+						{
+							startValue = properties.AmplitudeMin * ApplyFalloff(properties);
+							newValue = properties.AmplitudeMax * ApplyFalloff(properties);
+						}
+						else
+						{
+							startValue = newValue;
+							newValue = (newValue == properties.AmplitudeMin) ? properties.AmplitudeMax * ApplyFalloff(properties) : properties.AmplitudeMin;	
+						}
 					}                    
 					RandomizeFloat(ref randomFrequency, properties.FrequencyMin, properties.FrequencyMax);
 					RandomizeFloat(ref pauseDuration, properties.PauseMin, properties.PauseMax);
@@ -600,7 +615,7 @@ namespace MoreMountains.Feedbacks
 						newValue.y = newValue.x;
 						newValue.z = newValue.x;
 					}
-                    
+					
 					return newValue;
 
 				case WiggleTypes.Random:

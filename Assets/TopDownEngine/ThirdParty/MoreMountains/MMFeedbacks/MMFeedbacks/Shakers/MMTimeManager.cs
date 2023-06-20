@@ -115,18 +115,36 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// On start we initialize our stack and store our initial time scale
+		/// On start we initialize our stack 
 		/// </summary>
 		protected override void Awake()
 		{
 			base.Awake();
+			PreInitialization();
+		}
+
+		/// <summary>
+		/// We initialize our stack
+		/// </summary>
+		public virtual void PreInitialization()
+		{
+			_timeScaleProperties = new Stack<TimeScaleProperties>();
+		}
+
+		/// <summary>
+		/// On Start we apply our timescale
+		/// </summary>
+		protected virtual void Start()
+		{
 			Initialization();
 		}
 
+		/// <summary>
+		/// On init we store our initial timescales and apply the normal timescale
+		/// </summary>
 		public virtual void Initialization()
 		{
 			TargetTimeScale = NormalTimeScale;
-			_timeScaleProperties = new Stack<TimeScaleProperties>();
 			_initialFixedDeltaTime = Time.fixedDeltaTime;
 			_initialMaximumDeltaTime = Time.maximumDeltaTime;
 			ApplyTimeScale(NormalTimeScale);

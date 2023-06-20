@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 #if MM_TEXTMESHPRO
+using MoreMountains.Tools;
 using TMPro;
 #endif
 
@@ -30,6 +33,11 @@ namespace MoreMountains.Feedbacks
 		protected string _originalText;
 		
 		#if MM_TEXTMESHPRO
+		public override bool HasAutomatedTargetAcquisition => true;
+		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
+
+		protected TMP_TextInfo _textInfo;
+
 		/// the duration of this feedback 
 		public override float FeedbackDuration
 		{
@@ -149,6 +157,9 @@ namespace MoreMountains.Feedbacks
 		[Tooltip("the total duration of the text reveal, in seconds")]
 		[MMFEnumCondition("DurationMode", (int)DurationModes.TotalDuration)]
 		public float RevealDuration = 1f;
+		/// a UnityEvent to invoke every time a reveal happens (word, line or character)
+		[Tooltip("a UnityEvent to invoke every time a reveal happens (word, line or character)")]
+		public UnityEvent OnReveal;
 
 		protected float _delay;
 		protected Coroutine _coroutine;
@@ -158,6 +169,7 @@ namespace MoreMountains.Feedbacks
 		protected int _totalLines;
 		protected int _totalWords;
 		protected string _initialText;
+		protected int _indexLastTime = -1;
         
 		/// <summary>
 		/// On play we change the text of our target TMPText
@@ -179,6 +191,7 @@ namespace MoreMountains.Feedbacks
 			}
 
 			_initialText = TargetTMPText.text;
+			_textInfo = TargetTMPText.textInfo;
 
 			if (ReplaceText)
 			{
@@ -231,6 +244,7 @@ namespace MoreMountains.Feedbacks
 				}
 		            
 				TargetTMPText.maxVisibleCharacters = visibleCharacters;
+				InvokeRevealEvents();
 				visibleCharacters++;                
 				lastCharAt = time;
 
@@ -273,6 +287,7 @@ namespace MoreMountains.Feedbacks
 			while ((visibleLines <= _totalLines) && !Owner.SkippingToTheEnd)
 			{
 				TargetTMPText.maxVisibleLines = visibleLines;
+				InvokeRevealEvents();
 				visibleLines++;
 
 				yield return WaitFor(_delay);
@@ -294,14 +309,28 @@ namespace MoreMountains.Feedbacks
 			while ((visibleWords <= _totalWords) && !Owner.SkippingToTheEnd)
 			{
 				TargetTMPText.maxVisibleWords = visibleWords;
+				InvokeRevealEvents();
 				visibleWords++;
-
-				
 				yield return WaitFor(_delay);
 			}
-
 			TargetTMPText.maxVisibleWords = _totalWords;
 			IsPlaying = false;
+		}
+
+		/// <summary>
+		/// Invokes on reveal events
+		/// </summary>
+		protected virtual void InvokeRevealEvents()
+		{
+			if ( ((RevealMode == RevealModes.Character) && (TargetTMPText.maxVisibleCharacters == 0))
+			    || ((RevealMode == RevealModes.Character) && !IsNewVisibleCharacter())
+				|| ((RevealMode == RevealModes.Lines) && (TargetTMPText.maxVisibleLines == 0))
+				|| ((RevealMode == RevealModes.Words) && (TargetTMPText.maxVisibleWords == 0)) )
+			{
+				return;
+			}
+			
+			OnReveal?.Invoke();
 		}
 
 		/// <summary>
@@ -381,7 +410,37 @@ namespace MoreMountains.Feedbacks
 	 
 			return richTextLength;
 		}
+
+		/// <summary>
+		/// Returns true if the last visible letter of the TMP text is new and visible and a letter or digit
+		/// </summary>
+		/// <returns></returns>
+		protected virtual bool IsNewVisibleCharacter()
+		{
+			int lastVisibleCharIndex = -1;
+			_textInfo = TargetTMPText.GetTextInfo(TargetTMPText.text);
+
+			for (int i = 0; i < _textInfo.characterCount; i++)
+			{
+				if (_textInfo.characterInfo[i].isVisible)
+				{
+					lastVisibleCharIndex = i;
+				}
+			}
+
+			if ((lastVisibleCharIndex < 0) 
+			    || (lastVisibleCharIndex > TargetTMPText.text.Length)
+			    || (lastVisibleCharIndex == _indexLastTime))
+			{
+				return false;
+			}
+			
+			_indexLastTime = lastVisibleCharIndex;
+			return Char.IsLetterOrDigit(_textInfo.characterInfo[lastVisibleCharIndex].character);
+		}
+		
 		#endif
+		
 		
 		/// <summary>
 		/// On restore, we put our object back at its initial position

@@ -69,18 +69,23 @@ namespace MoreMountains.Tools
 	public class MMSwipeZone : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler
 	{
 		/// the minimal length of a swipe
+		[Tooltip("the minimal length of a swipe")]
 		public float MinimalSwipeLength = 50f;
 		/// the maximum press length of a swipe
+		[Tooltip("the maximum press length of a swipe")]
 		public float MaximumPressLength = 10f;
 
 		/// The method(s) to call when the zone is swiped
+		[Tooltip("The method(s) to call when the zone is swiped")]
 		public SwipeEvent ZoneSwiped;
 		/// The method(s) to call while the zone is being pressed
+		[Tooltip("The method(s) to call while the zone is being pressed")]
 		public UnityEvent ZonePressed;
 
 		[Header("Mouse Mode")]
 		[MMInformation("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).", MMInformationAttribute.InformationType.Info,false)]
 		/// If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).
+		[Tooltip("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).")]
 		public bool MouseMode = false;
 
 		protected Vector2 _firstTouchPosition;
@@ -93,6 +98,9 @@ namespace MoreMountains.Tools
 		protected float _swipeStartedAt = 0f;
 		protected float _swipeEndedAt = 0f;
 
+		/// <summary>
+		/// Invokes a swipe event with the correct properties
+		/// </summary>
 		protected virtual void Swipe()
 		{
 			float duration = _swipeEndedAt - _swipeStartedAt;
@@ -104,6 +112,9 @@ namespace MoreMountains.Tools
 			}
 		}
 
+		/// <summary>
+		/// Raises the press event
+		/// </summary>
 		protected virtual void Press()
 		{
 			if (ZonePressed != null)

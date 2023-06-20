@@ -28,6 +28,7 @@ namespace MoreMountains.InventoryEngine
 
 		/// the complete list of inventory items in this inventory
 		[Tooltip("This is a realtime view of your Inventory's contents. Don't modify this list via the inspector, it's visible for control purposes only.")]
+		[MMReadOnly]
 		public InventoryItem[] Content;
 
 		[Header("Inventory Type")]
@@ -56,7 +57,10 @@ namespace MoreMountains.InventoryEngine
 		public GameObject Owner { get; set; }
 
 		/// The number of free slots in this inventory
-		public int NumberOfFreeSlots { get { return Content.Length - NumberOfFilledSlots; } }
+		public int NumberOfFreeSlots => Content.Length - NumberOfFilledSlots;
+
+		/// whether or not the inventory is full (doesn't have any remaining free slots)
+		public bool IsFull => NumberOfFreeSlots <= 0;
 
 		/// The number of filled slots 
 		public int NumberOfFilledSlots
@@ -99,9 +103,9 @@ namespace MoreMountains.InventoryEngine
 			return numberOfStackableSlots;
 		}
 
-		public const string _resourceItemPath = "Items/";
-		protected const string _saveFolderName = "InventoryEngine/";
-		protected const string _saveFileExtension = ".inventory";
+		public static string _resourceItemPath = "Items/";
+		public static string _saveFolderName = "InventoryEngine/";
+		public static string _saveFileExtension = ".inventory";
 
 		/// <summary>
 		/// Returns (if found) an inventory matching the searched name and playerID
@@ -237,12 +241,20 @@ namespace MoreMountains.InventoryEngine
 		/// <returns></returns>
 		public virtual bool AddItemAt(InventoryItem itemToAdd, int quantity, int destinationIndex)
 		{
+			int tempQuantity = quantity;
+			
 			if (!InventoryItem.IsNull(Content[destinationIndex]))
 			{
-				return false;
+				if ((Content[destinationIndex].ItemID != itemToAdd.ItemID) || (Content[destinationIndex].MaximumStack <= 1))
+				{
+					return false;
+				}
+				else
+				{
+					tempQuantity += Content[destinationIndex].Quantity;
+				}
 			}
-
-			int tempQuantity = quantity;
+			
 			if (tempQuantity > itemToAdd.MaximumStack)
 			{
 				tempQuantity = itemToAdd.MaximumStack;
@@ -408,6 +420,7 @@ namespace MoreMountains.InventoryEngine
 			}
 
 			int quantityLeftToRemove = quantity;
+			
             
 			List<int> list = InventoryContains(itemID);
 			foreach (int index in list)
@@ -420,7 +433,8 @@ namespace MoreMountains.InventoryEngine
 					return true;
 				}
 			}
-			return true;
+			
+			return false;
 		}
 
 		/// <summary>
@@ -745,8 +759,15 @@ namespace MoreMountains.InventoryEngine
 					MMInventoryEvent.Trigger(MMInventoryEventType.Error, slot, this.name, null, 0, index, PlayerID);
 					return;
 				}
+				// if the object can't be equipped if the inventory is full, and if it indeed is, we do nothing and exit
+				if (!item.EquippableIfInventoryIsFull)
+				{
+					if (item.TargetEquipmentInventory(PlayerID).IsFull)
+					{
+						return;
+					}
+				}
 				// call the equip method of the item
-
 				if (!item.Equip(PlayerID))
 				{
 					return;

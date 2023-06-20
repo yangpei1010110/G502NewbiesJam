@@ -104,6 +104,9 @@ namespace MoreMountains.TopDownEngine
 		/// a transform to use as the spawn point for weapon use (if null, only offset will be considered, otherwise the transform without offset)
 		[Tooltip("a transform to use as the spawn point for weapon use (if null, only offset will be considered, otherwise the transform without offset)")]
 		public Transform WeaponUseTransform;
+		/// if this is true, the weapon will flip to match the character's orientation
+		[Tooltip("if this is true, the weapon will flip to match the character's orientation")]
+		public bool WeaponShouldFlip = true;
 
 		[MMInspectorGroup("IK", true, 13)]
 		/// the transform to which the character's left hand should be attached to
@@ -139,6 +142,9 @@ namespace MoreMountains.TopDownEngine
 		/// If this is true, sanity checks will be performed to make sure animator parameters exist before updating them. Turning this to false will increase performance but will throw errors if you're trying to update non existing parameters. Make sure your animator has the required parameters.
 		[Tooltip("If this is true, sanity checks will be performed to make sure animator parameters exist before updating them. Turning this to false will increase performance but will throw errors if you're trying to update non existing parameters. Make sure your animator has the required parameters.")]
 		public bool PerformAnimatorSanityChecks = false;
+		/// if this is true, the weapon's animator(s) will mirror the animation parameter of the owner character (that way your weapon's animator will be able to "know" if the character is walking, jumping, etc)
+		[Tooltip("if this is true, the weapon's animator(s) will mirror the animation parameter of the owner character (that way your weapon's animator will be able to 'know' if the character is walking, jumping, etc)")]
+		public bool MirrorCharacterAnimatorParameters = false;
 
 		[MMInspectorGroup("Animation Parameters Names", true, 17)]
 		/// the ID of the weapon to pass to the animator
@@ -180,6 +186,9 @@ namespace MoreMountains.TopDownEngine
 		/// the name of the weapon's angle animation parameter, adjusted so it's always relative to the direction the character is currently facing
 		[Tooltip("the name of the weapon's angle animation parameter, adjusted so it's always relative to the direction the character is currently facing")]
 		public string WeaponAngleRelativeAnimationParameter;
+		/// the name of the parameter to send to true as long as this weapon is equipped, used or not. While all the other parameters defined here are updated by the Weapon class itself, and passed to the weapon and character, this one will be updated by CharacterHandleWeapon only."
+		[Tooltip("the name of the parameter to send to true as long as this weapon is equipped, used or not. While all the other parameters defined here are updated by the Weapon class itself, and passed to the weapon and character, this one will be updated by CharacterHandleWeapon only.")]
+		public string EquippedAnimationParameter;
         
 		[MMInspectorGroup("Feedbacks", true, 18)]
 		/// the feedback to play when the weapon starts being used
@@ -265,7 +274,9 @@ namespace MoreMountains.TopDownEngine
 		protected int _weaponAngleRelativeAnimationParameter;
 		protected int _aliveAnimationParameter;
 		protected int _comboInProgressAnimationParameter;
+		protected int _equippedAnimationParameter;
 		protected float _lastShootRequestAt;
+		protected float _lastTurnWeaponOnAt;
 
 		/// <summary>
 		/// On start we initialize our weapon
@@ -373,10 +384,25 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
+		/// Describes what happens when the weapon's input gets released
+		/// </summary>
+		public virtual void WeaponInputReleased()
+		{
+			
+		}
+
+		/// <summary>
 		/// Describes what happens when the weapon starts
 		/// </summary>
-		protected virtual void TurnWeaponOn()
+		public virtual void TurnWeaponOn()
 		{
+			if (!InputAuthorized && (Time.time - _lastTurnWeaponOnAt < TimeBetweenUses))
+			{
+				return;
+			}
+
+			_lastTurnWeaponOnAt = Time.time;
+			
 			TriggerWeaponStartFeedback();
 			WeaponState.ChangeState(WeaponStates.WeaponStart);
 			if ((_characterMovement != null) && (ModifyMovementWhileAttacking))
@@ -725,7 +751,15 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		public virtual void WeaponUse()
 		{
-			// apply recoil
+			ApplyRecoil();
+			TriggerWeaponUsedFeedback();
+		}
+
+		/// <summary>
+		/// Applies recoil if necessary
+		/// </summary>
+		protected virtual void ApplyRecoil()
+		{
 			if ((RecoilForce != 0f) && (_controller != null))
 			{
 				if (Owner != null)
@@ -747,7 +781,6 @@ namespace MoreMountains.TopDownEngine
 					}
 				}                
 			}
-			TriggerWeaponUsedFeedback();
 		}
 
 		/// <summary>
@@ -869,6 +902,11 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		public virtual void FlipWeapon()
 		{
+			if (!WeaponShouldFlip)
+			{
+				return;
+			}
+			
 			if (Owner == null)
 			{
 				return;
@@ -1033,6 +1071,14 @@ namespace MoreMountains.TopDownEngine
 					{
 						Animators[i].logWarnings = false;
 					}
+
+					if (MirrorCharacterAnimatorParameters)
+					{
+						MMAnimatorMirror mirror = Animators[i].gameObject.AddComponent<MMAnimatorMirror>();
+						mirror.SourceAnimator = _ownerAnimator;
+						mirror.TargetAnimator = Animators[i];
+						mirror.Initialization();
+					}
 				}                
 			}            
 
@@ -1049,6 +1095,7 @@ namespace MoreMountains.TopDownEngine
 
 		protected virtual void AddParametersToAnimator(Animator animator, HashSet<int> list)
 		{
+			MMAnimatorExtensions.AddAnimatorParameterIfExists(animator, EquippedAnimationParameter, out _equippedAnimationParameter, AnimatorControllerParameterType.Bool, list);
 			MMAnimatorExtensions.AddAnimatorParameterIfExists(animator, WeaponAngleAnimationParameter, out _weaponAngleAnimationParameter, AnimatorControllerParameterType.Float, list);
 			MMAnimatorExtensions.AddAnimatorParameterIfExists(animator, WeaponAngleRelativeAnimationParameter, out _weaponAngleRelativeAnimationParameter, AnimatorControllerParameterType.Float, list);
 			MMAnimatorExtensions.AddAnimatorParameterIfExists(animator, IdleAnimationParameter, out _idleAnimationParameter, AnimatorControllerParameterType.Bool, list);
@@ -1087,6 +1134,7 @@ namespace MoreMountains.TopDownEngine
 
 		protected virtual void UpdateAnimator(Animator animator, HashSet<int> list)
 		{
+			MMAnimatorExtensions.UpdateAnimatorBool(animator, _equippedAnimationParameter, true, list);
 			MMAnimatorExtensions.UpdateAnimatorBool(animator, _idleAnimationParameter, (WeaponState.CurrentState == Weapon.WeaponStates.WeaponIdle), list, PerformAnimatorSanityChecks);
 			MMAnimatorExtensions.UpdateAnimatorBool(animator, _startAnimationParameter, (WeaponState.CurrentState == Weapon.WeaponStates.WeaponStart), list, PerformAnimatorSanityChecks);
 			MMAnimatorExtensions.UpdateAnimatorBool(animator, _delayBeforeUseAnimationParameter, (WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBeforeUse), list, PerformAnimatorSanityChecks);

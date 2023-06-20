@@ -24,14 +24,18 @@ namespace MoreMountains.TopDownEngine
 		[Tooltip("the shape of the damage area (rectangle or circle)")]
 		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
 		public MeleeDamageAreaShapes DamageAreaShape = MeleeDamageAreaShapes.Rectangle;
-		/// the size of the damage area
-		[Tooltip("the size of the damage area")]
-		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
-		public Vector3 AreaSize = new Vector3(1, 1);
 		/// the offset to apply to the damage area (from the weapon's attachment position
 		[Tooltip("the offset to apply to the damage area (from the weapon's attachment position")]
 		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
 		public Vector3 AreaOffset = new Vector3(1, 0);
+		/// the size of the damage area
+		[Tooltip("the size of the damage area")]
+		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
+		public Vector3 AreaSize = new Vector3(1, 1);
+		/// the trigger filters this melee weapon should apply damage on (by default, it'll apply damage on everything, but you can change this to only apply when targets enter the area, for example)
+		[Tooltip("the trigger filters this melee weapon should apply damage on (by default, it'll apply damage on everything, but you can change this to only apply when targets enter the area, for example)")]
+		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
+		public DamageOnTouch.TriggerAndCollisionMask TriggerFilter = DamageOnTouch.AllowedTriggerCallbacks;
 		/// the feedback to play when hitting a Damageable
 		[Tooltip("the feedback to play when hitting a Damageable")]
 		[MMEnumCondition("MeleeDamageAreaMode", (int)MeleeDamageAreaModes.Generated)]
@@ -193,6 +197,7 @@ namespace MoreMountains.TopDownEngine
 			_damageOnTouch.InvincibilityDuration = InvincibilityDuration;
 			_damageOnTouch.HitDamageableFeedback = HitDamageableFeedback;
 			_damageOnTouch.HitNonDamageableFeedback = HitNonDamageableFeedback;
+			_damageOnTouch.TriggerFilter = TriggerFilter;
             
 			if (!CanDamageOwner && (Owner != null))
 			{

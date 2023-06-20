@@ -78,9 +78,9 @@ namespace MoreMountains.Tools
 			/// returns the time (in unscaled seconds) since the last time the button was released
 			public float TimeSinceLastButtonUp { get { return Time.unscaledTime - _lastButtonUpAt; } }
 			/// returns true if this button was pressed down within the time (in unscaled seconds) passed in parameters
-			public bool ButtonDownRecently(float time) { return (Time.unscaledTime - TimeSinceLastButtonDown <= time); }
+			public bool ButtonDownRecently(float time) { return (TimeSinceLastButtonDown <= time); }
 			/// returns true if this button was released within the time (in unscaled seconds) passed in parameters
-			public bool ButtonUpRecently(float time) { return (Time.unscaledTime - TimeSinceLastButtonUp <= time); }
+			public bool ButtonUpRecently(float time) { return (TimeSinceLastButtonUp <= time); }
 
 			protected float _lastButtonDownAt;
 			protected float _lastButtonUpAt;

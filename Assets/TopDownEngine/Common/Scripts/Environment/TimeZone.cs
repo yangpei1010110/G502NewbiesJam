@@ -44,7 +44,6 @@ namespace MoreMountains.TopDownEngine
 			}
 			base.TriggerButtonAction();
 			ControlTime();
-			ActivateZone();
 		}
 
 		/// <summary>

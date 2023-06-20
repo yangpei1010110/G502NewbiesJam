@@ -18,43 +18,124 @@ namespace MoreMountains.InventoryEngine
 		[Header("Targets")]
 		[MMInformation("Bind here your inventory container (the CanvasGroup that you want to turn on/off when opening/closing the inventory), your main InventoryDisplay, and the overlay that will be displayed under the InventoryDisplay when opened.", MMInformationAttribute.InformationType.Info, false)]
 		/// The CanvasGroup containing all the elements you want to show/hide when pressing the open/close inventory button
+		[Tooltip("The CanvasGroup containing all the elements you want to show/hide when pressing the open/close inventory button")]
 		public CanvasGroup TargetInventoryContainer;
-		/// The main inventory display 
+		/// The main inventory display
+		[Tooltip("The main inventory display")] 
 		public InventoryDisplay TargetInventoryDisplay;
 		/// The Fader that will be used under it when opening/closing the inventory
+		[Tooltip("The Fader that will be used under it when opening/closing the inventory")]
 		public CanvasGroup Overlay;
+
+		[Header("Overlay")] 
+		/// the opacity of the overlay when active
+		[Tooltip("the opacity of the overlay when active")]
+		public float OverlayActiveOpacity = 0.85f;
+		/// the opacity of the overlay when inactive
+		[Tooltip("the opacity of the overlay when inactive")]
+		public float OverlayInactiveOpacity = 0f;
 
 		[Header("Start Behaviour")]
 		[MMInformation("If you set HideContainerOnStart to true, the TargetInventoryContainer defined right above this field will be automatically hidden on Start, even if you've left it visible in Scene view. Useful for setup.", MMInformationAttribute.InformationType.Info, false)]
 		/// if this is true, the inventory container will be hidden automatically on start
+		[Tooltip("if this is true, the inventory container will be hidden automatically on start")]
 		public bool HideContainerOnStart = true;
 
 		[Header("Permissions")]
 		[MMInformation("Here you can decide to have your inventory catch input only when open, or not.", MMInformationAttribute.InformationType.Info, false)]
 		/// if this is true, the inventory container will be hidden automatically on start
+		[Tooltip("if this is true, the inventory container will be hidden automatically on start")]
 		public bool InputOnlyWhenOpen = true;
 
 		#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-			[Header("Input System Key Mapping")]
-			[MMInformation("Here you need to set the various key bindings you prefer. There are some by default but feel free to change them.", MMInformationAttribute.InformationType.Info, false)]
+		
+			[Header("Input System Key Mapping")] 
+
 			/// the key used to open/close the inventory
-			public Key ToggleInventoryKey = Key.I;
+			public InputActionProperty ToggleInventoryKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Toggle",
+					type: InputActionType.Button, 
+					binding: "Keyboard/I", 
+					interactions: "Press(behavior=2)"));
+			
+			/// the key used to open the inventory
+			public InputActionProperty OpenInventoryKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Open",
+					type: InputActionType.Button, 
+					interactions: "Press(behavior=2)"));
+			
+			/// the key used to open the inventory
+			public InputActionProperty CloseInventoryKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Close",
+					type: InputActionType.Button, 
+					interactions: "Press(behavior=2)"));
+
 			/// the alt key used to open/close the inventory
-			public Key CancelKey = Key.Escape;
+			public InputActionProperty CancelKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Cancel", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/escape", 
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to move an item
-			public Key MoveKey = Key.Insert;
+			public InputActionProperty MoveKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Move", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/insert", 
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to equip an item
-			public Key EquipKey = Key.Home;
+			public InputActionProperty EquipKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Equip", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/home",
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to use an item
-			public Key UseKey = Key.End;
+			public InputActionProperty UseKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Use", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/end",
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to equip or use an item
-			public Key EquipOrUseKey = Key.Space;
+			public InputActionProperty EquipOrUseKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_EquipOrUse", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/space", 
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to drop an item
-			public Key DropKey = Key.Delete;
+			public InputActionProperty DropKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_Drop", 
+					type: InputActionType.Button,
+					binding: "Keyboard/delete",		
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to go to the next inventory
-			public Key NextInvKey = Key.PageDown;
+			public InputActionProperty NextInvKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_NextInv", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/pageDown", 
+					interactions: "Press(behavior=2)"));
+			
 			/// the key used to go to the previous inventory
-			public Key PrevInvKey = Key.PageUp;
+			public InputActionProperty PrevInvKey = new InputActionProperty(
+				new InputAction(
+					name: "IM_PrevInv", 
+					type: InputActionType.Button, 
+					binding: "Keyboard/pageUp", 
+					interactions: "Press(behavior=2)"));
 		#else
 		[Header("Key Mapping")]
 		[MMInformation("Here you need to set the various key bindings you prefer. There are some by default but feel free to change them.", MMInformationAttribute.InformationType.Info, false)]
@@ -62,6 +143,10 @@ namespace MoreMountains.InventoryEngine
 		public KeyCode ToggleInventoryKey = KeyCode.I;
 		/// the alt key used to open/close the inventory
 		public KeyCode ToggleInventoryAltKey = KeyCode.Joystick1Button6;
+		/// the key used to open the inventory
+		public KeyCode OpenInventoryKey;
+		/// the key used to close the inventory
+		public KeyCode CloseInventoryKey;
 		/// the alt key used to open/close the inventory
 		public KeyCode CancelKey = KeyCode.Escape;
 		/// the alt key used to open/close the inventory
@@ -136,7 +221,6 @@ namespace MoreMountains.InventoryEngine
 		public bool InventoryIsOpen;
 
 		protected CanvasGroup _canvasGroup;
-		protected bool _pause = false;
 		protected GameObject _currentSelection;
 		protected InventorySlot _currentInventorySlot;
 		protected List<InventoryHotbar> _targetInventoryHotbars;
@@ -149,6 +233,8 @@ namespace MoreMountains.InventoryEngine
 		private bool _isDropButtonNotNull;
 		
 		protected bool _toggleInventoryKeyPressed;
+		protected bool _openInventoryKeyPressed;
+		protected bool _closeInventoryKeyPressed;
 		protected bool _cancelKeyPressed;
 		protected bool _prevInvKeyPressed;
 		protected bool _nextInvKeyPressed;
@@ -181,7 +267,7 @@ namespace MoreMountains.InventoryEngine
 			if (HideContainerOnStart)
 			{
 				if (TargetInventoryContainer != null) { TargetInventoryContainer.alpha = 0; }
-				if (Overlay != null) { Overlay.alpha = 0; }
+				if (Overlay != null) { Overlay.alpha = OverlayInactiveOpacity; }
 				EventSystem.current.sendNavigationEvents = false;
 				if (_canvasGroup != null)
 				{
@@ -317,8 +403,6 @@ namespace MoreMountains.InventoryEngine
 				}
 			}
             
-			// we set the game to pause
-			_pause = true;
 			if (_canvasGroup != null)
 			{
 				_canvasGroup.blocksRaycasts = true;
@@ -330,7 +414,7 @@ namespace MoreMountains.InventoryEngine
 			InventoryIsOpen = true;
 
 			StartCoroutine(MMFade.FadeCanvasGroup(TargetInventoryContainer, 0.2f, 1f));
-			StartCoroutine(MMFade.FadeCanvasGroup(Overlay, 0.2f, 0.85f));
+			StartCoroutine(MMFade.FadeCanvasGroup(Overlay, 0.2f, OverlayActiveOpacity));
 		}
 
 		/// <summary>
@@ -338,8 +422,6 @@ namespace MoreMountains.InventoryEngine
 		/// </summary>
 		public virtual void CloseInventory()
 		{
-			// we unpause the game
-			_pause = false;
 			if (_canvasGroup != null)
 			{
 				_canvasGroup.blocksRaycasts = false;
@@ -350,7 +432,7 @@ namespace MoreMountains.InventoryEngine
 			InventoryIsOpen = false;
 
 			StartCoroutine(MMFade.FadeCanvasGroup(TargetInventoryContainer, 0.2f, 0f));
-			StartCoroutine(MMFade.FadeCanvasGroup(Overlay, 0.2f, 0f));
+			StartCoroutine(MMFade.FadeCanvasGroup(Overlay, 0.2f, OverlayInactiveOpacity));
 		}
 
 		/// <summary>
@@ -365,25 +447,29 @@ namespace MoreMountains.InventoryEngine
 			}
 			
 			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-				_toggleInventoryKeyPressed = Keyboard.current[ToggleInventoryKey].wasPressedThisFrame;
-				_cancelKeyPressed = Keyboard.current[CancelKey].wasPressedThisFrame;
-				_prevInvKeyPressed = Keyboard.current[PrevInvKey].wasPressedThisFrame;
-				_nextInvKeyPressed = Keyboard.current[NextInvKey].wasPressedThisFrame;
-				_moveKeyPressed = Keyboard.current[MoveKey].wasPressedThisFrame;
-				_equipOrUseKeyPressed = Keyboard.current[EquipOrUseKey].wasPressedThisFrame;
-				_equipKeyPressed = Keyboard.current[EquipKey].wasPressedThisFrame;
-				_useKeyPressed = Keyboard.current[UseKey].wasPressedThisFrame;
-				_dropKeyPressed = Keyboard.current[DropKey].wasPressedThisFrame;
+				_toggleInventoryKeyPressed = ToggleInventoryKey.action.WasPressedThisFrame();
+				_openInventoryKeyPressed = OpenInventoryKey.action.WasPressedThisFrame();
+				_closeInventoryKeyPressed = CloseInventoryKey.action.WasPressedThisFrame();
+				_cancelKeyPressed = CancelKey.action.WasPressedThisFrame();
+				_prevInvKeyPressed = PrevInvKey.action.WasPressedThisFrame();
+				_nextInvKeyPressed = NextInvKey.action.WasPressedThisFrame();
+				_moveKeyPressed = MoveKey.action.WasPressedThisFrame();
+				_equipOrUseKeyPressed = EquipOrUseKey.action.WasPressedThisFrame();
+				_equipKeyPressed = EquipKey.action.WasPressedThisFrame();
+				_useKeyPressed = UseKey.action.WasPressedThisFrame();
+				_dropKeyPressed = DropKey.action.WasPressedThisFrame();
 			#else
-			_toggleInventoryKeyPressed = Input.GetKeyDown(ToggleInventoryKey) || Input.GetKeyDown(ToggleInventoryAltKey);
-			_cancelKeyPressed = (Input.GetKeyDown(CancelKey)) || (Input.GetKeyDown(CancelKeyAlt));
-			_prevInvKeyPressed = Input.GetKeyDown(PrevInvKey) || Input.GetKeyDown(PrevInvAltKey);
-			_nextInvKeyPressed = Input.GetKeyDown(NextInvKey) || Input.GetKeyDown(NextInvAltKey);
-			_moveKeyPressed = (Input.GetKeyDown(MoveKey) || Input.GetKeyDown(MoveAltKey));
-			_equipOrUseKeyPressed = Input.GetKeyDown(EquipOrUseKey) || Input.GetKeyDown(EquipOrUseAltKey);
-			_equipKeyPressed = Input.GetKeyDown(EquipKey) || Input.GetKeyDown(EquipAltKey);
-			_useKeyPressed = Input.GetKeyDown(UseKey) || Input.GetKeyDown(UseAltKey);
-			_dropKeyPressed = Input.GetKeyDown(DropKey) || Input.GetKeyDown(DropAltKey);
+				_toggleInventoryKeyPressed = Input.GetKeyDown(ToggleInventoryKey) || Input.GetKeyDown(ToggleInventoryAltKey);
+				_openInventoryKeyPressed = Input.GetKeyDown(OpenInventoryKey);
+				_closeInventoryKeyPressed = Input.GetKeyDown(CloseInventoryKey);
+				_cancelKeyPressed = (Input.GetKeyDown(CancelKey)) || (Input.GetKeyDown(CancelKeyAlt));
+				_prevInvKeyPressed = Input.GetKeyDown(PrevInvKey) || Input.GetKeyDown(PrevInvAltKey);
+				_nextInvKeyPressed = Input.GetKeyDown(NextInvKey) || Input.GetKeyDown(NextInvAltKey);
+				_moveKeyPressed = (Input.GetKeyDown(MoveKey) || Input.GetKeyDown(MoveAltKey));
+				_equipOrUseKeyPressed = Input.GetKeyDown(EquipOrUseKey) || Input.GetKeyDown(EquipOrUseAltKey);
+				_equipKeyPressed = Input.GetKeyDown(EquipKey) || Input.GetKeyDown(EquipAltKey);
+				_useKeyPressed = Input.GetKeyDown(UseKey) || Input.GetKeyDown(UseAltKey);
+				_dropKeyPressed = Input.GetKeyDown(DropKey) || Input.GetKeyDown(DropAltKey);
 			#endif
 			
 			// if the user presses the 'toggle inventory' key
@@ -399,6 +485,16 @@ namespace MoreMountains.InventoryEngine
 				{
 					CloseInventory();
 				}
+			}
+
+			if (_openInventoryKeyPressed)
+			{
+				OpenInventory();
+			}
+
+			if (_closeInventoryKeyPressed)
+			{
+				CloseInventory();
 			}
 
 			if (_cancelKeyPressed)
@@ -488,7 +584,7 @@ namespace MoreMountains.InventoryEngine
 					if (hotbar != null)
 					{
 						#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-						_hotbarInputPressed = Keyboard.current[hotbar.HotbarKey].wasPressedThisFrame;
+						_hotbarInputPressed = hotbar.HotbarInputAction.action.WasPressedThisFrame();
 						#else
 						_hotbarInputPressed = Input.GetKeyDown(hotbar.HotbarKey) || Input.GetKeyDown(hotbar.HotbarAltKey);
 						#endif
@@ -571,6 +667,19 @@ namespace MoreMountains.InventoryEngine
 		protected virtual void OnEnable()
 		{
 			this.MMEventStartListening<MMInventoryEvent>();
+			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+				ToggleInventoryKey.action.Enable();
+				OpenInventoryKey.action.Enable();
+				CloseInventoryKey.action.Enable();
+				CancelKey.action.Enable();
+				MoveKey.action.Enable();
+				EquipKey.action.Enable();
+				UseKey.action.Enable();
+				EquipOrUseKey.action.Enable();
+				DropKey.action.Enable();
+				NextInvKey.action.Enable();
+				PrevInvKey.action.Enable();
+			#endif
 		}
 
 		/// <summary>
@@ -579,6 +688,19 @@ namespace MoreMountains.InventoryEngine
 		protected virtual void OnDisable()
 		{
 			this.MMEventStopListening<MMInventoryEvent>();
+			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+				ToggleInventoryKey.action.Disable();
+				OpenInventoryKey.action.Disable();
+				CloseInventoryKey.action.Disable();
+				CancelKey.action.Disable();
+				MoveKey.action.Disable();
+				EquipKey.action.Disable();
+				UseKey.action.Disable();
+				EquipOrUseKey.action.Disable();
+				DropKey.action.Disable();
+				NextInvKey.action.Disable();
+				PrevInvKey.action.Disable();
+			#endif
 		}
 	}
 }

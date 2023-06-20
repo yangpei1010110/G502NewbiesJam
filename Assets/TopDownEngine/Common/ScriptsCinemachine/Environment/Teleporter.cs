@@ -194,6 +194,7 @@ namespace MoreMountains.TopDownEngine
 			}
 			else
 			{
+				base.TriggerButtonAction();
 				Teleport(collider);
 			}
 		}
@@ -260,8 +261,6 @@ namespace MoreMountains.TopDownEngine
 		/// <param name="collider"></param>
 		protected virtual void SequenceStart(GameObject collider)
 		{
-			ActivateZone();
-
 			if (CameraMode == CameraModes.TeleportCamera)
 			{
 				MMCameraEvent.Trigger(MMCameraEventTypes.StopFollowing);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using MoreMountains.Tools;
 using MoreMountains.Feedbacks;
 using System.Linq;
@@ -40,6 +41,9 @@ namespace MoreMountains.TopDownEngine
 		/// an array containing all the blocking condition states. If the Character is in one of these states and tries to trigger this ability, it won't be permitted. Useful to prevent this ability from being used while dead, for example.
 		[Tooltip("an array containing all the blocking condition states. If the Character is in one of these states and tries to trigger this ability, it won't be permitted. Useful to prevent this ability from being used while dead, for example.")]
 		public CharacterStates.CharacterConditions[] BlockingConditionStates;
+		/// an array containing all the blocking weapon states. If one of the character's weapons is in one of these states and yet the character tries to trigger this ability, it won't be permitted. Useful to prevent this ability from being used while attacking, for example.
+		[Tooltip("an array containing all the blocking weapon states. If one of the character's weapons is in one of these states and yet the character tries to trigger this ability, it won't be permitted. Useful to prevent this ability from being used while attacking, for example.")]
+		public Weapon.WeaponStates[] BlockingWeaponStates;
 
 		public virtual bool AbilityAuthorized
 		{
@@ -68,6 +72,23 @@ namespace MoreMountains.TopDownEngine
 							}    
 						}
 					}
+					
+					if ((BlockingWeaponStates != null) && (BlockingWeaponStates.Length > 0))
+					{
+						for (int i = 0; i < BlockingWeaponStates.Length; i++)
+						{
+							foreach (CharacterHandleWeapon handleWeapon in _handleWeaponList)
+							{
+								if (handleWeapon.CurrentWeapon != null)
+								{
+									if (BlockingWeaponStates[i] == (handleWeapon.CurrentWeapon.WeaponState.CurrentState))
+									{
+										return false;
+									}
+								}
+							}
+						}
+					}
 				}
 				return AbilityPermitted;
 			}
@@ -75,6 +96,10 @@ namespace MoreMountains.TopDownEngine
         
 		/// whether or not this ability has been initialized
 		public bool AbilityInitialized { get { return _abilityInitialized; } }
+		
+		public delegate void AbilityEvent();
+		public AbilityEvent OnAbilityStart;
+		public AbilityEvent OnAbilityStop;
         
 		protected Character _character;
 		protected TopDownController _controller;
@@ -94,6 +119,7 @@ namespace MoreMountains.TopDownEngine
 		protected float _verticalInput;
 		protected float _horizontalInput;
 		protected bool _startFeedbackIsPlaying = false;
+		protected List<CharacterHandleWeapon> _handleWeaponList;
 
 		/// This method is only used to display a helpbox text at the beginning of the ability's inspector
 		public virtual string HelpBoxText() { return ""; }
@@ -136,11 +162,20 @@ namespace MoreMountains.TopDownEngine
 			_characterMovement = _character?.FindAbility<CharacterMovement>();
 			_spriteRenderer = this.gameObject.GetComponentInParent<SpriteRenderer>();
 			_health = _character.CharacterHealth;
+			_handleWeaponList = _character?.FindAbilities<CharacterHandleWeapon>();
 			_inputManager = _character.LinkedInputManager;
 			_state = _character.CharacterState;
 			_movement = _character.MovementState;
 			_condition = _character.ConditionState;
 			_abilityInitialized = true;
+		}
+
+		/// <summary>
+		/// Call this any time you want to force this ability to initialize (again)
+		/// </summary>
+		public virtual void ForceInitialization()
+		{
+			Initialization();
 		}
 
 		/// <summary>
@@ -320,6 +355,7 @@ namespace MoreMountains.TopDownEngine
 		{
 			AbilityStartFeedbacks?.PlayFeedbacks(this.transform.position);
 			_startFeedbackIsPlaying = true;
+			OnAbilityStart?.Invoke();
 		}
 
 		/// <summary>
@@ -337,6 +373,7 @@ namespace MoreMountains.TopDownEngine
 		public virtual void PlayAbilityStopFeedbacks()
 		{
 			AbilityStopFeedbacks?.PlayFeedbacks();
+			OnAbilityStop?.Invoke();
 		}
 
 		/// <summary>

@@ -147,7 +147,7 @@ namespace MoreMountains.Tools
 				ShakeComplete();
 			}
 
-			if ((_levelLastFrame != Level) && (OnValueChange != null))
+			if (_levelLastFrame != Level)
 			{
 				ApplyLevel(Level);
 			}
@@ -157,7 +157,10 @@ namespace MoreMountains.Tools
 
 		public virtual void ApplyLevel(float level)
 		{
-			OnValueChange.Invoke(level);
+			if (OnValueChange != null)
+			{
+				OnValueChange.Invoke(level);	
+			}
 		}
 
 		/// <summary>

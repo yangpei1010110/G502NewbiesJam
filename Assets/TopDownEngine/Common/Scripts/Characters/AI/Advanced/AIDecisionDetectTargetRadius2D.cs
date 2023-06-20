@@ -91,7 +91,8 @@ namespace MoreMountains.TopDownEngine
 				return _lastReturnValue;
 			}
 			_potentialTargets.Clear();
-            
+			_lastTargetCheckTimestamp = Time.time;
+			
 			if (_orientation2D != null)
 			{
 				_facingDirection = _orientation2D.IsFacingRight ? Vector2.right : Vector2.left;

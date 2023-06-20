@@ -226,5 +226,98 @@ namespace MoreMountains.TopDownEngine
 			}
 			return false;
 		}
+		
+		/// <summary>
+		/// Returns true if the resistances on this processor make it immune to knockback, false otherwise
+		/// </summary>
+		/// <param name="typedDamage"></param>
+		/// <returns></returns>
+		public virtual bool CheckPreventKnockback(List<TypedDamage> typedDamages)
+		{
+			if ((typedDamages == null) || (typedDamages.Count == 0))
+			{
+				foreach (DamageResistance resistance in DamageResistanceList)
+				{
+					if (!resistance.gameObject.activeInHierarchy)
+					{
+						continue;
+					}
+
+					if ((resistance.DamageTypeMode == DamageTypeModes.BaseDamage) &&
+					    (resistance.ImmuneToKnockback))
+					{
+						return true;	
+					}
+				}
+			}
+
+			foreach (TypedDamage typedDamage in typedDamages)
+			{
+				foreach (DamageResistance resistance in DamageResistanceList)
+				{
+					if (!resistance.gameObject.activeInHierarchy)
+					{
+						continue;
+					}
+
+					if (typedDamage == null)
+					{
+						if ((resistance.DamageTypeMode == DamageTypeModes.BaseDamage) &&
+						    (resistance.ImmuneToKnockback))
+						{
+							return true;	
+						}
+					}
+					else
+					{
+						if ((resistance.TypeResistance == typedDamage.AssociatedDamageType) &&
+						    (resistance.ImmuneToKnockback))
+						{
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Processes the input knockback force through the various resistances
+		/// </summary>
+		/// <param name="knockback"></param>
+		/// <param name="typedDamages"></param>
+		/// <returns></returns>
+		public virtual Vector3 ProcessKnockbackForce(Vector3 knockback, List<TypedDamage> typedDamages)
+		{
+			if (DamageResistanceList.Count == 0) // if we don't have resistances, we output raw knockback value
+			{
+				return knockback;
+			}
+			else // if we do have resistances
+			{
+				foreach (DamageResistance resistance in DamageResistanceList)
+				{
+					knockback = resistance.ProcessKnockback(knockback, null);
+				}
+
+				if (typedDamages != null)
+				{
+					foreach (TypedDamage typedDamage in typedDamages)
+					{
+						foreach (DamageResistance resistance in DamageResistanceList)
+						{
+							if (IgnoreDisabledResistances && !resistance.isActiveAndEnabled)
+							{
+								continue;
+							}
+							knockback = resistance.ProcessKnockback(knockback, typedDamage.AssociatedDamageType);
+						}
+					}
+				}
+
+				return knockback;
+			}
+		}
 	}
 }

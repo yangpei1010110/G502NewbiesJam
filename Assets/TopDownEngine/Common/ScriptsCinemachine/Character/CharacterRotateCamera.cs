@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 #if MM_CINEMACHINE
 using Cinemachine;
 #endif
@@ -58,7 +59,8 @@ namespace MoreMountains.TopDownEngine
 		protected override void Initialization()
 		{
 			base.Initialization();
-			GetCurrentCamera();
+			_mainCamera = Camera.main;
+			StartCoroutine(DelayedInitialization());
 			if (AutoSetupInputManager)
 			{
 				_inputManager.RotateInputBasedOnCameraDirection = true;
@@ -68,11 +70,20 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
+		/// Because Cinemachine only initializes in LateUpdate, and doesn't offer events to know when it'll be ready, we wait a bit for it to be done
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IEnumerator DelayedInitialization()
+		{
+			yield return MMCoroutine.WaitForFrames(2);
+			GetCurrentCamera();
+		}
+
+		/// <summary>
 		/// Stores the current camera
 		/// </summary>
 		protected virtual void GetCurrentCamera()
 		{
-			_mainCamera = Camera.main;
 			#if MM_CINEMACHINE
 			_brain = _mainCamera.GetComponent<CinemachineBrain>();
 			if (_brain != null)

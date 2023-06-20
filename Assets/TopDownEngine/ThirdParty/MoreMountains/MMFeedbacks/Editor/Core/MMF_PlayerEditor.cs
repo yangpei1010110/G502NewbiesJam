@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -40,6 +41,7 @@ namespace MoreMountains.Feedbacks
 		protected SerializedProperty _mmfeedbacksCanPlayWhileAlreadyPlaying;
 		protected SerializedProperty _mmfeedbacksPerformanceMode;
 		protected SerializedProperty _mmfeedbacksForceStopFeedbacksOnDisable;
+		protected SerializedProperty _mmfeedbacksPlayCount;
 		protected SerializedProperty _mmfeedbacksEvents;
 		protected SerializedProperty _keepPlayModeChanges;
 		protected SerializedProperty _mmfeedbacksChanceToPlay;
@@ -107,6 +109,7 @@ namespace MoreMountains.Feedbacks
 		protected GUIContent _pasteAllAsNewGUIContent;
 		protected GUIContent _feedbackPlayGUIContent;
 		protected GUIContent _feedbackRemoveGUIContent;
+		protected GUIContent _feedbackResetGUIContent;
 		protected GUIContent _feedbackDuplicateGUIContent;
 		protected GUIContent _feedbackCopyGUIContent;
 		protected GUIContent _feedbackPasteGUIContent;
@@ -195,6 +198,7 @@ namespace MoreMountains.Feedbacks
 			_keepPlayModeChanges = serializedObject.FindProperty("KeepPlayModeChanges");
 			_mmfeedbacksPerformanceMode = serializedObject.FindProperty("PerformanceMode");
 			_mmfeedbacksForceStopFeedbacksOnDisable = serializedObject.FindProperty("ForceStopFeedbacksOnDisable");
+			_mmfeedbacksPlayCount = serializedObject.FindProperty("PlayCount");
 			_mmfeedbacksChanceToPlay = serializedObject.FindProperty("ChanceToPlay");
 			
 			_mmfeedbacksOnlyPlayIfWithinRange = serializedObject.FindProperty("OnlyPlayIfWithinRange");
@@ -318,6 +322,7 @@ namespace MoreMountains.Feedbacks
 			_pasteAllAsNewGUIContent = new GUIContent(_pasteAllAsNewText);
 			_feedbackPlayGUIContent = new GUIContent(_playText);
 			_feedbackRemoveGUIContent = new GUIContent(_removeText);
+			_feedbackResetGUIContent = new GUIContent(_resetText);
 			_feedbackDuplicateGUIContent = new GUIContent(_duplicateText);
 			_feedbackCopyGUIContent = new GUIContent(_copyText);
 			_feedbackPasteGUIContent = new GUIContent(_pasteText);
@@ -412,6 +417,10 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.PropertyField(_mmfeedbacksCanPlayWhileAlreadyPlaying);
 				EditorGUILayout.PropertyField(_mmfeedbacksPerformanceMode);
 				EditorGUILayout.PropertyField(_mmfeedbacksForceStopFeedbacksOnDisable);
+				if (Application.isPlaying)
+				{
+					EditorGUILayout.PropertyField(_mmfeedbacksPlayCount);	
+				}
 
 				EditorGUILayout.Space(10);
 				EditorGUILayout.LabelField(_eventsText, EditorStyles.boldLabel);
@@ -590,6 +599,7 @@ namespace MoreMountains.Feedbacks
 					AddFeedback(_typesAndNames[newItem].FeedbackType);
 					serializedObject.ApplyModifiedProperties();
 					PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
+					ForceRepaint();
 				}
 
 				// Paste feedback copy as new
@@ -782,6 +792,7 @@ namespace MoreMountains.Feedbacks
 						menu.AddDisabledItem(_feedbackPlayGUIContent);
 					menu.AddSeparator(null);
 					menu.AddItem(_feedbackRemoveGUIContent, false, () => RemoveFeedback(i));
+					menu.AddItem(_feedbackResetGUIContent, false, () => ResetContextMenuFeedback(i));
 					menu.AddSeparator(null);
 					menu.AddItem(_feedbackDuplicateGUIContent, false, () => DuplicateFeedback(i));
 					menu.AddItem(_feedbackCopyGUIContent, false, () => CopyFeedback(i));
@@ -926,13 +937,25 @@ namespace MoreMountains.Feedbacks
 			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
 		}
 
+		protected virtual void ResetContextMenuFeedback(int id)
+		{
+			Undo.RecordObject(target, "Reset feedback");
+
+			Type feedbackType = (target as MMF_Player).FeedbacksList[id].GetType();
+			MMF_Feedback newFeedback = (target as MMF_Player).AddFeedback(feedbackType, false);
+			(target as MMF_Player).FeedbacksList[id] = newFeedback;
+			serializedObject.ApplyModifiedProperties();
+			ForceRepaint();
+			PrefabUtility.RecordPrefabInstancePropertyModifications(TargetMmfPlayer);
+		}
+
 		/// <summary>
 		/// Play the selected feedback
 		/// </summary>
 		protected virtual void InitializeFeedback(int id)
 		{
 			MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
-			feedback.Initialization(TargetMmfPlayer);
+			feedback.Initialization(TargetMmfPlayer, id);
 		}
 
 		/// <summary>
@@ -1078,6 +1101,7 @@ namespace MoreMountains.Feedbacks
 		{
 			MMF_FeedbackInspectors.Clear();
 			Initialization();
+			(target as MMF_Player).RefreshCache();
 			Repaint();
 		}
         

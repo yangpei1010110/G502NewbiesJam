@@ -2,6 +2,8 @@
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using System;
+using Unity.Collections;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -24,7 +26,11 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/Controls/MMTouchJoystick")]
 	public class MMTouchJoystick : MMMonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
 	{
+		public enum MaxRangeModes { Distance, DistanceToTransform }
+		
 		[MMInspectorGroup("Camera", true, 16)]
+		/// The camera to use as the reference for any ScreenToWorldPoint computations
+		[Tooltip("The camera to use as the reference for any ScreenToWorldPoint computations")]
 		public Camera TargetCamera;
 
 		[MMInspectorGroup("Joystick Behaviour", true, 18)]
@@ -34,9 +40,44 @@ namespace MoreMountains.Tools
 		/// Is vertical axis allowed
 		[Tooltip("Determines whether the vertical axis of this stick should be enabled. If not, the stick will only move horizontally.")]
 		public bool VerticalAxisEnabled = true;
-		/// The max range allowed
+		/// the mode in which to compute the range. Distance will be a flat value, DistanceToTransform will be a distance to a transform you can move around and potentially resize as you wish for various resolutions
+		[Tooltip("the mode in which to compute the range. Distance will be a flat value, DistanceToTransform will be a distance to a transform you can move around and potentially resize as you wish for various resolutions")]
+		public MaxRangeModes MaxRangeMode = MaxRangeModes.Distance;
+		/// The MaxRange is the maximum distance from its initial center position you can drag the joystick to
 		[Tooltip("The MaxRange is the maximum distance from its initial center position you can drag the joystick to.")]
+		[MMEnumCondition("MaxRangeMode", (int)MaxRangeModes.Distance)]
 		public float MaxRange = 1.5f;
+		/// in DistanceToTransform mode, the object whose distance to the center will be used to compute the max range. Note that this is computed once, at init. Call RefreshMaxRangeDistance() to recompute it.
+		[Tooltip("in DistanceToTransform mode, the object whose distance to the center will be used to compute the max range. Note that this is computed once, at init. Call RefreshMaxRangeDistance() to recompute it.")]
+		[MMEnumCondition("MaxRangeMode", (int)MaxRangeModes.DistanceToTransform)]
+		public Transform MaxRangeTransform;
+
+		public float ComputedMaxRange
+		{
+			get
+			{
+				if (Application.isPlaying)
+				{
+					return MaxRangeMode == MaxRangeModes.Distance ? MaxRange : _maxRangeTransformDistance;
+				}
+				else
+				{
+					if (MaxRangeMode == MaxRangeModes.Distance)
+					{
+						return MaxRange;
+					}
+					else
+					{
+						if (MaxRangeTransform == null)
+						{
+							return -1f;
+						}
+						RefreshMaxRangeDistance();
+						return _maxRangeTransformDistance;
+					}
+				}
+			}
+		} 
 
 		[MMInspectorGroup("Value Events", true, 19)]
 		/// An event to use the raw value of the joystick
@@ -96,8 +137,7 @@ namespace MoreMountains.Tools
 		/// whether or not to draw gizmos associated to this stick
 		[Tooltip("whether or not to draw gizmos associated to this stick")] 
 		public bool DrawGizmos = true;
-		
-		
+
 		/// the render mode of the parent canvas this stick is on
 		public RenderMode ParentCanvasRenderMode { get; protected set; }
 
@@ -110,6 +150,7 @@ namespace MoreMountains.Tools
 		protected float _initialOpacity;
 		protected Transform _knobTransform;
 		protected bool _rotatingIndicatorIsNotNull = false;
+		protected float _maxRangeTransformDistance;
 		
 		/// <summary>
 		/// On Start we initialize our stick
@@ -132,6 +173,7 @@ namespace MoreMountains.Tools
 			
 			_canvasGroup = GetComponent<CanvasGroup>();
 			_rotatingIndicatorIsNotNull = (RotatingIndicator != null);
+			RefreshMaxRangeDistance();
 
 			SetKnobTransform(this.transform);
 
@@ -139,7 +181,18 @@ namespace MoreMountains.Tools
 			
 			ParentCanvasRenderMode = GetComponentInParent<Canvas>().renderMode;
 			_initialZPosition = _knobTransform.position.z;
-			_initialOpacity = _canvasGroup.alpha;			
+			_initialOpacity = _canvasGroup.alpha;
+		}
+
+		/// <summary>
+		/// This method is used to compute the max range distance when in DistanceToTransform mode
+		/// </summary>
+		public virtual void RefreshMaxRangeDistance()
+		{
+			if (MaxRangeMode == MaxRangeModes.DistanceToTransform)
+			{
+				_maxRangeTransformDistance = Vector2.Distance(this.transform.position, MaxRangeTransform.position);
+			}
 		}
 
 		/// <summary>
@@ -250,7 +303,7 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected virtual void ClampToBounds()
 		{
-			_newTargetPosition = Vector2.ClampMagnitude(_newTargetPosition - _neutralPosition, MaxRange);
+			_newTargetPosition = Vector2.ClampMagnitude(_newTargetPosition - _neutralPosition, ComputedMaxRange);
 		}
 
 		/// <summary>
@@ -294,7 +347,7 @@ namespace MoreMountains.Tools
 		/// <param name="vectorPosition">stick position.</param>
 		protected virtual float EvaluateInputValue(float vectorPosition)
 		{
-			return Mathf.InverseLerp(0, MaxRange, Mathf.Abs(vectorPosition)) * Mathf.Sign(vectorPosition);
+			return Mathf.InverseLerp(0, ComputedMaxRange, Mathf.Abs(vectorPosition)) * Mathf.Sign(vectorPosition);
 		}
 
 		/// <summary>
@@ -347,11 +400,11 @@ namespace MoreMountains.Tools
 			Handles.color = MMColors.Orange;
 			if (!Application.isPlaying)
 			{
-				Handles.DrawWireDisc(this.transform.position, Vector3.forward, MaxRange);	
+				Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
 			}
 			else
 			{
-				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, MaxRange);
+				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, ComputedMaxRange);
 			}
 		}
 		#endif

@@ -22,22 +22,28 @@ namespace MoreMountains.Tools
 		public enum ButtonStates { Off, ButtonDown, ButtonPressed, ButtonUp }
 		[Header("Binding")]
 		/// The method(s) to call when the axis gets pressed down
+		[Tooltip("The method(s) to call when the axis gets pressed down")]
 		public UnityEvent AxisPressedFirstTime;
 		/// The method(s) to call when the axis gets released
+		[Tooltip("The method(s) to call when the axis gets released")]
 		public UnityEvent AxisReleased;
 		/// The method(s) to call while the axis is being pressed
+		[Tooltip("The method(s) to call while the axis is being pressed")]
 		public AxisEvent AxisPressed;
 
 		[Header("Pressed Behaviour")]
 		[MMInformation("Here you can set the opacity of the button when it's pressed. Useful for visual feedback.",MMInformationAttribute.InformationType.Info,false)]
 		/// the new opacity to apply to the canvas group when the axis is pressed
+		[Tooltip("the new opacity to apply to the canvas group when the axis is pressed")]
 		public float PressedOpacity = 0.5f;
 		/// the value to send the bound method when the axis is pressed
+		[Tooltip("the value to send the bound method when the axis is pressed")]
 		public float AxisValue;
 
 		[Header("Mouse Mode")]
 		[MMInformation("If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).", MMInformationAttribute.InformationType.Info,false)]
 		/// If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).
+		[Tooltip("If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).")]
 		public bool MouseMode = false;
 
 		public ButtonStates CurrentState { get; protected set; }

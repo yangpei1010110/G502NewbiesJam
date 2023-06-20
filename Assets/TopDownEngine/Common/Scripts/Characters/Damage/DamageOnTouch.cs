@@ -53,7 +53,7 @@ namespace MoreMountains.TopDownEngine
 			BasedOnScriptDirection
 		}
 
-		protected const TriggerAndCollisionMask AllowedTriggerCallbacks = TriggerAndCollisionMask.OnTriggerEnter
+		public const TriggerAndCollisionMask AllowedTriggerCallbacks = TriggerAndCollisionMask.OnTriggerEnter
 		                                                                  | TriggerAndCollisionMask.OnTriggerStay
 		                                                                  | TriggerAndCollisionMask.OnTriggerEnter2D
 		                                                                  | TriggerAndCollisionMask.OnTriggerStay2D;
@@ -587,7 +587,6 @@ namespace MoreMountains.TopDownEngine
 				{
 					OnCollideWithDamageable(_colliderHealth);
 				}
-				HitDamageableEvent?.Invoke(_colliderHealth);
 			}
 			else // if what we're colliding with can't be damaged
 			{
@@ -636,6 +635,7 @@ namespace MoreMountains.TopDownEngine
 				_colliderTopDownController = health.gameObject.MMGetComponentNoAlloc<TopDownController>();
 
 				HitDamageableFeedback?.PlayFeedbacks(this.transform.position);
+				HitDamageableEvent?.Invoke(_colliderHealth);
 
 				// we apply the damage to the thing we've collided with
 				float randomDamage =
@@ -675,6 +675,7 @@ namespace MoreMountains.TopDownEngine
 			if (ShouldApplyKnockback(damage, typedDamages))
 			{
 				_knockbackForce = DamageCausedKnockbackForce * _colliderHealth.KnockbackForceMultiplier;
+				_knockbackForce = _colliderHealth.ComputeKnockbackForce(_knockbackForce, typedDamages);
 
 				if (_twoD) // if we're in 2D
 				{
@@ -709,7 +710,7 @@ namespace MoreMountains.TopDownEngine
 			return (_colliderTopDownController != null)
 			       && (DamageCausedKnockbackForce != Vector3.zero)
 			       && !_colliderHealth.Invulnerable
-			       && !_colliderHealth.ImmuneToKnockback;
+			       && _colliderHealth.CanGetKnockback(typedDamages);
 		}
 
 		/// <summary>
@@ -808,10 +809,10 @@ namespace MoreMountains.TopDownEngine
 			}
 
 			// if what we're colliding with is a TopDownController, we apply a knockback force
-			if (_topDownController != null)
+			if ((_topDownController != null) && (_colliderTopDownController != null))
 			{
-				Vector2 totalVelocity = _colliderTopDownController.Speed + _velocity;
-				Vector2 knockbackForce =
+				Vector3 totalVelocity = _colliderTopDownController.Speed + _velocity;
+				Vector3 knockbackForce =
 					Vector3.RotateTowards(DamageTakenKnockbackForce, totalVelocity.normalized, 10f, 0f);
 
 				if (DamageTakenKnockbackType == KnockbackStyles.AddForce)

@@ -57,7 +57,18 @@ namespace MoreMountains.Feedbacks
 		/// whether or not to perform extra checks to make sure the loading screen and destination scene are in the build settings
 		[Tooltip("whether or not to perform extra checks to make sure the loading screen and destination scene are in the build settings")]
 		public bool SecureLoad = true;
-
+		/// the chosen way to unload scenes (none, only the active scene, all loaded scenes)
+		[Tooltip("the chosen way to unload scenes (none, only the active scene, all loaded scenes)")]
+		[MMFEnumCondition("LoadingMode", (int)LoadingModes.MMAdditiveSceneLoadingManager)]
+		public MMAdditiveSceneLoadingManagerSettings.UnloadMethods UnloadMethod =
+			MMAdditiveSceneLoadingManagerSettings.UnloadMethods.AllScenes;
+		/// the name of the anti spill scene to use when loading additively.
+		/// If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.
+		[Tooltip("the name of the anti spill scene to use when loading additively." +
+		         "If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.")]
+		[MMFEnumCondition("LoadingMode", (int)LoadingModes.MMAdditiveSceneLoadingManager)]
+		public string AntiSpillSceneName = "";
+		
 		[MMFInspectorGroup("Loading Scene Delays", true, 58)] 
 		/// a delay (in seconds) to apply before the first fade plays
 		[Tooltip("a delay (in seconds) to apply before the first fade plays")]
@@ -118,7 +129,7 @@ namespace MoreMountains.Feedbacks
 						AfterEntryFadeDelay,
 						BeforeExitFadeDelay, ExitFadeDuration,
 						EntryFadeTween, ExitFadeTween,
-						ProgressInterpolationSpeed, FadeMode);
+						ProgressInterpolationSpeed, FadeMode, UnloadMethod, AntiSpillSceneName);
 					break;
 			}
 		}

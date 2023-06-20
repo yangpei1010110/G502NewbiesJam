@@ -14,7 +14,7 @@ namespace GameDemo.Scripts
             cubes = Resources.LoadAll<GameObject>("GameDemo/Prefab/MapPrefabs");
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData) 
         {
             GameObject go = cubes[Random.Range(0, cubes.Length)];
 

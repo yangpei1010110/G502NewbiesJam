@@ -129,6 +129,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 235125376}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &26700988 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1809710142717510, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+    type: 3}
+  m_PrefabInstance: {fileID: 1249385434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &26700989
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26700988}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1, y: 2, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &47716954 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 487350, guid: 13f7a2e2a04268d4f8cee777011fef35,
@@ -185,14 +207,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e997f38a2e2884e89b9bd8ad830fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AutoAttributePlayerIDs: 1
   PlayerPrefabs:
   - {fileID: 114839196621103566, guid: 2513a92f10a3a1746bfe8e1034ae9f1a, type: 3}
-  AutoAttributePlayerIDs: 1
   SceneCharacters: []
   InitialSpawnPoint: {fileID: 1618121293}
   CurrentCheckpoint: {fileID: 0}
   PointsOfEntry: []
   IntroFadeDuration: 0.1
+  SpawnDelay: 0
   OutroFadeDuration: 0.1
   FaderID: 0
   FadeCurve:
@@ -222,6 +245,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    Initialized: 0
   RespawnDelay: 2
   DelayBeforeDeathScreen: 1
   UseLevelBounds: 1
@@ -246,6 +270,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      Initialized: 0
     ExitFadeTween:
       MMTweenDefinitionType: 0
       MMTweenCurve: 0
@@ -255,9 +280,12 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      Initialized: 0
     ProgressBarSpeed: 5
     FadeMode: 0
     UnloadMethod: 2
+    AntiSpillSceneName: 
+  SetPlayerAsFeedbackRangeCenter: 0
 --- !u!1 &139856174
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,6 +749,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1914012743}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &490469453 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1809710142717510, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+    type: 3}
+  m_PrefabInstance: {fileID: 858814425}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &490469454
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490469453}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1, y: 2, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &494288361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1703,6 +1753,31 @@ PrefabInstance:
       propertyPath: Destination
       value: 
       objectReference: {fileID: 1271550579}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Acceleration
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Deceleration
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: PathRefreshMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshSpeedThreshold
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db, type: 3}
 --- !u!4 &887353300 stripped
@@ -1947,10 +2022,35 @@ PrefabInstance:
       propertyPath: Destination
       value: 
       objectReference: {fileID: 1271550579}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Acceleration
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Deceleration
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
         type: 3}
       propertyPath: DebugDrawPath
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: PathRefreshMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshSpeedThreshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db, type: 3}
@@ -2672,10 +2772,35 @@ PrefabInstance:
       propertyPath: Destination
       value: 
       objectReference: {fileID: 1271550579}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Acceleration
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114784271909244682, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: Deceleration
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
         type: 3}
       propertyPath: DebugDrawPath
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: PathRefreshMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114945332420172096, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+        type: 3}
+      propertyPath: RefreshSpeedThreshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db, type: 3}
@@ -3364,6 +3489,28 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 939110086}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1644737914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1809710142717510, guid: 53fdfa4f8d7eca04ea65a96dfecdf1db,
+    type: 3}
+  m_PrefabInstance: {fileID: 928092439}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1644737915
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644737914}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1, y: 2, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1682546060
 GameObject:
   m_ObjectHideFlags: 0
@@ -3651,13 +3798,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7de9ef06f04864391a928af29f4b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalTimescale: 1
-  DefaultLerpSpeed: 1
-  DefaultLerpTimescale: 0
+  NormalTimeScale: 1
   CurrentTimeScale: 1
   TargetTimeScale: 1
-  LerpTimescale: 1
-  LerpSpeed: 0
   TestButton: 0
 --- !u!1001 &1794283135
 PrefabInstance:

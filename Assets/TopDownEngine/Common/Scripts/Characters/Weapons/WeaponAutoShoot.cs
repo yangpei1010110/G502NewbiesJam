@@ -14,6 +14,9 @@ namespace MoreMountains.TopDownEngine
 		/// the delay (in seconds) between acquiring a target and starting shooting at it
 		[Tooltip("the delay (in seconds) between acquiring a target and starting shooting at it")]
 		public float DelayBeforeShootAfterAcquiringTarget = 0.1f;
+		/// if this is true, the weapon will only auto shoot if its owner is idle 
+		[Tooltip("if this is true, the weapon will only auto shoot if its owner is idle")]
+		public bool OnlyAutoShootIfOwnerIsIdle = false;
 		
 		protected WeaponAutoAim _weaponAutoAim;
 		protected Weapon _weapon;
@@ -62,11 +65,33 @@ namespace MoreMountains.TopDownEngine
 		}
 
 		/// <summary>
+		/// Returns true if this weapon can autoshoot, false otherwise
+		/// </summary>
+		/// <returns></returns>
+		public virtual bool CanAutoShoot()
+		{
+			if (!_hasWeaponAndAutoAim)
+			{
+				return false;
+			}
+
+			if (OnlyAutoShootIfOwnerIsIdle)
+			{
+				if (_weapon.Owner.MovementState.CurrentState != CharacterStates.MovementStates.Idle)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Checks if we have a target for enough time, and shoots if needed
 		/// </summary>
 		protected virtual void HandleAutoShoot()
 		{
-			if (!_hasWeaponAndAutoAim)
+			if (!CanAutoShoot())
 			{
 				return;
 			}

@@ -202,7 +202,7 @@ namespace MoreMountains.TopDownEngine
 			// we check if there's a stored character in the game manager we should instantiate
 			if (GameManager.Instance.StoredCharacter != null)
 			{
-				Character newPlayer = (Character)Instantiate(GameManager.Instance.StoredCharacter, _initialSpawnPointPosition, Quaternion.identity);
+				Character newPlayer = Instantiate(GameManager.Instance.StoredCharacter, _initialSpawnPointPosition, Quaternion.identity);
 				newPlayer.name = GameManager.Instance.StoredCharacter.name;
 				Players.Add(newPlayer);
 				return;
@@ -220,11 +220,11 @@ namespace MoreMountains.TopDownEngine
 			if (PlayerPrefabs == null) { return; }
 
 			// player instantiation
-			if (PlayerPrefabs.Count() != 0)
+			if (PlayerPrefabs.Length != 0)
 			{ 
 				foreach (Character playerPrefab in PlayerPrefabs)
 				{
-					Character newPlayer = (Character)Instantiate (playerPrefab, _initialSpawnPointPosition, Quaternion.identity);
+					Character newPlayer = Instantiate (playerPrefab, _initialSpawnPointPosition, Quaternion.identity);
 					newPlayer.name = playerPrefab.name;
 					Players.Add(newPlayer);
 
@@ -295,14 +295,14 @@ namespace MoreMountains.TopDownEngine
 			if ((point != null) && (PointsOfEntry.Length >= (point.PointOfEntryIndex + 1)))
 			{
 				Players[0].RespawnAt(PointsOfEntry[point.PointOfEntryIndex], point.FacingDirection);
-				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.SpawnComplete, null);
+				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.SpawnComplete, Players[0]);
 				return;
 			}
 
 			if (InitialSpawnPoint != null)
 			{
 				InitialSpawnPoint.SpawnPlayer(Players[0]);
-				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.SpawnComplete, null);
+				TopDownEngineEvent.Trigger(TopDownEngineEventTypes.SpawnComplete, Players[0]);
 				return;
 			}
 
@@ -407,7 +407,7 @@ namespace MoreMountains.TopDownEngine
 		/// <returns>The player co.</returns>
 		protected virtual IEnumerator SoloModeRestart()
 		{
-			if ((PlayerPrefabs.Count() <= 0) && (SceneCharacters.Count <= 0))
+			if ((PlayerPrefabs.Length <= 0) && (SceneCharacters.Count <= 0))
 			{
 				yield break;
 			}

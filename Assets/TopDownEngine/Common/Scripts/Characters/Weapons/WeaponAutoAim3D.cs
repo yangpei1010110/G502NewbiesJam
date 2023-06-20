@@ -13,6 +13,7 @@ namespace MoreMountains.TopDownEngine
 	[AddComponentMenu("TopDown Engine/Weapons/Weapon Auto Aim 3D")]
 	public class WeaponAutoAim3D : WeaponAutoAim
 	{
+		[Header("Overlap Detection")]
 		/// the maximum amount of targets the overlap detection can acquire
 		[Tooltip("the maximum amount of targets the overlap detection can acquire")]
 		public int OverlapMaximum = 10;
@@ -97,7 +98,7 @@ namespace MoreMountains.TopDownEngine
 			{
 				_raycastDirection = t.position - _raycastOrigin;
 				RaycastHit hit = MMDebug.Raycast3D(_raycastOrigin, _raycastDirection, _raycastDirection.magnitude, ObstacleMask.value, Color.yellow, true);
-				if (hit.collider == null)
+				if ((hit.collider == null) && CanAcquireNewTargets())
 				{
 					Target = t;
 					return true;

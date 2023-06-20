@@ -5262,6 +5262,7 @@ MonoBehaviour:
     ProgressBarSpeed: 5
     FadeMode: 0
     UnloadMethod: 2
+    AntiSpillSceneName: 
   SetPlayerAsFeedbackRangeCenter: 0
 --- !u!1 &120070876
 GameObject:
@@ -10149,6 +10150,12 @@ MonoBehaviour:
   DamageModifierClamps: {x: 0, y: 10}
   PreventCharacterConditionChange: 0
   PreventMovementModifier: 0
+  ImmuneToKnockback: 0
+  KnockbackModifierMode: 0
+  KnockbackMultiplier: 1
+  FlatKnockbackMagnitudeReduction: 10
+  ClampKnockback: 0
+  KnockbackMaxMagnitude: 10
   OnDamageReceived: {fileID: 1384040671}
   InterruptibleFeedback: 0
   AlwaysInterruptFeedbackBeforePlay: 0
@@ -15255,6 +15262,12 @@ MonoBehaviour:
   DamageModifierClamps: {x: 0, y: 10}
   PreventCharacterConditionChange: 1
   PreventMovementModifier: 1
+  ImmuneToKnockback: 0
+  KnockbackModifierMode: 0
+  KnockbackMultiplier: 1
+  FlatKnockbackMagnitudeReduction: 10
+  ClampKnockback: 0
+  KnockbackMaxMagnitude: 10
   OnDamageReceived: {fileID: 0}
   InterruptibleFeedback: 0
   AlwaysInterruptFeedbackBeforePlay: 0
@@ -27620,7 +27633,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca323e22713fb3a40af2f80e436eb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChannelMode: 0
   Channel: 0
+  MMChannelDefinition: {fileID: 0}
   CanSpawn: 1
   UseUnscaledTime: 0
   PoolerMode: 0
@@ -28057,7 +28072,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1336941657
         Label: Set Active
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -28080,10 +28097,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 750366276}
         DebugActive: 0
         TargetGameObject: {fileID: 1184164083}
@@ -28103,7 +28151,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: 994123540
         Label: Pause
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -28126,10 +28176,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 750366276}
         DebugActive: 0
         PauseDuration: 3
@@ -28146,7 +28227,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1777831723
         Label: Set Active
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -28169,10 +28252,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 750366276}
         DebugActive: 0
         TargetGameObject: {fileID: 1184164083}
@@ -40795,7 +40909,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1336941657
         Label: Set Active
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -40818,10 +40934,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 1013262413}
         DebugActive: 0
         TargetGameObject: {fileID: 1831829286}
@@ -40841,7 +40988,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: 994123540
         Label: Pause
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -40864,10 +41013,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 1013262413}
         DebugActive: 0
         PauseDuration: 3
@@ -40884,7 +41064,9 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1777831723
         Label: Set Active
+        ChannelMode: 0
         Channel: 0
+        MMChannelDefinition: {fileID: 0}
         Chance: 100
         DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
@@ -40907,10 +41089,41 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 1013262413}
         DebugActive: 0
         TargetGameObject: {fileID: 1831829286}
@@ -46974,9 +47187,15 @@ MonoBehaviour:
   DamageModifierClamps: {x: 0, y: 10}
   PreventCharacterConditionChange: 0
   PreventMovementModifier: 0
+  ImmuneToKnockback: 0
+  KnockbackModifierMode: 0
+  KnockbackMultiplier: 1
+  FlatKnockbackMagnitudeReduction: 10
+  ClampKnockback: 0
+  KnockbackMaxMagnitude: 10
   OnDamageReceived: {fileID: 750366276}
   InterruptibleFeedback: 1
-  AlwaysInterruptFeedbackBeforePlay: 0
+  AlwaysInterruptFeedbackBeforePlay: 1
   TriggerFeedbackIfDamageIsZero: 0
 --- !u!4 &1320632961 stripped
 Transform:
@@ -61366,13 +61585,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7de9ef06f04864391a928af29f4b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalTimescale: 1
-  DefaultLerpSpeed: 1
-  DefaultLerpTimescale: 0
+  NormalTimeScale: 1
   CurrentTimeScale: 1
   TargetTimeScale: 1
-  LerpTimescale: 1
-  LerpSpeed: 0
   TestButton: 0
 --- !u!1 &1758349033
 GameObject:
@@ -66882,6 +67097,12 @@ MonoBehaviour:
   DamageModifierClamps: {x: 0, y: 10}
   PreventCharacterConditionChange: 0
   PreventMovementModifier: 0
+  ImmuneToKnockback: 0
+  KnockbackModifierMode: 0
+  KnockbackMultiplier: 1
+  FlatKnockbackMagnitudeReduction: 10
+  ClampKnockback: 0
+  KnockbackMaxMagnitude: 10
   OnDamageReceived: {fileID: 609847547}
   InterruptibleFeedback: 0
   AlwaysInterruptFeedbackBeforePlay: 0
@@ -72367,6 +72588,12 @@ MonoBehaviour:
   DamageModifierClamps: {x: 0, y: 10}
   PreventCharacterConditionChange: 0
   PreventMovementModifier: 0
+  ImmuneToKnockback: 0
+  KnockbackModifierMode: 0
+  KnockbackMultiplier: 1
+  FlatKnockbackMagnitudeReduction: 10
+  ClampKnockback: 0
+  KnockbackMaxMagnitude: 10
   OnDamageReceived: {fileID: 1395273592}
   InterruptibleFeedback: 1
   AlwaysInterruptFeedbackBeforePlay: 1

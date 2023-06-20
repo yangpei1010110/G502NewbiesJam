@@ -87,7 +87,7 @@ namespace MoreMountains.TopDownEngine
                 
 				_hit = Physics2D.BoxCast(_raycastOrigin, LineOfFireBoxcastSize, 0f, _boxcastDirection.normalized, _boxcastDirection.magnitude, ObstacleMask); 
                 
-				if (!_hit)
+				if (!_hit && CanAcquireNewTargets())
 				{
 					Target = t;
 					return true;

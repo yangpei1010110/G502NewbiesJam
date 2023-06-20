@@ -226,6 +226,13 @@ namespace MoreMountains.Tools
 		/// the format in which the text should display
 		[Tooltip("the format in which the text should display")]
 		public string TextFormat = "{000}";
+		/// whether or not to display the total after the current value 
+		[Tooltip("whether or not to display the total after the current value")]
+		public bool DisplayTotal = false;
+		/// if DisplayTotal is true, the separator to put between the current value and the total
+		[Tooltip("if DisplayTotal is true, the separator to put between the current value and the total")]
+		[MMCondition("DisplayTotal", true)]
+		public string TotalSeparator = " / ";
 
 		[MMInspectorGroup("Debug", true, 15)]
 		/// the value the bar will move to if you press the DebugSet button
@@ -286,6 +293,7 @@ namespace MoreMountains.Tools
 		protected float _delayedBarIncreasingProgress;
 		protected MMProgressBarStates CurrentState = MMProgressBarStates.Idle;
 		protected string _updatedText;
+		protected string _totalText;
 		protected bool _isForegroundBarNotNull;
 		protected bool _isForegroundImageNotNull;
 		protected bool _isPercentageTextNotNull;
@@ -551,7 +559,12 @@ namespace MoreMountains.Tools
 
 		protected virtual void UpdateText()
 		{
-			_updatedText = TextPrefix + (BarTarget * TextValueMultiplier).ToString(TextFormat) + TextSuffix;
+			_updatedText = TextPrefix + (BarTarget * TextValueMultiplier).ToString(TextFormat);
+			if (DisplayTotal)
+			{
+				_updatedText += TotalSeparator + (TextValueMultiplier).ToString(TextFormat);
+			}
+			_updatedText += TextSuffix;
 			if (_isPercentageTextNotNull)
 			{
 				PercentageText.text = _updatedText;

@@ -151,6 +151,9 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
@@ -220,6 +223,9 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
@@ -507,6 +513,9 @@ MonoBehaviour:
           TrackID: 0
           Quantized: 0
           TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
         RandomizeOutput: 0
         RandomMultiplier: {x: 0.8, y: 1}
         RandomizeDuration: 0
@@ -541,7 +550,7 @@ MonoBehaviour:
         RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 3826221924207598925}
         DebugActive: 0
-        Mode: 2
+        Mode: 1
         ObjectPoolSize: 4
         MutualizePools: 1
         ParentTransform: {fileID: 0}

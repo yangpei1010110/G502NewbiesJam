@@ -62,11 +62,14 @@ namespace MoreMountains.Tools
 				MMSoundManagerSettings settings =
 					(MMSoundManagerSettings) MMSaveLoadManager.Load(typeof(MMSoundManagerSettings), _saveFileName,
 						_saveFolderName);
+				
 				if (settings != null)
 				{
 					this.Settings = settings;
 					ApplyTrackVolumes();
 				}
+
+				MMSoundManagerEvent.Trigger(MMSoundManagerEventTypes.SettingsLoaded);
 			}
 		}
 

@@ -8,7 +8,8 @@ namespace MoreMountains.Tools
 	{
 		SaveSettings,
 		LoadSettings,
-		ResetSettings
+		ResetSettings,
+		SettingsLoaded
 	}
     
 	/// <summary>

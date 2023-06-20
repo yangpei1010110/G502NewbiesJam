@@ -58,7 +58,7 @@ namespace MoreMountains.TopDownEngine
 				_initialParent = WeaponAttachment.parent;
 				_initialLocalPosition = WeaponAttachment.transform.localPosition;
 				_initialLocalScale = WeaponAttachment.transform.localScale;
-				_initialRotation = WeaponAttachment.transform.rotation;
+				_initialRotation = WeaponAttachment.transform.localRotation;
 			}
 		}
         
@@ -113,11 +113,9 @@ namespace MoreMountains.TopDownEngine
 				_weaponIK.AttachRightHand = true;
 				WeaponAttachment.transform.SetParent(_initialParent);
                 
-				_initialRotation = WeaponAttachment.transform.rotation;
-                
 				WeaponAttachment.transform.localPosition = _initialLocalPosition;
 				WeaponAttachment.transform.localScale = _initialLocalScale;
-				WeaponAttachment.transform.rotation = _initialRotation;
+				WeaponAttachment.transform.localRotation = _initialRotation;
 			}
 		}
 	}

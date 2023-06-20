@@ -15,8 +15,12 @@ namespace MoreMountains.Tools
 		/// If you check Auto Mobile Detection, the engine will automatically switch to mobile controls when your build target is Android or iOS. 
 		/// You can also force mobile or desktop (keyboard, gamepad) controls using the dropdown below.Note that if you don't need mobile controls 
 		/// and/or GUI this component can also work on its own, just put it on an empty GameObject instead.
+		[Tooltip("If you check Auto Mobile Detection, the engine will automatically switch to mobile controls when your build target is Android or iOS." +
+		         "You can also force mobile or desktop (keyboard, gamepad) controls using the dropdown below.Note that if you don't need mobile controls " +
+		         "and/or GUI this component can also work on its own, just put it on an empty GameObject instead.")]
 		public bool AutoMobileDetection = true;
 		/// Force desktop mode (gamepad, keyboard...) or mobile (touch controls) 
+		[Tooltip("Force desktop mode (gamepad, keyboard...) or mobile (touch controls)")]
 		public InputForcedMode ForcedMode;
 		public bool IsMobile { get; protected set; }
 
@@ -52,6 +56,10 @@ namespace MoreMountains.Tools
 			}
 		}
 		
+		/// <summary>
+		/// Use this method to enable or disable mobile controls
+		/// </summary>
+		/// <param name="state"></param>
 		public virtual void SetMobileControlsActive(bool state)
 		{
 			if (_canvasGroup!=null)

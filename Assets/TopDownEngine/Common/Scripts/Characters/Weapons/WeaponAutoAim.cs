@@ -33,7 +33,10 @@ namespace MoreMountains.TopDownEngine
 		/// an offset to apply to the weapon's position for scan 
 		[Tooltip("an offset to apply to the weapon's position for scan ")]
 		public Vector3 DetectionOriginOffset = Vector3.zero;
-
+		/// if this is true, auto aim scan will only acquire new targets if the owner is in the idle state 
+		[Tooltip("if this is true, auto aim scan will only acquire new targets if the owner is in the idle state")]
+		public bool OnlyAcquireTargetsIfOwnerIsIdle = false;
+		
 		[Header("Weapon Rotation")]
 		/// the rotation mode to apply when a target is found
 		[Tooltip("the rotation mode to apply when a target is found")]
@@ -163,6 +166,23 @@ namespace MoreMountains.TopDownEngine
 		/// </summary>
 		/// <returns></returns>
 		protected abstract bool ScanForTargets();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public virtual bool CanAcquireNewTargets() 
+		{
+			if (OnlyAcquireTargetsIfOwnerIsIdle && !_isOwnerNull)
+			{
+				if (_weapon.Owner.MovementState.CurrentState != CharacterStates.MovementStates.Idle)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 		/// <summary>
 		/// Sends aim coordinates to the weapon aim component
