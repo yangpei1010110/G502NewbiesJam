@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
-using aDevGame.UI;
 using GameDemo.Scripts.Extensions;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 namespace aDevGame.sceneResources.scripts
