@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - World
   - NoMask
+  - BaseCube
+  - Mine
   layers:
   - Default
   - TransparentFX

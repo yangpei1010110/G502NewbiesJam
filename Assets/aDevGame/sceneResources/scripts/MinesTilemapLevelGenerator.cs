@@ -118,7 +118,9 @@ namespace aDevGame.sceneResources.scripts
                             cellPosition.x = i;
                             cellPosition.y = j;
                             cellPosition += MMTilemapGridRenderer.ComputeOffset(width - 1, height - 1);
-                            mine.transform.position = TargetGrid.GetCellCenterWorld(cellPosition);
+                            var position = TargetGrid.GetCellCenterWorld(cellPosition);
+                            position.z = -1f;
+                            mine.transform.position = position;
                             // 设置名称
                             mine.name = mineGenerateData.name;
                         }

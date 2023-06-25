@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2301861075634952259}
   m_Layer: 13
   m_Name: mine-c
-  m_TagString: Untagged
+  m_TagString: Mine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
