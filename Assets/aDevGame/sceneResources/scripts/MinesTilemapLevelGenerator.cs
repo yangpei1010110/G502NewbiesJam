@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using GameDemo.Scripts.Extensions;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 namespace aDevGame.sceneResources.scripts
@@ -17,6 +19,8 @@ namespace aDevGame.sceneResources.scripts
         {
             //原有的生成器方法
             base.Generate();
+            // 地平线生成
+            HorizonGenerate();
             // 新物资生成
             MinesGenerate();
         }
@@ -36,6 +40,48 @@ namespace aDevGame.sceneResources.scripts
         public List<MineGenerateData> MineObjects;
         private GameObject _mineSceneGameObject;
         private string     _mineSceneGameObjectName = "Mines";
+        [Header("地图拓展")]
+        [InspectorName("天空高度")]
+        public int horizonHeight = 5;
+        [InspectorName("地平线迭代次数")]
+        public int maxHorizonIteration = 10;
+        [InspectorName("地平线TileBase")]
+        public TileBase horizonTileBase;
+
+        /// <summary>
+        /// 地平线生成
+        /// </summary>
+        public void HorizonGenerate()
+        {
+            // 设置随机数种子
+            var random = new System.Random(GlobalSeed);
+            UnityEngine.Random.InitState(GlobalSeed);
+            int width = UnityEngine.Random.Range(GridWidth.x, GridWidth.y);
+            int height = UnityEngine.Random.Range(GridHeight.x, GridHeight.y);
+            // 找到地平线高度
+            int skyHeight = height - this.horizonHeight;
+            // 设置天空不阻塞
+            var nonBlocks = new Vector2Int[width * horizonHeight];
+            for (int j = 0; j < horizonHeight; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    nonBlocks[width * j + i] = new Vector2Int(i, height - j); 
+                }
+            }
+
+            MapTool.DrawTilemap(new Size(width, height), ObstaclesTilemap, null, nonBlocks);
+
+            // 生成地平线
+            var startPoints = new Vector2Int[width];
+            for (int i = 0; i < width; i++)
+            {
+                startPoints[i] = new Vector2Int(i, skyHeight);
+            }
+
+            var horizonBlocks = MapTool.RandomWalk(new Size(width, height), startPoints, maxHorizonIteration, random);
+            MapTool.DrawTilemap(new Size(width, height), ObstaclesTilemap, horizonTileBase, horizonBlocks);
+        }
 
 
         public void MinesGenerate()
