@@ -66,7 +66,7 @@ namespace aDevGame.sceneResources.scripts
             {
                 for (int i = 0; i < width; i++)
                 {
-                    nonBlocks[width * j + i] = new Vector2Int(i, height - j); 
+                    nonBlocks[width * j + i] = new Vector2Int(i, height - j);
                 }
             }
 
@@ -136,6 +136,12 @@ namespace aDevGame.sceneResources.scripts
                 {
                     for (int j = 0; j < height; j++)
                     {
+                        // 如果高于地平线则不生成
+                        if (j >= horizonHeight)
+                        {
+                            grid[i, j] = 0;
+                        }
+
                         // 如果该处有障碍物则不生成
                         if (obstacleGrid[i, j] >= 1)
                         {
