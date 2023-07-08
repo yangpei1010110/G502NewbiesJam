@@ -1,8 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 namespace aDevGame.sceneResources.scripts
 {
@@ -30,7 +32,7 @@ namespace aDevGame.sceneResources.scripts
             horizonHeight = _generator.horizonHeight;
             maxHorizonIteration = _generator.maxHorizonIteration;
             horizonTileBase = _generator.horizonTileBase;
-            OnHorizonTileBaseChange();
+            geosphere = _generator.geosphere;
         }
 
         [LabelText("保存设置")]
@@ -45,6 +47,7 @@ namespace aDevGame.sceneResources.scripts
             _generator.horizonHeight = horizonHeight;
             _generator.maxHorizonIteration = maxHorizonIteration;
             _generator.horizonTileBase = horizonTileBase;
+            _generator.geosphere = geosphere;
         }
 
         [LabelText("生成地图")]
@@ -84,12 +87,35 @@ namespace aDevGame.sceneResources.scripts
         public int maxHorizonIteration = 5;
 
         [FoldoutGroup("地图生成设置"), LabelText("地平线TileBase"),]
-        [OnValueChanged(nameof(OnHorizonTileBaseChange))]
         public TileBase horizonTileBase;
-        private void OnHorizonTileBaseChange() => horizonTileBasePath = AssetDatabase.GetAssetPath(horizonTileBase);
 
-        [FoldoutGroup("地图生成设置"), LabelText("地平线TileBase资源路径"),]
-        [ReadOnly]
-        public string horizonTileBasePath;
+        [Serializable]
+        public struct MineDataSingle
+        {
+            [LabelText("矿物TileBase")]
+            public TileBase tileBase;
+            [LabelText("矿物数量")]
+            public int resourceCount;
+            [LabelText("矿物大小")]
+            public int resourceSize;
+        }
+
+        [Serializable]
+        public struct MineDataShell
+        {
+            [LabelText("层级排序")]
+            public int layerOrder;
+            [LabelText("层级名称")]
+            public string shellName;
+            [LabelText("层级占比权重")]
+            public int weight;
+            [LabelText("默认地块")]
+            public TileBase defaultTileBase;
+            [LabelText("地块数据")]
+            public List<MineDataSingle> mineDataSingles;
+        }
+
+        [FoldoutGroup("地图生成设置"), LabelText("地下分层地块"),]
+        public List<MineDataShell> geosphere;
     }
 }
