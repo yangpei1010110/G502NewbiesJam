@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Cysharp.Threading.Tasks;
-using GameDemo.Scripts.Extensions;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using Unity.Mathematics;
@@ -31,6 +29,7 @@ namespace aDevGame.sceneResources.scripts
         }
 
         // 地下数据明细
+        [HideInInspector]
         public List<MinesTilemapLevelGeneratorWindow.MineDataShell> geosphere;
 
         /// <summary>
@@ -93,17 +92,20 @@ namespace aDevGame.sceneResources.scripts
             public GenerateMethods generateMethods;
         }
 
-        [Header("额外生成对象")]
-        [InspectorName("可生成对象")]
-        public List<MineGenerateData> MineObjects;
-        private GameObject _mineSceneGameObject;
-        private string     _mineSceneGameObjectName = "Mines";
+        // [Header("额外生成对象")]
+        // [InspectorName("可生成对象")]
+        // public List<MineGenerateData> MineObjects;
+        // private GameObject _mineSceneGameObject;
+        // private string     _mineSceneGameObjectName = "Mines";
         [Header("地图拓展")]
         [InspectorName("天空高度")]
+        [HideInInspector]
         public int horizonHeight = 5;
         [InspectorName("地平线迭代次数")]
+        [HideInInspector]
         public int maxHorizonIteration = 10;
         [InspectorName("地平线TileBase")]
+        [HideInInspector]
         public TileBase horizonTileBase;
 
         /// <summary>
