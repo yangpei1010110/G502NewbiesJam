@@ -26,6 +26,9 @@ namespace aDevGame.sceneResources.scripts
             HorizonGenerate();
             // 新物资生成
             // MinesGenerate();
+            
+            // debug init spawn
+            InitialSpawn.position = new Vector3(0, 0, 0);
         }
 
         // 地下数据明细
