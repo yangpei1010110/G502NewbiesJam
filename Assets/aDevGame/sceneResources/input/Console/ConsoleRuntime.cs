@@ -74,6 +74,7 @@ namespace aDevGame.sceneResources.input.Console
                                 AddMessage($"  <color=#00ff00ff>{tempString}</color>");
                             }
                         }
+
                         ResizeContent();
                     }
                 }
@@ -256,6 +257,13 @@ namespace aDevGame.sceneResources.input.Console
                     return new[] { @"<color=yellow>未找到游戏对象</color>", };
                 }
             }
+        }
+
+        [ConsoleCommand("crash")]
+        public string[] Crash(string[] param = null)
+        {
+            Environment.FailFast("Crash");
+            return Array.Empty<string>();
         }
 
         /// <summary>
