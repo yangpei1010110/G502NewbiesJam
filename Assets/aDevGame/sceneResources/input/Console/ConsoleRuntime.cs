@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using aDevGame.sceneResources.scripts.builder;
 using GameDemo.Scripts.Extensions;
 using MoreMountains.TopDownEngine;
 using TMPro;
@@ -263,6 +264,18 @@ namespace aDevGame.sceneResources.input.Console
         public string[] Crash(string[] param = null)
         {
             Environment.FailFast("Crash");
+            return Array.Empty<string>();
+        }
+
+        [ConsoleCommand("build_all")]
+        public string[] buildAll(string[] param = null)
+        {
+            foreach (BuilderStructure builderStructure in FindObjectsOfType<BuilderStructure>())
+            {
+                builderStructure.buildCost = builderStructure.buildProgress;
+                builderStructure.Build(0f);
+            }
+
             return Array.Empty<string>();
         }
 

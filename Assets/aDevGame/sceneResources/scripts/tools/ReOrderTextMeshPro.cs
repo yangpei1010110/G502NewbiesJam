@@ -1,15 +1,14 @@
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 
-namespace aDevGame.sceneResources.scripts
+namespace aDevGame.sceneResources.scripts.tools
 {
     public class ReOrderTextMeshPro : MonoBehaviour
     {
         [LabelText("Awake时修改文字渲染Order")]
         public bool autoReOrderOnAwake = true;
-
+        
         private void Awake()
         {
             if (autoReOrderOnAwake)
