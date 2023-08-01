@@ -16,6 +16,9 @@ namespace aDevGame.sceneResources.scripts
     /// </summary>
     public class MinesTilemapLevelGenerator : TilemapLevelGenerator
     {
+        /// the tilemap containing the walls
+        [Tooltip("the tilemap containing the walls")]
+        public Tilemap ObstaclesMineTilemap; 
         public override void Generate()
         {
             TargetGrid.GetComponent<MMTilemapCleaner>().CleanAllChildren();
@@ -60,7 +63,7 @@ namespace aDevGame.sceneResources.scripts
                     drawBlocks[j] = new Vector2Int(j % width, j / width + minHeight);
                 }
 
-                MapTool.DrawTilemap(new Size(width, height), ObstaclesTilemap, currentShell.defaultTileBase, drawBlocks);
+                MapTool.DrawTilemap(new Size(width, height), ObstaclesMineTilemap, currentShell.defaultTileBase, drawBlocks);
 
                 // 生成矿物
                 foreach (MinesTilemapLevelGeneratorWindow.MineDataSingle mineDataSingle in currentShell.mineDataSingles)
@@ -77,7 +80,7 @@ namespace aDevGame.sceneResources.scripts
                                             })
                                            .ToArray();
                     
-                    MapTool.DrawTilemap(new Size(width, height), ObstaclesTilemap, mineDataSingle.tileBase, mineBlocks);
+                    MapTool.DrawTilemap(new Size(width, height), ObstaclesMineTilemap, mineDataSingle.tileBase, mineBlocks);
                 }
 
                 // 更新高度
@@ -132,7 +135,7 @@ namespace aDevGame.sceneResources.scripts
             }
 
             var horizonBlocks = MapTool.RandomWalk(new Size(width, height), startPoints, maxHorizonIteration, random);
-            MapTool.DrawTilemap(new Size(width, height), ObstaclesTilemap, horizonTileBase, horizonBlocks);
+            MapTool.DrawTilemap(new Size(width, height), ObstaclesMineTilemap, horizonTileBase, horizonBlocks);
         }
 
 
