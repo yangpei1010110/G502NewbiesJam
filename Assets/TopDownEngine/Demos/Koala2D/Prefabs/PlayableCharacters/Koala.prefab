@@ -9915,7 +9915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ee7fe4b0037274d8dba40f605ae049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gravity: -30
+  Gravity: 1
   GravityActive: 1
   CrouchedRaycastLengthMultiplier: 1
   PerformCardinalObstacleRaycastDetection: 0
@@ -10022,7 +10022,7 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
-  Movement: 0
+  Movement: 1
   InputAuthorized: 1
   AnalogInput: 0
   ScriptDrivenInput: 0
