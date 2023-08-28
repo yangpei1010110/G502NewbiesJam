@@ -104,8 +104,8 @@ MonoBehaviour:
   Model: {fileID: 0}
   CurrentHealth: 0
   Invulnerable: 0
-  InitialHealth: 10
-  MaximumHealth: 10
+  InitialHealth: 50
+  MaximumHealth: 50
   ResetHealthOnEnable: 1
   ImmuneToDamage: 0
   DamageMMFeedbacks: {fileID: 0}
@@ -436,8 +436,8 @@ MonoBehaviour:
     MaximumSphereRadius: 2
     MinimumCubeBaseSize: {x: 1, y: 1, z: 1}
     MaximumCubeBaseSize: {x: 2, y: 2, z: 2}
-    MinimumNormalAxisOffset: 0
-    MaximumNormalAxisOffset: 0
+    MinimumNormalAxisOffset: 1
+    MaximumNormalAxisOffset: 1
     UseNormalAxisOffsetCurve: 0
     NormalOffsetCurve:
       serializedVersion: 2
@@ -473,7 +473,7 @@ MonoBehaviour:
   LimitedLootQuantity: 1
   MaximumQuantity: 100
   RemainingQuantity: 100
-  AvoidObstacles: 0
+  AvoidObstacles: 1
   DimensionMode: 0
   AvoidObstaclesLayerMask:
     serializedVersion: 2

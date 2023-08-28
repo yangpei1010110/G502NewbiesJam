@@ -8,7 +8,7 @@ namespace aDevGame.sceneResources.scripts
         private void OnMouseEnter()
         {
             Debug.Log("OnMouseEnter");
-            gameObject.GetComponent<Health>().Damage(5f, this.gameObject, 0.5f, 0.5f, Vector3.up);
+            // gameObject.GetComponent<Health>().Damage(5f, this.gameObject, 0.5f, 0.5f, Vector3.up);
         }
     }
 }
