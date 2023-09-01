@@ -137,6 +137,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Demos/MMSceneLoading/MMSceneLoadingDemoSceneB.unity
     guid: 352d34cac2435634fb99618d19a3929c
+  - enabled: 1
+    path: Assets/2DCharacterControllerTutorial-master/Assets/Main.unity
+    guid: 0d1a72c8677fda7439e9a17bdd4e3b90
+  - enabled: 1
+    path: Assets/2DCharacterControllerTutorial-master/Assets/StartMenu.unity
+    guid: 94c8ad2a7a3a3f94aa88d768578125ef
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: f5a0c5cea60b2e34ba6d8f20c9e1db33,
+      type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 605ccca156c5c5a46b4a21d064fb96a8,
       type: 2}

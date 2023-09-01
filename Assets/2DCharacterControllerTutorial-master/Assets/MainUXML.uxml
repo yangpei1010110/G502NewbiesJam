@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/2DCharacterControllerTutorial-master/Assets/MenuStyle.uss?fileID=7433441132597879392&amp;guid=f7163df68e77d944a9b86b8306583275&amp;type=3#MenuStyle" />
+    <ui:VisualElement focusable="false" name="MainMenu" style="height: 1080px; align-items: center; flex-grow: 1; justify-content: center; flex-direction: column; flex-wrap: nowrap; flex-shrink: 1; flex-basis: auto; display: flex;">
+        <ui:Button text="开始游戏" display-tooltip-when-elided="true" focusable="true" enable-rich-text="true" usage-hints="None" name="PlayButton" class="button-style" style="font-size: 100px;" />
+        <ui:Button text="游戏设置" display-tooltip-when-elided="true" name="OptionsButton" class="button-style" style="align-items: center; justify-content: center;" />
+        <ui:Button text="退出游戏" display-tooltip-when-elided="true" name="QuitButton" class="button-style" style="align-items: center; justify-content: center; position: relative; -unity-text-align: middle-center; white-space: nowrap;" />
+    </ui:VisualElement>
+    <ui:VisualElement focusable="false" name="OptionsMenu" style="height: 1080px; align-items: center; flex-grow: 1; justify-content: center; flex-direction: column; flex-wrap: nowrap; flex-shrink: 1; flex-basis: auto; display: none;">
+        <ui:Button text="返回" display-tooltip-when-elided="true" name="BackButton" class="button-style" style="align-items: center; justify-content: center; position: relative; -unity-text-align: middle-center; white-space: nowrap;" />
+    </ui:VisualElement>
+</ui:UXML>
