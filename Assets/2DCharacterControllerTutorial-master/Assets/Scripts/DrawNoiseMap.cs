@@ -6,7 +6,7 @@ using System;
 
 
 /// <summary>
-/// 柏林噪声地图生成
+/// 鏌忔灄鍣０鍦板浘鐢熸垚
 /// </summary>
 
 public class DrawNoiseMapgenerate : MonoBehaviour

@@ -13,13 +13,13 @@ GameObject:
   - component: {fileID: 146116829534511230}
   - component: {fileID: -3491150076397693760}
   - component: {fileID: 63918377637082125}
-  - component: {fileID: -5030681752666301211}
+  - component: {fileID: -1270888893793357709}
   m_Layer: 13
   m_Name: mine-fe
   m_TagString: Mine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2765258317377255430
 Transform:
@@ -112,7 +112,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &-3491150076397693760
 MonoBehaviour:
@@ -389,7 +389,7 @@ MonoBehaviour:
   DisplayDurationOnHit: 1
   HideBarAtZero: 1
   HideBarAtZeroDelay: 1
---- !u!114 &-5030681752666301211
+--- !u!114 &-1270888893793357709
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -398,6 +398,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2385128994174337380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5097918333e8f48b4215fec9f5598f, type: 3}
+  m_Script: {fileID: 11500000, guid: 51cdcf0c83fd93a4c85967c7ee9c5386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

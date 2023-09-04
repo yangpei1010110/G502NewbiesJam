@@ -13,14 +13,14 @@ GameObject:
   - component: {fileID: -8681197471521036782}
   - component: {fileID: -6944544230551168011}
   - component: {fileID: 7059133983551085260}
-  - component: {fileID: 2301861075634952259}
   - component: {fileID: -2051000930415514551}
+  - component: {fileID: -3837676721092422422}
   m_Layer: 13
   m_Name: mine-c
   m_TagString: Mine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5925151477752868220
 Transform:
@@ -158,7 +158,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &7059133983551085260
 MonoBehaviour:
@@ -390,18 +390,6 @@ MonoBehaviour:
   DisplayDurationOnHit: 1
   HideBarAtZero: 1
   HideBarAtZeroDelay: 1
---- !u!114 &2301861075634952259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5925151477752868222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5097918333e8f48b4215fec9f5598f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-2051000930415514551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,3 +474,15 @@ MonoBehaviour:
   GizmosColor: {r: 0.827451, g: 0.827451, b: 0.827451, a: 1}
   GimosSize: 1
   SpawnLootButton: 0
+--- !u!114 &-3837676721092422422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5925151477752868222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdcf0c83fd93a4c85967c7ee9c5386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

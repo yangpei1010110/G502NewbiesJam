@@ -1,8 +1,6 @@
 using System;
-using aDevGame.sceneResources.scripts.tools;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace aDevGame.sceneResources.scripts.builder
 {
