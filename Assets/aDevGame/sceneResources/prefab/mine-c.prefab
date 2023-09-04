@@ -411,7 +411,7 @@ MonoBehaviour:
   LootTableSO: {fileID: 11400000, guid: 85de9c6a05bc0da4e81974edce0ee240, type: 2}
   SpawnLootOnDeath: 1
   SpawnLootOnDamage: 0
-  PoolLoot: 0
+  PoolLoot: 1
   PoolSize: 20
   MutualizedPoolName: 
   CanSpawn: 1
