@@ -413,7 +413,7 @@ MonoBehaviour:
   SpawnLootOnDamage: 0
   PoolLoot: 1
   PoolSize: 20
-  MutualizedPoolName: 
+  MutualizedPoolName: MineLoot
   CanSpawn: 1
   Delay: 0
   Quantity: {x: 1, y: 1}
