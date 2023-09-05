@@ -16,7 +16,11 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: a5b6c84bbc748a344a4616bcd3dd2b2c
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: a2b5907713db1c747a1e10afc21a9fd1
+    m_Address: Assets/aDevGame/sceneResources/prefab/mine-c.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 32f299dc104a7da458045e3996ce0354, type: 2}
   m_SchemaSet:
