@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+#nullable enable
+
 using UnityEditor;
 using UnityEngine;
 
@@ -18,3 +21,4 @@ namespace aDevGame.UI
         }
     }
 }
+#endif

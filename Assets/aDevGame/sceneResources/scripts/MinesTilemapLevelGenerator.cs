@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -131,3 +133,4 @@ namespace aDevGame.sceneResources.scripts
         }
     }
 }
+#endif

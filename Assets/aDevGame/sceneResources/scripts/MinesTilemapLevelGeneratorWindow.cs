@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -119,3 +122,4 @@ namespace aDevGame.sceneResources.scripts
         public List<MineDataShell> geosphere;
     }
 }
+#endif

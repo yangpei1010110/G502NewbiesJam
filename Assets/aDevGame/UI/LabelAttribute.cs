@@ -1,11 +1,13 @@
+#if UNITY_EDITOR
+#nullable enable
 using UnityEngine;
 
 namespace aDevGame.UI
 {
-    public class LabelAttribute:PropertyAttribute
+    public class LabelAttribute : PropertyAttribute
     {
-        private string name;   
-    
+        private string name;
+
         public string Name => name;
 
         public LabelAttribute(string name)
@@ -14,3 +16,4 @@ namespace aDevGame.UI
         }
     }
 }
+#endif

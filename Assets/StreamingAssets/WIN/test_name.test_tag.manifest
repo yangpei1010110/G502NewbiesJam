@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 316495340
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 91c132e12083d1bddba77b2434a493a4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ae8c52309304dbced62e9359e7a02dec
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/aDevGame/sceneResources/prefab/Test/AssetBundlesTest.prefab
+Dependencies: []
