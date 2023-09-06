@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9bf1ac07f3659498e89157301c9746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LootMode: 0
+  LootMode: 2
   GameObjectToLoot: {fileID: 1136408400419902, guid: d5864e8b4e77ac443b95c0e8697cd4d4,
     type: 3}
   LootTable:

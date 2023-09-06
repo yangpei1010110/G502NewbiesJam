@@ -402,12 +402,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9bf1ac07f3659498e89157301c9746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LootMode: 0
+  LootMode: 2
   GameObjectToLoot: {fileID: 0}
   LootTable:
     ObjectsToLoot: []
     WeightsTotal: 0
-  LootTableSO: {fileID: 0}
+  LootTableSO: {fileID: 11400000, guid: 85de9c6a05bc0da4e81974edce0ee240, type: 2}
   SpawnLootOnDeath: 1
   SpawnLootOnDamage: 0
   PoolLoot: 1
