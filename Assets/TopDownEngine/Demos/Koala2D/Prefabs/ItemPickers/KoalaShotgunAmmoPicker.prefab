@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4892658203909722}
   m_Father: {fileID: 4521874184846174}
@@ -34,7 +35,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &95267457642895150
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -47,6 +48,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -79,6 +81,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.77699995, z: -0.052117262}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4521874184846174}
   m_RootOrder: 1
@@ -94,9 +97,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -108,6 +114,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -133,7 +140,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &95274990790405236
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,6 +153,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -179,6 +187,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 42.5, y: -14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4586091373600748}
   - {fileID: 4056111640707914}
@@ -224,202 +233,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feff4042ae759c49a290443b9bfdd71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Effect: {fileID: 0}
-  PickSfx: {fileID: 0}
-  PickedFeedback:
-    UpdateAnimator: 0
-    FeedbackAnimator: {fileID: 0}
-    AnimatorTriggerParameterName: 
-    AnimatorBoolParameterName: 
-    AnimateScale: 0
-    AnimateScaleTarget: {fileID: 0}
-    AnimateScaleDuration: 0.2
-    AnimateScaleX:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.3
-        value: 1.05
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    AnimateScaleY:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.3
-        value: 1.05
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    AnimateScaleZ:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.3
-        value: 1.05
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    InstantiateParticles: 0
-    ParticlesPrefab: {fileID: 0}
-    InstantiateParticlesAt: {fileID: 0}
-    BindParticleSystem: 0
-    BoundParticleSystem: {fileID: 0}
-    InstantiateVFX: 0
-    VfxToInstantiate: {fileID: 0}
-    VfxPositionOffset: {x: 0, y: 0, z: 0}
-    VfxCreateObjectPool: 0
-    VfxObjectPoolSize: 5
-    FlickerRenderer: 0
-    FlickeringRenderer: {fileID: 0}
-    FlickerDuration: 0.2
-    FlickerOctave: 0.04
-    FlickerColor: {r: 1, g: 0.078431375, b: 0.078431375, a: 1}
-    Sfx: {fileID: 0}
-    SfxAudioMixerGroup: {fileID: 0}
-    ShakeCamera: 0
-    CameraShakeProperties:
-      Duration: 0.1
-      Amplitude: 0.2
-      Frequency: 40
-    ZoomCamera: 0
-    ZoomMode: 0
-    ZoomFieldOfView: 30
-    ZoomTransitionDuration: 0.05
-    ZoomDuration: 0.1
-    FreezeFrame: 0
-    FreezeFrameDuration: 0
-    ModifyTimescale: 0
-    TimeScale: 0
-    TimeScaleDuration: 0
-    TimeScaleLerp: 0
-    TimeScaleLerpSpeed: 0
-    ChromaticAberration: 0
-    ChromaticAberrationIntensity:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.5
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    ChromaticAberrationDuration: 0.2
-    ChromaticAberrationAmplitude: 1
-    TriggerFlash: 0
-    FlashColor: {r: 1, g: 1, b: 1, a: 1}
-    FlashDuration: 0.2
-    FlashAlpha: 1
-    FlashID: 0
-    PlayEvent:
-      m_PersistentCalls:
-        m_Calls: []
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    StopEvent:
-      m_PersistentCalls:
-        m_Calls: []
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   PickedMMFeedbacks: {fileID: 31552433389457295}
+  DisableColliderOnPick: 0
   DisableObjectOnPick: 1
+  DisableDelay: 0
+  DisableModelOnPick: 0
+  DisableTargetObjectOnPick: 0
+  TargetObjectToDisable: {fileID: 0}
+  TargetObjectDisableDelay: 1
+  Model: {fileID: 0}
+  RequireCharacterComponent: 1
+  RequirePlayerType: 1
 --- !u!114 &114473148523296108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,9 +258,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item: {fileID: 11400000, guid: 018549010a133a64db7c2fd9dfbedc67, type: 2}
   Quantity: 50
+  RemainingQuantity: 1
   PickableIfInventoryIsFull: 0
-  PickAsMuchQuantityAsPossible: 0
   DisableObjectWhenDepleted: 0
+  RequirePlayerTag: 1
 --- !u!1 &1875644226021616
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +289,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4586091373600748}
   m_RootOrder: 0
@@ -479,9 +305,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -493,6 +322,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -547,6 +377,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4521874184846174}
   m_RootOrder: 2
@@ -569,6 +400,78 @@ MonoBehaviour:
   - {fileID: 6324491618450040184}
   - {fileID: 3458057971571749628}
   InitializationMode: 2
+  SafeMode: 3
+  Direction: 0
+  AutoChangeDirectionOnEnd: 0
+  AutoPlayOnStart: 0
+  AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
+  DurationMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
+  DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
+  CooldownDuration: 0
+  InitialDelay: 0
+  CanPlay: 1
+  CanPlayWhileAlreadyPlaying: 1
+  ChanceToPlay: 100
+  FeedbacksIntensity: 1
+  Events:
+    TriggerMMFeedbacksEvents: 0
+    TriggerUnityEvents: 1
+    OnPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    OnPause:
+      m_PersistentCalls:
+        m_Calls: []
+    OnResume:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRevert:
+      m_PersistentCalls:
+        m_Calls: []
+    OnComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRestoreInitialValues:
+      m_PersistentCalls:
+        m_Calls: []
+    OnSkipToTheEnd:
+      m_PersistentCalls:
+        m_Calls: []
   DebugActive: 0
 --- !u!114 &8777739275681832235
 MonoBehaviour:
@@ -584,20 +487,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Active: 1
   Label: Sound
+  Chance: 100
   Timing:
+    TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
   DebugActive: 0
   Sfx: {fileID: 8300000, guid: d8ea448bae39d4146b98a9953a270f1b, type: 3}
   RandomSfx: []
+  TestButton: 0
+  TestStopButton: 0
+  PlayMethod: 0
+  PoolSize: 10
   MinVolume: 1
   MaxVolume: 1
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
+  Priority: 128
 --- !u!114 &8547408332636714376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,18 +535,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Active: 1
   Label: Instantiate Object
+  Chance: 100
   Timing:
+    TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
   DebugActive: 0
-  VfxToInstantiate: {fileID: 1381411408848946, guid: 925923046384f284f9fa9a692d832d2c,
+  GameObjectToInstantiate: {fileID: 1381411408848946, guid: 925923046384f284f9fa9a692d832d2c,
     type: 3}
-  VfxPositionOffset: {x: 0, y: 0, z: 0}
-  VfxCreateObjectPool: 0
-  VfxObjectPoolSize: 5
+  PositionMode: 0
+  AlsoApplyRotation: 0
+  AlsoApplyScale: 0
+  TargetTransform: {fileID: 0}
+  TargetPosition: {x: 0, y: 0, z: 0}
+  PositionOffset: {x: 0, y: 0, z: 0}
+  CreateObjectPool: 0
+  ObjectPoolSize: 5
+  MutualizePools: 0
 --- !u!114 &6324491618450040184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638,13 +582,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Active: 1
   Label: Lens Distortion
+  Chance: 100
   Timing:
+    TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
   DebugActive: 0
+  Channel: 0
+  Duration: 0.8
+  ResetShakerValuesAfterShake: 1
+  ResetTargetValuesAfterShake: 1
   RelativeIntensity: 0
   Intensity:
     serializedVersion: 2
@@ -742,8 +705,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Duration: 0.8
-  Amplitude: 20
+  RemapIntensityZero: 0
+  RemapIntensityOne: 20
 --- !u!114 &3458057971571749628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -758,13 +721,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Active: 1
   Label: Flash
+  Chance: 100
   Timing:
+    TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
     InitialDelay: 0
     CooldownDuration: 0
+    InterruptsOnStop: 1
     NumberOfRepeats: 0
     RepeatForever: 0
     DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
   DebugActive: 0
+  Channel: 0
   FlashColor: {r: 1, g: 1, b: 1, a: 1}
   FlashDuration: 0.1
   FlashAlpha: 0.3
