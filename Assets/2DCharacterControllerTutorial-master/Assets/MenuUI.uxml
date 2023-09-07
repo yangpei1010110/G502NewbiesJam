@@ -2,7 +2,7 @@
     <ui:VisualElement name="Play" style="height: 100%; align-items: center; display: flex; flex-grow: 0;">
         <ui:Button display-tooltip-when-elided="true" name="MenuButton" text="设置" style="align-items: center; justify-content: flex-start; width: 113px; height: 67px; font-size: 10px; overflow: hidden; visibility: visible; display: flex;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Menu" style="height: 100%; align-items: center; display: flex; background-color: rgba(0, 0, 0, 0.67); flex-grow: 0;">
+    <ui:VisualElement name="Menu" style="height: 100%; align-items: center; display: none; background-color: rgba(0, 0, 0, 0.67); flex-grow: 0;">
         <ui:Button display-tooltip-when-elided="true" name="BackButton" text="返回" style="align-items: center; justify-content: flex-start; width: 130px; height: 81px; font-size: 10px; overflow: hidden; visibility: visible; display: flex;" />
     </ui:VisualElement>
 </ui:UXML>
