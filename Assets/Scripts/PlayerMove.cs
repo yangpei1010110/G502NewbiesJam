@@ -19,6 +19,23 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody2D      rb;
     private CircleCollider2D circleCollider2D;
     private Collider2D[]     results = new Collider2D[25];
+    //疲劳值设置
+    private float minTired = 0.0f;
+    public float MinTired
+    {
+        get { return minTired; }
+    }
+    private float maxTired = 10.0f;
+    public float MaxTired
+    {
+        get { return maxTired; }
+    }
+    private float currentTired;
+    public float CurrentTired
+    {
+        get { return currentTired; }
+    }
+    private float TiredIndex;
 
 
     // Start is called before the first frame update
@@ -90,4 +107,25 @@ public class PlayerMove : MonoBehaviour
 
         PlayerState = State.OnAir;
     }
+    //计算体力值，根据当前的速度来判断角色时走还是跑还是站立不动
+    // void CalculateTired()
+    // {
+    //     if (currentSpeed <= walkSpeed && currentTired >= minTired)
+    //     {
+    //         //角色站立不动，疲劳值每秒-1
+    //         currentTired -= Time.deltaTime;
+    //     }
+    //     else if (currentSpeed >= runSpeed && currentTired <= maxTired)
+    //     {
+    //         //角色跑动，疲劳值+1
+    //         currentTired += Time.deltaTime;
+    //     }
+    //     else
+    //     {
+    //         //角色走动，疲劳值不变
+    //         return;
+    //     }
+    //     //将疲劳值限制在最大最小之间
+    //     currentTired = Mathf.Clamp(currentTired, minTired, maxTired);
+    // }
 }
