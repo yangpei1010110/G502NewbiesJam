@@ -408,7 +408,7 @@ MonoBehaviour:
   LootTable:
     ObjectsToLoot: []
     WeightsTotal: 0
-  LootTableSO: {fileID: 11400000, guid: 85de9c6a05bc0da4e81974edce0ee240, type: 2}
+  LootTableSO: {fileID: 11400000, guid: 4d90d868f60cbb0489099288dabc40a5, type: 2}
   SpawnLootOnDeath: 1
   SpawnLootOnDamage: 0
   PoolLoot: 1
