@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 63918377637082125}
   - component: {fileID: -2913222016268118103}
   - component: {fileID: -1625533397670528191}
+  - component: {fileID: -448508981134671851}
   m_Layer: 13
   m_Name: mine-red
   m_TagString: Mine
@@ -485,3 +486,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51cdcf0c83fd93a4c85967c7ee9c5386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-448508981134671851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2385128994174337380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322904ffb5f964542a855bb63617fa43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: f0ad0fec94c6bea4791a1166d8886d73, type: 2}
+        m_TargetAssemblyTypeName: ProgressionSystem.Scripts.Variables.IntVariable,
+          Assembly-CSharp
+        m_MethodName: Add
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
